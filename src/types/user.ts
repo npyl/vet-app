@@ -1,10 +1,6 @@
-export type IUserPOST = {
-    username: string;
-    password: string;
+type IUser = {
+    email: string;
     avatar: string;
 };
 
-export type IUser = {
-    username: string;
-    avatar: string;
-};
+export default IUser;

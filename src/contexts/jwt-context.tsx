@@ -1,5 +1,5 @@
-import { IAuthReq, ILoginResponse } from "@/interfaces/auth";
-import User from "@/interfaces/user";
+import { ILoginReq, IRegisterReq, IAuthRes } from "@/types/auth";
+import IUser from "@/types/user";
 import type { FC, ReactNode } from "react";
 import {
     createContext,
@@ -14,7 +14,7 @@ import useApiContext from "./api";
 interface State {
     isInitialized: boolean;
     isAuthenticated: boolean;
-    user: User | null;
+    user: IUser | null;
 }
 
 export interface AuthContextValue extends State {
@@ -38,14 +38,14 @@ type InitializeAction = {
     type: ActionType.INITIALIZE;
     payload: {
         isAuthenticated: boolean;
-        user: User | null;
+        user: IUser | null;
     };
 };
 
 type LoginAction = {
     type: ActionType.LOGIN;
     payload: {
-        user: User;
+        user: IUser;
     };
 };
 
@@ -56,7 +56,7 @@ type LogoutAction = {
 type RegisterAction = {
     type: ActionType.REGISTER;
     payload: {
-        user: User;
+        user: IUser;
     };
 };
 
@@ -122,9 +122,9 @@ const useMethods = () => {
 
     const [isSuccess, setIsSuccess] = useState(false);
 
-    const login = useCallback(async (body: IAuthReq) => {
+    const login = useCallback(async (body: ILoginReq) => {
         // NOTE: emulate rtk's isSuccess
-        const res = await post<ILoginResponse>("/api/login", {
+        const res = await post<IAuthRes>("/api/login", {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -134,9 +134,17 @@ const useMethods = () => {
 
         return res;
     }, []);
-    const register = useCallback((body: IAuthReq) => {
-        console.log(body);
-        post("");
+    const register = useCallback(async (body: IRegisterReq) => {
+        // NOTE: emulate rtk's isSuccess
+        const res = await post<IAuthRes>("/api/register", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+        if ("token" in res) setIsSuccess(true);
+
+        return res;
     }, []);
     const getProfile = useCallback(() => get("/api/profile"), []);
 
@@ -177,12 +185,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         initialize();
     }, [isSuccess]);
 
-    const signin = async (
-        username: string,
-        password: string,
-    ): Promise<void> => {
+    const signin = async (email: string, password: string): Promise<void> => {
         const loginRes = await login({
-            username,
+            email,
             password,
         });
 
@@ -206,11 +211,27 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         dispatch({ type: ActionType.LOGOUT });
     };
 
-    const signup = async (username: string, password: string): Promise<void> =>
-        await register({
-            username,
+    const signup = async (email: string, password: string): Promise<void> => {
+        const registerRes = await register({
+            email,
             password,
+            avatar: "", // TODO: ...
         });
+
+        localStorage.setItem("accessToken", registerRes.token);
+
+        const user = await getProfile();
+        if (!user) {
+            throw "Failed getting profile!";
+        }
+
+        dispatch({
+            type: ActionType.LOGIN,
+            payload: {
+                user,
+            },
+        });
+    };
 
     const providerValues = useMemo(
         () => ({

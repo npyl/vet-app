@@ -4,7 +4,7 @@ import "./global.css";
 
 import DashboardLayout from "@/components/NavigationBar";
 import { AuthGuard } from "@/guards/is-authenticated";
-import Login from "@/components/auth/login";
+import AuthPage from "@/components/auth";
 
 export const metadata: Metadata = {
     title: "Hello!",
@@ -24,7 +24,7 @@ export default function RootLayout({
                 }}
             >
                 <Providers>
-                    <AuthGuard alternative={<Login />}>
+                    <AuthGuard alternative={<AuthPage />}>
                         <DashboardLayout>{children}</DashboardLayout>
                     </AuthGuard>
                 </Providers>

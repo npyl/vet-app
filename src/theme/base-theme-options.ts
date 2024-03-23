@@ -191,6 +191,14 @@ export const baseThemeOptions: ThemeOptions = {
                 },
             },
         },
+        // INFO: fixes adornment in DatePicker being too far right
+        MuiInputAdornment: {
+            styleOverrides: {
+                positionEnd: {
+                    marginRight: 5.5,
+                },
+            },
+        },
         MuiOutlinedInput: {
             styleOverrides: {
                 input: {

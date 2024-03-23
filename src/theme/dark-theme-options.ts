@@ -129,6 +129,7 @@ export const darkThemeOptions: ThemeOptions = {
                     // Focus Ring
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         boxShadow: `0 0 0 3px ${alpha(primary.main, 0.18)}`,
+                        borderWidth: 1,
                     },
                     padding: "0 5px!important",
                 },

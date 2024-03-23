@@ -4,7 +4,7 @@ import { ThemeOptions, alpha } from "@mui/material";
 
 const neutral = {
     100: "#F3F4F6",
-    200: "#F4F6F8",
+    200: "#FBFBFB",
     300: "#D1D5DB",
     400: "#9CA3AF",
     500: "#6B7280",
@@ -27,6 +27,7 @@ const primary = {
     main: "#640C67",
     dark: "#500a52",
     contrastText: "#FFFFFF",
+    border: "#1201120",
 };
 
 const secondary = {
@@ -148,6 +149,7 @@ export const lightThemeOptions: ThemeOptions = {
                     // Focus Ring
                     "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                         boxShadow: `0 0 0 3px ${alpha(primary.main, 0.18)}`,
+                        borderWidth: 1,
                     },
                     padding: "0 5px!important",
                 },

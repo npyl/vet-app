@@ -1,5 +1,4 @@
 "use client";
-
 // React
 import { FormEvent, useCallback, useState } from "react";
 // MUI
@@ -14,7 +13,6 @@ import Iconify from "@/components/iconify";
 // Hooks
 import useAuth from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SoftAlert } from "../styled";
 
 export default function LoginForm() {
     const { signin } = useAuth();
@@ -45,10 +43,10 @@ export default function LoginForm() {
 
     return (
         <>
-            <SoftAlert severity="info" sx={{ mb: 3 }}>
+            {/* <SoftAlert severity="info" sx={{ mb: 3 }}>
                 Use email : <strong>tester@example.com</strong> / password :
                 <strong>123456</strong>
-            </SoftAlert>
+            </SoftAlert> */}
 
             <form method="POST" onSubmit={handleSubmit}>
                 <Stack spacing={2.5}>

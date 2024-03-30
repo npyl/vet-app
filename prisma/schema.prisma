@@ -24,4 +24,6 @@ model User {
   password  String
   avatar    String
   type      UserType  @default(USER)
+
+  token     String?   @unique
 }

@@ -1,22 +1,28 @@
 import { IRegisterReq, IAuthRes } from "@/types/auth";
-import { PrismaClient } from "@prisma/client";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import prisma from "../_util/db";
 
 export async function POST(req: Request | NextRequest) {
     try {
         const body = (await req.json()) as IRegisterReq;
 
-        console.log("creating a : ", body.type);
-
-        await prisma.user.create({
+        const user = await prisma.user.create({
             data: body,
         });
 
         // Randomly generated token
         const token = randomUUID();
+
+        // Update user token
+        await prisma.user.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                token,
+            },
+        });
 
         return new NextResponse<IAuthRes>(JSON.stringify({ token }), {
             status: 200,

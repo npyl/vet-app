@@ -1,9 +1,7 @@
 import { ILoginReq } from "@/types/auth";
-import { PrismaClient } from "@prisma/client";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
+import prisma from "../_util/db";
 
 export async function POST(req: Request | NextRequest) {
     try {
@@ -30,6 +28,16 @@ export async function POST(req: Request | NextRequest) {
 
         // Generate token
         const token = randomUUID();
+
+        // Update user token
+        await prisma.user.update({
+            where: {
+                id: user[0].id,
+            },
+            data: {
+                token,
+            },
+        });
 
         return new NextResponse(JSON.stringify({ token }), {
             status: 200,

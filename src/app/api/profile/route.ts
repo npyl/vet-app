@@ -1,25 +1,33 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "../_util/db";
 
-export async function GET() {
+export async function GET(req: Request | NextRequest) {
     try {
-        // Respond with a dummy user
-        return new NextResponse(
-            JSON.stringify({
-                id: 1,
-                firstName: "Tester",
-                lastName: "Wtvr",
-                email: "tester@example.com",
-            }),
-            {
-                status: 200,
-                headers: { "Content-Type": "application/json" },
+        const authorization = req.headers.get("Authorization");
+        if (!authorization) throw "Did not receive authorization token";
+
+        const token = authorization.split(" ")[1];
+
+        const users = await prisma.user.findMany({
+            where: {
+                token,
             },
-        );
+        });
+
+        if (!users || users.length === 0) {
+            throw "Could not find user with these credentials!";
+        }
+
+        return new NextResponse(JSON.stringify(users[0]), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
     } catch (error) {
         console.error(error);
-        return new NextResponse(
-            JSON.stringify({ message: "Internal Server Error" }),
-            { status: 500, headers: { "Content-Type": "application/json" } },
-        );
+
+        return new NextResponse(JSON.stringify(error), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+        });
     }
 }

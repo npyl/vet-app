@@ -18,11 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body
-                style={{
-                    minHeight: "100vh",
-                }}
-            >
+            <body>
                 <Providers>
                     <AuthGuard alternative={<AuthPage />}>
                         <DashboardLayout>{children}</DashboardLayout>

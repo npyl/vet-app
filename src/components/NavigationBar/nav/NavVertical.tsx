@@ -2,20 +2,17 @@ import { useEffect } from "react";
 // next
 import { usePathname } from "next/navigation";
 // @mui
-import { Box, Button, Drawer, Stack, Typography } from "@mui/material";
+import { Box, Drawer, Stack } from "@mui/material";
 // hooks
 import useResponsive from "@/hooks/useResponsive";
 // config
 import { NAV } from "../config";
-// components
-// import Logo from "../../../components/logo";
 import { NavSectionVertical } from "../nav-section";
-import Scrollbar from "../scrollbar";
 //
 import navConfig from "./config";
-import useAuth from "@/hooks/useAuth";
 
-// import NavAccount from "./NavAccount";
+import BobosLogo from "public/images/bobos_logo.jpg";
+import NavAccount from "./account";
 
 // ----------------------------------------------------------------------
 
@@ -25,8 +22,6 @@ type Props = {
 };
 
 export default function NavVertical({ openNav, onCloseNav }: Props) {
-    const { logout } = useAuth();
-
     const pathname = usePathname();
 
     const isDesktop = useResponsive("up", "lg");
@@ -38,40 +33,20 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
     }, [pathname]);
 
     const renderContent = (
-        <Scrollbar
-            sx={{
-                height: 1,
-                "& .simplebar-content": {
-                    height: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                },
-            }}
-        >
-            <Stack
-                spacing={3}
-                sx={{
-                    pt: 3,
-                    pb: 2,
-                    px: 2.5,
-                    flexShrink: 0,
-                }}
-            >
-                {/* <Logo /> */}
-                <Typography>Logo</Typography>
-                {/* <NavAccount /> */}
+        <>
+            <Stack justifyContent="center" alignItems="center">
+                <Stack width="70%">
+                    <img src={BobosLogo.src} width="100%" height="100%" />
+                </Stack>
             </Stack>
 
             <NavSectionVertical data={navConfig} />
 
+            {/* Vertical Space */}
             <Box sx={{ flexGrow: 1 }} />
 
-            <Box display="flex" flexDirection="row" justifyContent="center">
-                <Button variant="outlined" onClick={logout}>
-                    Logout
-                </Button>
-            </Box>
-        </Scrollbar>
+            <NavAccount />
+        </>
     );
 
     return (
@@ -90,7 +65,6 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
                         sx: {
                             width: NAV.W_DASHBOARD,
                             bgcolor: "transparent",
-                            borderRightStyle: "dashed",
                         },
                     }}
                 >

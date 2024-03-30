@@ -23,11 +23,11 @@ const background = {
 const divider = "#E6E8F0";
 
 const primary = {
-    light: "#780e7c",
-    main: "#640C67",
-    dark: "#500a52",
+    light: "#7ccd9f",
+    main: "#68ab85",
+    dark: "#54896b",
     contrastText: "#FFFFFF",
-    border: "#1201120",
+    border: "#3f6750",
 };
 
 const secondary = {

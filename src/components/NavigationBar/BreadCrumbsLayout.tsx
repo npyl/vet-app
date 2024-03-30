@@ -4,7 +4,6 @@ import Chip from "@mui/material/Chip";
 import { ReactNode } from "react";
 import { emphasize, styled } from "@mui/material/styles";
 import HomeIcon from "@mui/icons-material/Home";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { usePathname } from "next/navigation";
 
@@ -40,6 +39,7 @@ const BreadCrumbsLayout = ({ children }: Props) => {
             >
                 {pathname.split("/").map((l, i) => (
                     <StyledBreadcrumb
+                        key={i}
                         label={i === 0 ? "Home" : l}
                         icon={i === 0 ? <HomeIcon /> : undefined}
                     />

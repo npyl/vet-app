@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 // @mui
 import { Box, IconButton } from "@mui/material";
@@ -9,7 +8,6 @@ import useResponsive from "@/hooks/useResponsive";
 import Main from "./Main";
 import NavVertical from "./nav/NavVertical";
 import { MenuOutlined } from "@mui/icons-material";
-import BreadCrumbsLayout from "./BreadCrumbsLayout";
 // ----------------------------------------------------------------------
 
 type Props = {

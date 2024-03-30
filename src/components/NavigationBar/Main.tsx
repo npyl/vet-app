@@ -1,5 +1,6 @@
 // @mui
 import { Box, BoxProps, Container } from "@mui/material";
+import BreadCrumbsLayout from "./BreadCrumbsLayout";
 
 export default function Main({ children, sx, ...other }: BoxProps) {
     return (
@@ -11,7 +12,9 @@ export default function Main({ children, sx, ...other }: BoxProps) {
             }}
             {...other}
         >
-            <Container maxWidth="xl">{children}</Container>
+            <BreadCrumbsLayout>
+                <Container maxWidth="xl">{children}</Container>
+            </BreadCrumbsLayout>
         </Box>
     );
 }

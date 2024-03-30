@@ -1,3 +1,9 @@
+import { Typography } from "@mui/material";
+
 export default function Home() {
-    return <main>Welcome!</main>;
+    return (
+        <>
+            <Typography variant="h4">Pets</Typography>
+        </>
+    );
 }

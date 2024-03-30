@@ -13,8 +13,13 @@ import Iconify from "@/components/iconify";
 // Hooks
 import useAuth from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
+import { UserType } from "@/types/user";
 
-export default function LoginForm() {
+interface Props {
+    type: UserType;
+}
+
+export default function LoginForm({ type }: Props) {
     const { signin } = useAuth();
 
     const router = useRouter();
@@ -33,7 +38,7 @@ export default function LoginForm() {
 
             const form = e.target as HTMLFormElement;
 
-            signin(form.email.value, form.password.value)
+            signin(form.email.value, form.password.value, type)
                 .then(() => returnTo && router.push(returnTo))
                 .catch((error) => console.error(error))
                 .finally(() => setIsSubmitting(false));

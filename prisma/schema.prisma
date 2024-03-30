@@ -13,9 +13,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserType {
+  VET   // ...
+  USER  // normal user (less options)
+}
+
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   password  String
   avatar    String
+  type      UserType  @default(USER)
 }

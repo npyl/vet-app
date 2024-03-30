@@ -1,5 +1,5 @@
 import { ILoginReq, IRegisterReq, IAuthRes } from "@/types/auth";
-import IUser from "@/types/user";
+import IUser, { UserType } from "@/types/user";
 import type { FC, ReactNode } from "react";
 import {
     createContext,
@@ -18,9 +18,17 @@ interface State {
 }
 
 export interface AuthContextValue extends State {
-    signin: (username: string, password: string) => Promise<void>;
+    signin: (
+        username: string,
+        password: string,
+        type: UserType,
+    ) => Promise<void>;
+    signup: (
+        username: string,
+        password: string,
+        type: UserType,
+    ) => Promise<void>;
     logout: () => Promise<void>;
-    signup: (username: string, password: string) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -185,10 +193,15 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         initialize();
     }, [isSuccess]);
 
-    const signin = async (email: string, password: string): Promise<void> => {
+    const signin = async (
+        email: string,
+        password: string,
+        type: UserType,
+    ): Promise<void> => {
         const loginRes = await login({
             email,
             password,
+            type,
         });
 
         localStorage.setItem("accessToken", loginRes.token);
@@ -211,11 +224,16 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         dispatch({ type: ActionType.LOGOUT });
     };
 
-    const signup = async (email: string, password: string): Promise<void> => {
+    const signup = async (
+        email: string,
+        password: string,
+        type: UserType,
+    ): Promise<void> => {
         const registerRes = await register({
             email,
             password,
             avatar: "", // TODO: ...
+            type,
         });
 
         localStorage.setItem("accessToken", registerRes.token);

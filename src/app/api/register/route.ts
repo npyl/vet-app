@@ -9,6 +9,8 @@ export async function POST(req: Request | NextRequest) {
     try {
         const body = (await req.json()) as IRegisterReq;
 
+        console.log("creating a : ", body.type);
+
         await prisma.user.create({
             data: body,
         });

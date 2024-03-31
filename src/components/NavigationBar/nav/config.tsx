@@ -2,12 +2,13 @@ const navConfig = [
     {
         items: [
             {
-                title: "Home",
-                path: "/",
-            },
-            {
                 title: "Pets",
                 path: "/pets",
+            },
+            {
+                title: "Appointments",
+                path: "/appointments",
+                vetOnly: true,
             },
         ],
     },

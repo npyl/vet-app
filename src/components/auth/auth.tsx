@@ -65,16 +65,6 @@ export default function AuthPage() {
                             position: "relative",
                         }}
                     >
-                        <UserTypeSelect
-                            type={type}
-                            setType={setType}
-                            sx={{
-                                position: "absolute",
-                                right: "40px",
-                                top: "50px",
-                            }}
-                        />
-
                         {mode === "login" ? (
                             <>
                                 <Stack spacing={2} sx={{ mb: 5 }}>
@@ -105,6 +95,16 @@ export default function AuthPage() {
                             </>
                         ) : (
                             <>
+                                <UserTypeSelect
+                                    type={type}
+                                    setType={setType}
+                                    sx={{
+                                        position: "absolute",
+                                        right: "40px",
+                                        top: "50px",
+                                    }}
+                                />
+
                                 <Stack spacing={2} sx={{ mb: 5 }}>
                                     <Typography variant="h4">
                                         Sign up

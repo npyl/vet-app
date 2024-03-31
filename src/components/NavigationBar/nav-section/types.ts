@@ -21,11 +21,15 @@ export type NavListProps = {
     disabled?: boolean;
     roles?: string[];
     children?: any;
+
+    vetOnly?: boolean;
 };
 
+export interface NavListData {
+    subheader?: string;
+    items: NavListProps[];
+}
+
 export interface NavSectionProps extends StackProps {
-    data: {
-        subheader?: string;
-        items: NavListProps[];
-    }[];
+    data: NavListData[];
 }

@@ -8,6 +8,7 @@ import useActiveLink from "@/hooks/useActiveLink";
 //
 import { NavListProps } from "../types";
 import NavItem from "./NavItem";
+import useAuth from "@/hooks/useAuth";
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,7 @@ type NavListRootProps = {
 
 export default function NavList({ data, depth, hasChild }: NavListRootProps) {
     const pathname = usePathname();
+    const { user } = useAuth();
 
     const { active, isExternalLink } = useActiveLink(
         data.path,
@@ -40,6 +42,10 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    // show different sections for VET and USER
+    if (user?.type === "USER" && !!data.vetOnly) return null;
+    if (user?.type === "VET" && !data.vetOnly) return null;
 
     return (
         <>

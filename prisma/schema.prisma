@@ -27,3 +27,26 @@ model User {
 
   token     String?   @unique
 }
+
+model Pets {
+  id              Int             @id @default(autoincrement())
+  name            String          @db.VarChar(16)
+  age             Int
+  weight          Int
+  gender          String
+  type            String          @db.VarChar(16)
+  race            String          @db.VarChar(16)
+  birthday        DateTime        @db.Date
+  color           String          @db.VarChar(16)
+  secondary_color String          @db.VarChar(16)
+  microchip_date  DateTime?       @db.Date
+  neutered        Boolean
+  dead            Boolean
+  blood_type      String          @db.VarChar(16)
+  passport        Boolean
+  notes           String
+  therapy_notes   String
+  // appointments    Appointments[]
+  // history         History[]
+  // users           users          @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}

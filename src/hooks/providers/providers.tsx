@@ -13,6 +13,9 @@ import { SWRProvider } from "./swr";
 // AUTH
 import { ApiProvider } from "@/contexts/api";
 import { AuthProvider } from "@/contexts/jwt-context";
+// DatePicker
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 interface ProvidersProps {
     children: ReactNode;
@@ -38,7 +41,11 @@ const Providers = ({ children }: ProvidersProps) => (
                                 <AuthProvider>
                                     {/* Authentication Loading Splash Screen */}
                                     <IsInitialisedGuard>
-                                        {children}
+                                        <LocalizationProvider
+                                            dateAdapter={AdapterDayjs}
+                                        >
+                                            {children}
+                                        </LocalizationProvider>
                                     </IsInitialisedGuard>
                                 </AuthProvider>
                             </SWRProvider>

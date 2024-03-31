@@ -47,6 +47,12 @@ export const basicFetcher: FetcherType = async (input, init = {}) => {
     if (csrfHeaderName && csrfToken) {
         init.headers.set(csrfHeaderName, csrfToken);
     }
+    // (npyl): Authorization Token
+    const token = window ? window.localStorage.getItem("accessToken") : null;
+    if (token) {
+        init.headers.set("Authorization", `Bearer ${token}`);
+    }
+
     let res: Response;
     try {
         res = await fetch(input, init);

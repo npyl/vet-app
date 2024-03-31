@@ -1,5 +1,4 @@
 "use client";
-
 // React
 import { FormEvent, useCallback, useState } from "react";
 // MUI
@@ -14,9 +13,13 @@ import Iconify from "@/components/iconify";
 // Hooks
 import useAuth from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SoftAlert } from "../styled";
+import { UserType } from "@/types/user";
 
-export default function LoginForm() {
+interface Props {
+    type: UserType;
+}
+
+export default function LoginForm({ type }: Props) {
     const { signin } = useAuth();
 
     const router = useRouter();
@@ -35,7 +38,7 @@ export default function LoginForm() {
 
             const form = e.target as HTMLFormElement;
 
-            signin(form.email.value, form.password.value)
+            signin(form.email.value, form.password.value, type)
                 .then(() => returnTo && router.push(returnTo))
                 .catch((error) => console.error(error))
                 .finally(() => setIsSubmitting(false));
@@ -45,10 +48,10 @@ export default function LoginForm() {
 
     return (
         <>
-            <SoftAlert severity="info" sx={{ mb: 3 }}>
+            {/* <SoftAlert severity="info" sx={{ mb: 3 }}>
                 Use email : <strong>tester@example.com</strong> / password :
                 <strong>123456</strong>
-            </SoftAlert>
+            </SoftAlert> */}
 
             <form method="POST" onSubmit={handleSubmit}>
                 <Stack spacing={2.5}>

@@ -7,8 +7,7 @@ import { AuthGuard } from "@/guards/is-authenticated";
 import AuthPage from "@/components/auth";
 
 export const metadata: Metadata = {
-    title: "Hello!",
-    description: "Hello!",
+    title: "Bobos App",
 };
 
 export default function RootLayout({
@@ -18,11 +17,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body
-                style={{
-                    minHeight: "100vh",
-                }}
-            >
+            <body>
                 <Providers>
                     <AuthGuard alternative={<AuthPage />}>
                         <DashboardLayout>{children}</DashboardLayout>

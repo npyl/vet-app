@@ -1,12 +1,48 @@
 "use client";
 
 // mui
-import { Container, Paper } from "@mui/material";
+import {
+    Button,
+    ButtonGroup,
+    ButtonGroupProps,
+    Container,
+    Paper,
+} from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { Background } from "./styled";
 import { useCallback, useState } from "react";
 import { LoginForm, RegisterForm } from "./forms";
+import { UserType } from "@prisma/client";
+
+// ----------------------------------------------------------------------
+
+interface Props extends ButtonGroupProps {
+    type: UserType;
+    setType: (t: UserType) => void;
+}
+
+const UserTypeSelect = ({ type, setType, ...props }: Props) => {
+    const selectUser = useCallback(() => setType("USER"), []);
+    const selectVet = useCallback(() => setType("VET"), []);
+
+    return (
+        <ButtonGroup {...props}>
+            <Button
+                variant={type === "USER" ? "contained" : "outlined"}
+                onClick={selectUser}
+            >
+                User
+            </Button>
+            <Button
+                variant={type === "VET" ? "contained" : "outlined"}
+                onClick={selectVet}
+            >
+                Vet
+            </Button>
+        </ButtonGroup>
+    );
+};
 
 // ----------------------------------------------------------------------
 
@@ -15,17 +51,30 @@ export default function AuthPage() {
     const setLogin = useCallback(() => setMode("login"), []);
     const setRegister = useCallback(() => setMode("register"), []);
 
+    const [type, setType] = useState<UserType>("USER");
+
     return (
         <main>
             <Background>
-                <Container>
+                <Container maxWidth="sm">
                     <Paper
                         sx={{
                             p: 5,
                             borderRadius: "15px",
                             backgroundColor: "background.paper",
+                            position: "relative",
                         }}
                     >
+                        <UserTypeSelect
+                            type={type}
+                            setType={setType}
+                            sx={{
+                                position: "absolute",
+                                right: "40px",
+                                top: "50px",
+                            }}
+                        />
+
                         {mode === "login" ? (
                             <>
                                 <Stack spacing={2} sx={{ mb: 5 }}>
@@ -52,7 +101,7 @@ export default function AuthPage() {
                                         </Typography>
                                     </Stack>
                                 </Stack>
-                                <LoginForm />
+                                <LoginForm type={type} />
                             </>
                         ) : (
                             <>
@@ -80,7 +129,7 @@ export default function AuthPage() {
                                         </Typography>
                                     </Stack>
                                 </Stack>
-                                <RegisterForm />
+                                <RegisterForm type={type} />
                             </>
                         )}
                     </Paper>

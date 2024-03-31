@@ -9,8 +9,8 @@ export async function GET(req: Request | NextRequest) {
         const url = new URL(req.url);
 
         const search = url.searchParams.get("search") ?? "";
-        const pageSize = parseInt(url.searchParams.get("pageSize") ?? "") || 5;
-        const page = parseInt(url.searchParams.get("page") ?? "") || 0;
+        // const pageSize = parseInt(url.searchParams.get("pageSize") ?? "") || 5;
+        // const page = parseInt(url.searchParams.get("page") ?? "") || 0;
         // const pageOrder = url.searchParams.get("pageOrder") ?? "desc";
 
         const data = await prisma.pets.findMany({

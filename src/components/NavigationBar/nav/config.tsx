@@ -5,6 +5,10 @@ const navConfig = [
                 title: "Home",
                 path: "/",
             },
+            {
+                title: "Pets",
+                path: "/pets",
+            },
         ],
     },
 ];

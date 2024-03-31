@@ -4,7 +4,6 @@ import {
     Box,
     Button,
     Checkbox,
-    Divider,
     FormControlLabel,
     MenuItem,
     Stack,

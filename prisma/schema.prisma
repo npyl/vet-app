@@ -32,15 +32,16 @@ model User {
 model Pets {
   id              Int             @id @default(autoincrement())
   name            String          @db.VarChar(16)
+  photo           String
   age             Int
   weight          Int
   gender          String
   type            String          @db.VarChar(16)
   race            String          @db.VarChar(16)
-  birthday        DateTime        @db.Date
+  birthday        String
   color           String          @db.VarChar(16)
   secondary_color String          @db.VarChar(16)
-  microchip_date  DateTime?       @db.Date
+  microchip_date  String
   neutered        Boolean
   dead            Boolean
   blood_type      String          @db.VarChar(16)

@@ -3,6 +3,7 @@ export type IPetGender = "MALE" | "FEMALE";
 export interface IPet {
     id: number;
     name: string;
+    photo: string;
     age: number;
     weight: number;
     gender: IPetGender;

@@ -76,6 +76,8 @@ export default function PetsPage() {
                     pageSize={10}
                     sortingBy=""
                     sortingOrder=""
+                    // ...
+                    resource="pets"
                 />
             )}
         </>

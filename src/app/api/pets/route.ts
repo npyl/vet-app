@@ -41,11 +41,11 @@ export async function POST(req: Request | NextRequest) {
 
         const body = await req.json();
 
-        await prisma.pets.create({
+        const res = await prisma.pets.create({
             data: body,
         });
 
-        return new NextResponse(JSON.stringify({ message: "success" }), {
+        return new NextResponse(JSON.stringify(res), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });
@@ -70,13 +70,13 @@ export async function DELETE(req: Request | NextRequest) {
 
         if (!id) throw "Bad id!";
 
-        await prisma.pets.delete({
+        const res = await prisma.pets.delete({
             where: {
                 id,
             },
         });
 
-        return new NextResponse(JSON.stringify({ message: "success" }), {
+        return new NextResponse(JSON.stringify(res), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });
@@ -96,14 +96,14 @@ export async function PUT(req: Request | NextRequest) {
 
         const { id, ...body } = await req.json();
 
-        await prisma.pets.update({
+        const res = await prisma.pets.update({
             where: {
                 id,
             },
             data: body,
         });
 
-        return new NextResponse(JSON.stringify({ message: "success" }), {
+        return new NextResponse(JSON.stringify(res), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });

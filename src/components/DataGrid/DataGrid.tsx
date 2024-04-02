@@ -2,14 +2,16 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import { Button } from "@mui/material";
 import {
     GridDeleteIcon,
+    GridRowParams,
     GridRowSelectionModel,
     GridSortDirection,
     GridSortModel,
     GridToolbarContainer,
 } from "@mui/x-data-grid";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { StyledDataGrid } from "./styles";
 import GridProps from "./types";
+import { useRouter } from "next/navigation";
 
 const DataGridTable: FC<GridProps> = ({
     rows,
@@ -28,6 +30,8 @@ const DataGridTable: FC<GridProps> = ({
 
     ...other
 }) => {
+    const router = useRouter();
+
     const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
     const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
@@ -72,6 +76,11 @@ const DataGridTable: FC<GridProps> = ({
     const handleRowSelectionChange = (model: GridRowSelectionModel) =>
         setSelectedRows(model);
 
+    const handleRowClick = useCallback(
+        (e: GridRowParams) => router.push(`/${other.resource}/${e.row.id}`),
+        [other.resource],
+    );
+
     return (
         <>
             <StyledDataGrid
@@ -110,6 +119,7 @@ const DataGridTable: FC<GridProps> = ({
                 columns={columns}
                 pageSizeOptions={[25, 50, 100]}
                 // ...
+                onRowClick={handleRowClick}
                 {...other}
             />
         </>

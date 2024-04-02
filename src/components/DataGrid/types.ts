@@ -18,7 +18,7 @@ type GridProps = {
     totalRows?: number;
     onPaginationModelChange?: (
         model: GridPaginationModel,
-        details: GridCallbackDetails
+        details: GridCallbackDetails,
     ) => void;
 
     onBulkDelete?: (selectedRows: GridRowSelectionModel) => void;

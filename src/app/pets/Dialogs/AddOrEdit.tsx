@@ -23,6 +23,7 @@ import {
 } from "@/components/hook-form";
 import useApiContext from "@/contexts/api";
 import dayjs from "dayjs";
+import useMutateTable from "@/hooks/useMutateTable";
 
 interface Props {
     open: boolean;
@@ -53,6 +54,7 @@ const Schema = yup.object<IPetPOST>().shape({
 
 const AddPetDialog = ({ pet, ...props }: Props) => {
     const { post, put } = useApiContext();
+    const { mutateTable } = useMutateTable();
 
     const methods = useForm<IPetPOST>({
         resolver: yupResolver(Schema),
@@ -88,12 +90,12 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
             // update
             put("/api/pets", {
                 body: JSON.stringify({ ...d, id: pet?.id }),
-            });
+            }).then(() => mutateTable("/api/pets"));
         } else {
             // create
             post("/api/pets", {
                 body: JSON.stringify(d),
-            });
+            }).then(() => mutateTable("/api/pets"));
         }
     }, []);
 

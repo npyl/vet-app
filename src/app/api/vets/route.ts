@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import prisma from "../_util/db";
 
+//
+//  Get all users that are VETs
+//
 export async function GET() {
     try {
         const data = await prisma.user.findMany({
@@ -10,8 +13,6 @@ export async function GET() {
                 },
             },
         });
-
-        console.log("all vets: ", data);
 
         return new NextResponse(JSON.stringify(data), {
             status: 200,

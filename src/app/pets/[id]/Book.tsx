@@ -5,7 +5,7 @@ import IBookAppointment from "@/types/book";
 import IUser from "@/types/user";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { MenuItem } from "@mui/material";
+import { MenuItem, Skeleton } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useCallback, useMemo } from "react";
@@ -14,14 +14,16 @@ import useSWR from "swr";
 import * as yup from "yup";
 
 const SelectVet = () => {
-    const { data } = useSWR<IUser[]>("/api/vets");
+    const { data, isLoading } = useSWR<IUser[]>("/api/vets");
 
     const vets = useMemo(
         () => (Array.isArray(data) && data.length > 0 ? data : []),
         [data],
     );
 
-    return (
+    return isLoading ? (
+        <Skeleton width={100} height={50} animation="pulse" />
+    ) : (
         <RHFSelect label="Available vets" name="vetId">
             {vets.map(({ email, id }, i) => (
                 <MenuItem key={i} value={id}>
@@ -35,6 +37,7 @@ const SelectVet = () => {
 const Schema = yup.object<IBookAppointment>().shape({
     vetId: yup.number().required(),
     petId: yup.number().required(),
+    date: yup.string().required(),
 });
 
 interface Props {
@@ -52,6 +55,7 @@ const BookDialog = ({ petId, ...props }: Props) => {
         values: {
             vetId: -1,
             petId,
+            date: "",
         },
     });
 

@@ -2,7 +2,6 @@ import Dialog from "@/components/Dialog";
 import { IPet, IPetGender, IPetPOST } from "@/types/pet";
 import {
     Box,
-    Button,
     Checkbox,
     FormControlLabel,
     MenuItem,
@@ -24,6 +23,7 @@ import {
 import useApiContext from "@/contexts/api";
 import dayjs from "dayjs";
 import useMutateTable from "@/hooks/useMutateTable";
+import { LoadingButton } from "@mui/lab";
 
 interface Props {
     open: boolean;
@@ -56,6 +56,8 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
     const { post, put } = useApiContext();
     const { mutateTable } = useMutateTable();
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const methods = useForm<IPetPOST>({
         resolver: yupResolver(Schema),
         values: {
@@ -83,19 +85,32 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
 
     const [chipped, setChipped] = useState(false);
 
+    const mutate = useCallback(() => {
+        mutateTable("/api/pets");
+        props.onClose();
+    }, []);
+
     const handleSubmit = useCallback((d: IPetPOST) => {
         console.log("got: ", d);
 
         if (pet) {
             // update
+            setIsLoading(true);
+
             put("/api/pets", {
                 body: JSON.stringify({ ...d, id: pet?.id }),
-            }).then(() => mutateTable("/api/pets"));
+            })
+                .then(mutate)
+                .finally(() => setIsLoading(false));
         } else {
+            setIsLoading(true);
+
             // create
             post("/api/pets", {
                 body: JSON.stringify(d),
-            }).then(() => mutateTable("/api/pets"));
+            })
+                .then(mutate)
+                .finally(() => setIsLoading(false));
         }
     }, []);
 
@@ -235,9 +250,14 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
                     </Stack>
                 }
                 actions={
-                    <Button type="submit" variant="contained">
-                        Add
-                    </Button>
+                    <LoadingButton
+                        type="submit"
+                        variant="contained"
+                        disabled={isLoading}
+                        loading={isLoading}
+                    >
+                        {pet ? "Update" : "Add"}
+                    </LoadingButton>
                 }
             />
         </FormProvider>

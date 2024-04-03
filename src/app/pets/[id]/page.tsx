@@ -1,4 +1,5 @@
 "use client";
+
 import {
     List,
     ListBooleanItem,
@@ -15,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import { useParams } from "next/navigation";
 import EditDialog from "../Dialogs/AddOrEdit";
 import useSWR from "swr";
+import BookDialog from "./Book";
 
 const PetPage = () => {
     const { id } = useParams();
@@ -22,6 +24,7 @@ const PetPage = () => {
     const { data: pet } = useSWR<IPet>(`/api/pets/${id}`);
 
     const [isEditOpen, openEdit, closeEdit] = useDialog();
+    const [isBookOpen, openBook, closeBook] = useDialog();
 
     return (
         <>
@@ -32,17 +35,22 @@ const PetPage = () => {
                     position: "relative",
                 }}
             >
-                <Button
+                <Stack
                     sx={{
                         position: "absolute",
                         top: 4,
                         right: 4,
                     }}
-                    variant="contained"
-                    onClick={openEdit}
+                    direction="row"
+                    spacing={0.5}
                 >
-                    Edit
-                </Button>
+                    <Button variant="outlined" onClick={openBook}>
+                        Book Appointment
+                    </Button>
+                    <Button variant="contained" onClick={openEdit}>
+                        Edit
+                    </Button>
+                </Stack>
 
                 <Stack p={2} alignItems="center">
                     <Avatar
@@ -170,8 +178,18 @@ const PetPage = () => {
                 </Grid>
             </Paper>
 
+            {/* Dialogs */}
+
             {isEditOpen ? (
                 <EditDialog open={isEditOpen} pet={pet} onClose={closeEdit} />
+            ) : null}
+
+            {isBookOpen ? (
+                <BookDialog
+                    open={isBookOpen}
+                    petId={id ? +id : -1}
+                    onClose={closeBook}
+                />
             ) : null}
         </>
     );

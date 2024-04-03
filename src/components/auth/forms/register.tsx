@@ -43,7 +43,7 @@ export default function RegisterForm({ type }: Props) {
                 .catch((error) => console.error(error))
                 .finally(() => setIsSubmitting(false));
         },
-        [returnTo],
+        [type, returnTo],
     );
 
     return (

@@ -23,6 +23,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import IVetWorkingHours from "@/types/workingHours";
 import * as yup from "yup";
 import dayjs from "dayjs";
+import Calendar from "./Calendar";
 
 // ----------------------------------------------
 
@@ -209,6 +210,8 @@ const Appointments = () => {
                     <CalendarTodayIcon />
                 </IconButton>
             </Stack>
+
+            <Calendar />
 
             {isOpen ? (
                 <Popper

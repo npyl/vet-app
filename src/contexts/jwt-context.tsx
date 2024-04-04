@@ -165,20 +165,25 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const { login, register, getProfile, isSuccess } = useMethods();
 
     const initialize = async (): Promise<void> => {
-        if (globalThis?.localStorage?.getItem("accessToken")) {
-            const user = await getProfile();
-            if (!user) {
-                throw "Failed to get profile!";
-            }
+        try {
+            if (globalThis?.localStorage?.getItem("accessToken")) {
+                const user = await getProfile();
+                if (!user) {
+                    throw "Failed to get profile!";
+                }
 
-            dispatch({
-                type: ActionType.INITIALIZE,
-                payload: {
-                    isAuthenticated: true,
-                    user,
-                },
-            });
-        } else {
+                dispatch({
+                    type: ActionType.INITIALIZE,
+                    payload: {
+                        isAuthenticated: true,
+                        user,
+                    },
+                });
+            } else {
+                throw "Token does not exist!";
+            }
+        } catch (error) {
+            globalThis?.localStorage.removeItem("accessToken");
             dispatch({
                 type: ActionType.INITIALIZE,
                 payload: {

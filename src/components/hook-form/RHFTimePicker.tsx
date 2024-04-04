@@ -2,19 +2,19 @@ import { Controller, useFormContext } from "react-hook-form";
 import Stack from "@mui/material/Stack";
 import { FormHelperText, Typography } from "@mui/material";
 import {
-    DatePicker as MuiDatePicker,
-    DatePickerProps as MuiDatePickerProps,
+    TimePicker as MuiTimePicker,
+    TimePickerProps as MuiTimePickerProps,
 } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useCallback } from "react";
 
-interface Props extends MuiDatePickerProps<dayjs.Dayjs> {
+interface Props extends MuiTimePickerProps<dayjs.Dayjs> {
     label: string;
     name: string;
 }
 
 // INFO: value prop must be an ISO date string
-const DatePicker = ({ name, label, ...props }: Props) => {
+const TimePicker = ({ name, label, ...props }: Props) => {
     const { control, setValue } = useFormContext();
 
     const handleChange = useCallback(
@@ -29,7 +29,7 @@ const DatePicker = ({ name, label, ...props }: Props) => {
             render={({ field: { value, ...field }, fieldState: { error } }) => (
                 <Stack spacing={1}>
                     <Typography variant="subtitle1">{label}</Typography>
-                    <MuiDatePicker
+                    <MuiTimePicker
                         {...field}
                         {...props}
                         value={value ? dayjs(value) : null}
@@ -44,4 +44,4 @@ const DatePicker = ({ name, label, ...props }: Props) => {
     );
 };
 
-export default DatePicker;
+export default TimePicker;

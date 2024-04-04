@@ -17,7 +17,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IVetWorkingHours, IVetWorkingHoursPOST } from "@/types/workingHours";
 import * as yup from "yup";
-import dayjs from "dayjs";
 import Calendar from "./Calendar";
 import { RHFOnlyNumbers } from "@/components/hook-form";
 import useApiContext from "@/contexts/api";
@@ -25,9 +24,6 @@ import useSWR from "swr";
 import useAuth from "@/hooks/useAuth";
 
 // ----------------------------------------------
-
-const minTime = dayjs().hour(8).minute(0); // 8 AM
-const maxTime = dayjs().hour(22).minute(0); // 10 PM
 
 interface CustomTimePickerProps {
     day: string;
@@ -74,7 +70,7 @@ interface PopperProps extends MuiPopperProps {
 
 const Popper = ({ onClose, ...props }: PopperProps) => {
     const { user } = useAuth();
-    const { post } = useApiContext();
+    const { post, put } = useApiContext();
 
     // Get user working hours
     const { data: workingHours, isLoading } = useSWR<IVetWorkingHours>(
@@ -95,13 +91,24 @@ const Popper = ({ onClose, ...props }: PopperProps) => {
         },
     });
 
-    const handleSubmit = useCallback((d: IVetWorkingHoursPOST) => {
-        console.log("d: ", d);
+    const handleSubmit = useCallback(
+        (d: IVetWorkingHoursPOST) => {
+            console.log("d: ", d);
 
-        post("/api/vets/workingHours", {
-            body: JSON.stringify(d),
-        });
-    }, []);
+            if (!workingHours) {
+                // create
+                post("/api/vets/workingHours", {
+                    body: JSON.stringify(d),
+                });
+            } else {
+                // update
+                put("/api/vets/workingHours", {
+                    body: JSON.stringify({ ...d, id: workingHours.id }),
+                });
+            }
+        },
+        [workingHours],
+    );
 
     return (
         <MuiPopper

@@ -21,7 +21,7 @@ export default function RHFOnlyNumbers({
     disabled = false,
     acceptsDecimal = false,
     adornment = "",
-    ...other
+    // ...other
 }: Props) {
     const { control, setValue } = useFormContext();
 

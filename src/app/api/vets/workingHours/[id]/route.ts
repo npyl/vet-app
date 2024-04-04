@@ -1,11 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../_util/db";
+import { IVetWorkingHoursPOST } from "@/types/workingHours";
+import mapper from "./mapper";
 
 interface Props {
     params: { id: number };
 }
 
+//
+//  Receive a vet's working hours
+//
 export async function GET(req: Request | NextRequest, { params }: Props) {
+    req;
+
     try {
         // INFO: get user id
         const { id } = params || {};
@@ -30,11 +37,13 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
                 },
             },
         });
-
         if (!Array.isArray(res) || res.length === 0)
             throw "Could not find this workingHours record!";
 
-        return new NextResponse(JSON.stringify(res[0]), {
+        // Map Database object (IVetWorkingHoursPOST) to IVetWorkingHours
+        const result = mapper(res[0] as IVetWorkingHoursPOST, users[0]);
+
+        return new NextResponse(JSON.stringify(result), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });

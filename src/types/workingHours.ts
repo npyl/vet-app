@@ -1,6 +1,20 @@
 import IUser from "./user";
 
-interface IVetWorkingHours {
+export interface IVetWorkingHoursPOST {
+    id?: number;
+
+    monday: [number, number];
+    tuesday: [number, number];
+    wednesday: [number, number];
+    thursday: [number, number];
+    friday: [number, number];
+
+    vetId: number;
+}
+
+export interface IVetWorkingHours {
+    id: number;
+
     monday: [number, number];
     tuesday: [number, number];
     wednesday: [number, number];
@@ -9,5 +23,3 @@ interface IVetWorkingHours {
 
     vet: IUser;
 }
-
-export default IVetWorkingHours;

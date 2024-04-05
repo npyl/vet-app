@@ -1,5 +1,9 @@
 import Dialog from "@/components/Dialog";
-import { RHFDatePicker, RHFSelect } from "@/components/hook-form";
+import {
+    RHFDatePicker,
+    RHFSelect,
+    RHFTimePicker,
+} from "@/components/hook-form";
 import { SpaceBetween } from "@/components/styled";
 import useApiContext from "@/contexts/api";
 import IBookAppointment from "@/types/book";
@@ -9,7 +13,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { MenuItem, Skeleton } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useCallback, useMemo } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
@@ -106,11 +109,14 @@ const DateSelect = () => {
                 shouldDisableDate={disableWeekends}
             />
 
-            <TimePicker
+            <RHFTimePicker
+                label="Time"
                 name="date"
                 disableFuture
                 minTime={minDate}
                 maxTime={maxDate}
+                skipDisabled
+                ampm={false}
             />
         </>
     ) : null;
@@ -157,15 +163,10 @@ const BookDialog = ({ petId, ...props }: Props) => {
                 submit
                 onSubmit={methods.handleSubmit(handleSubmit)}
                 // ...
-                maxWidth="sm"
+                maxWidth="md"
                 title={<Typography variant="h6">Book Appointment</Typography>}
                 content={
-                    <SpaceBetween
-                        mt={2}
-                        spacing={1}
-                        alignItems="center"
-                        width={1}
-                    >
+                    <SpaceBetween mt={2} alignItems="center" width={1}>
                         <SelectVet />
                         <DateSelect />
                     </SpaceBetween>

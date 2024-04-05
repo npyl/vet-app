@@ -1,6 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
 import Stack from "@mui/material/Stack";
-import { FormHelperText, Typography } from "@mui/material";
+import { FormControlLabel, FormHelperText } from "@mui/material";
 import {
     TimePicker as MuiTimePicker,
     TimePickerProps as MuiTimePickerProps,
@@ -28,12 +28,17 @@ const TimePicker = ({ name, label, ...props }: Props) => {
             control={control}
             render={({ field: { value, ...field }, fieldState: { error } }) => (
                 <Stack spacing={1}>
-                    <Typography variant="subtitle1">{label}</Typography>
-                    <MuiTimePicker
-                        {...field}
-                        {...props}
-                        value={value ? dayjs(value) : null}
-                        onChange={handleChange}
+                    <FormControlLabel
+                        labelPlacement="top"
+                        label={label}
+                        control={
+                            <MuiTimePicker
+                                {...field}
+                                {...props}
+                                value={value ? dayjs(value) : null}
+                                onChange={handleChange}
+                            />
+                        }
                     />
                     {error ? (
                         <FormHelperText error>{error?.message}</FormHelperText>

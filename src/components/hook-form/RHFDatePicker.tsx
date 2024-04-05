@@ -1,6 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
 import Stack from "@mui/material/Stack";
-import { FormHelperText, Typography } from "@mui/material";
+import { FormControlLabel, FormHelperText, Typography } from "@mui/material";
 import {
     DatePicker as MuiDatePicker,
     DatePickerProps as MuiDatePickerProps,
@@ -28,12 +28,17 @@ const DatePicker = ({ name, label, ...props }: Props) => {
             control={control}
             render={({ field: { value, ...field }, fieldState: { error } }) => (
                 <Stack spacing={1}>
-                    <Typography variant="subtitle1">{label}</Typography>
-                    <MuiDatePicker
-                        {...field}
-                        {...props}
-                        value={value ? dayjs(value) : null}
-                        onChange={handleChange}
+                    <FormControlLabel
+                        labelPlacement="top"
+                        label={label}
+                        control={
+                            <MuiDatePicker
+                                {...field}
+                                {...props}
+                                value={value ? dayjs(value) : null}
+                                onChange={handleChange}
+                            />
+                        }
                     />
                     {error ? (
                         <FormHelperText error>{error?.message}</FormHelperText>

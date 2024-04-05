@@ -1,19 +1,13 @@
-import { ICalendarEvent } from "@/types/calendar";
+import { IAppointment } from "@/types/appointment";
 
-const ICalendarEvent2EventSourceInput = ({
-    id,
-    color,
-    description,
-    startDate,
-    endDate,
-    title,
-}: ICalendarEvent) => ({
+const IAppointmentToCalendarEvent = ({ id, date, pet }: IAppointment) => ({
     id: `${id}`,
-    color,
-    description,
-    start: startDate,
-    end: endDate,
-    title,
+    color: "primary.main",
+    start: date,
+    title: pet.name,
+
+    // description: "example",
+    // end: dayjs(date).minute(30),
 });
 
-export default ICalendarEvent2EventSourceInput;
+export default IAppointmentToCalendarEvent;

@@ -1,4 +1,5 @@
 "use client";
+
 import {
     IconButton,
     Stack,
@@ -46,19 +47,70 @@ const CustomTimePicker = ({ day, name1, name2 }: CustomTimePickerProps) => (
 
 const Schema = yup.object<IVetWorkingHoursPOST>().shape({
     monday: yup
-        .tuple([yup.number().required(), yup.number().required()])
+        .tuple([
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+            yup.number().min(8).max(22).required(),
+        ])
         .required(),
     tuesday: yup
-        .tuple([yup.number().required(), yup.number().required()])
+        .tuple([
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+        ])
         .required(),
     wednesday: yup
-        .tuple([yup.number().required(), yup.number().required()])
+        .tuple([
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+        ])
         .required(),
     thursday: yup
-        .tuple([yup.number().required(), yup.number().required()])
+        .tuple([
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+        ])
         .required(),
     friday: yup
-        .tuple([yup.number().required(), yup.number().required()])
+        .tuple([
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+            yup
+                .number()
+                .min(8, "must be more than / or 8")
+                .max(22, "must be less than / or 22")
+                .required(),
+        ])
         .required(),
 
     vetId: yup.number().required(),

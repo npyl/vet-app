@@ -1,18 +1,20 @@
-// TODO: ...
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "../_util/db";
+import { IAppointmentPOST } from "@/types/appointment";
 
-import { NextResponse } from "next/server";
-
-export async function POST() {
+export async function POST(req: Request | NextRequest) {
     try {
-        console.log("book: POST");
+        const body = (await req.json()) as IAppointmentPOST;
+        if (!body) throw "Bad body!";
 
-        return new NextResponse(
-            JSON.stringify({ message: "Not implemented!" }),
-            {
-                status: 400,
-                headers: { "Content-Type": "application/json" },
-            },
-        );
+        const res = await prisma.appointment.create({
+            data: body,
+        });
+
+        return new NextResponse(JSON.stringify(res), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
     } catch (error) {
         console.error(error);
         return new NextResponse(JSON.stringify(error), {

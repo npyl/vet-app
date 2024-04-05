@@ -15,17 +15,24 @@ import { Card, Container } from "@mui/material";
 import { StyledCalendar, CalendarToolbar } from "@/components/Calendar";
 
 import ICalendarEvent2EventSourceInput from "./constants";
+import useSWR from "swr";
+import { useParams } from "next/navigation";
+import useAuth from "@/hooks/useAuth";
 
 // ----------------------------------------------------------------------
 
 const view = "timeGridWeek";
 
 export default function Events() {
+    const { user } = useAuth();
+
     const calendarRef = useRef<FullCalendar>(null);
 
     const [date, setDate] = useState(new Date());
 
-    const data: any[] = [];
+    const { data } = useSWR(
+        user?.id ? `/api/vets/appointments/${user.id}` : null,
+    );
 
     const events = useMemo(
         () => data?.map(ICalendarEvent2EventSourceInput) || [],

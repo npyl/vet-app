@@ -4,6 +4,15 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+//
+//  Appointments:
+//    - a User can have many appointments
+//    - an appointment can only be connected to one User
+//
+//    - a Pet can have many appointments
+//    - an appointment can only be connected to one Pet
+//
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,16 +29,17 @@ enum UserType {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  password String
-  avatar   String
-  type     UserType @default(USER)
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  password        String
+  avatar          String
+  type            UserType @default(USER)
 
-  token String? @unique
+  token           String? @unique
 
   // User's working hours (Only a vet should have workingHours) 
-  workingHours   WorkingHours?
+  workingHours    WorkingHours?
+  appointments    Appointment[]
 }
 
 model Pets {
@@ -51,6 +61,8 @@ model Pets {
   passport        Boolean
   notes           String
   therapy_notes   String
+
+  appointments    Appointment[]
 }
 
 model WorkingHours {
@@ -65,4 +77,16 @@ model WorkingHours {
   // One-to-one relationship between User and WorkingHours
   vet      User @relation(fields: [vetId], references: [id])
   vetId    Int  @unique
+}
+
+model Appointment {
+  id      Int @id @default(autoincrement())
+
+  vetId   Int
+  vet     User @relation(fields: [vetId], references: [id])
+
+  petId   Int
+  pet     Pets @relation(fields: [petId], references: [id])
+
+  date    String
 }

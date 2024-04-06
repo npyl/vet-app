@@ -16,7 +16,6 @@ import { StyledCalendar, CalendarToolbar } from "@/components/Calendar";
 
 import ICalendarEvent2EventSourceInput from "./constants";
 import useSWR from "swr";
-import { useParams } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
 
 // ----------------------------------------------------------------------

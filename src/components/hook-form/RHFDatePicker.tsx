@@ -1,6 +1,6 @@
 import { Controller, useFormContext } from "react-hook-form";
 import Stack from "@mui/material/Stack";
-import { FormControlLabel, FormHelperText, Typography } from "@mui/material";
+import { FormControlLabel, FormHelperText } from "@mui/material";
 import {
     DatePicker as MuiDatePicker,
     DatePickerProps as MuiDatePickerProps,

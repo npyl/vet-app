@@ -1,4 +1,5 @@
 import {
+    DataGridProps,
     GridCallbackDetails,
     GridColDef,
     GridPaginationModel,
@@ -25,6 +26,6 @@ type GridProps = {
     onBulkEdit?: (selectedRows: GridRowSelectionModel) => void;
 
     resource?: string;
-};
+} & Omit<DataGridProps, "sortingOrder">;
 
 export default GridProps;

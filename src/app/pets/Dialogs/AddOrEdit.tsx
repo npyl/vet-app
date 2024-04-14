@@ -24,6 +24,7 @@ import useApiContext from "@/contexts/api";
 import dayjs from "dayjs";
 import useMutateTable from "@/hooks/useMutateTable";
 import { LoadingButton } from "@mui/lab";
+import useAuth from "@/hooks/useAuth";
 
 interface Props {
     open: boolean;
@@ -53,6 +54,7 @@ const Schema = yup.object<IPetPOST>().shape({
 });
 
 const AddPetDialog = ({ pet, ...props }: Props) => {
+    const { user } = useAuth();
     const { post, put } = useApiContext();
     const { mutateTable } = useMutateTable();
 
@@ -86,9 +88,9 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
     const [chipped, setChipped] = useState(false);
 
     const mutate = useCallback(() => {
-        mutateTable("/api/pets");
+        mutateTable(`/api/user/${user?.id}/pets`);
         props.onClose();
-    }, []);
+    }, [user?.id]);
 
     const handleSubmit = useCallback((d: IPetPOST) => {
         console.log("got: ", d);

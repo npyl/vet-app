@@ -6,16 +6,27 @@ import { useMemo } from "react";
 import { IPet } from "@/types/pet";
 import { GridCellParams, GridColDef } from "@mui/x-data-grid";
 import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import useAuth from "@/hooks/useAuth";
 
 const RenderImageCell = ({ row }: GridCellParams<IPet>) => (
-    <img src={row.photo} alt="petPhoto" width="150px" height="150px" />
+    <Stack justifyContent="center" alignItems="center" width={1} height={1}>
+        <img
+            src={row.photo}
+            alt="petPhoto"
+            width="70px"
+            height="70px"
+            style={{
+                borderRadius: "100%",
+            }}
+        />
+    </Stack>
 );
 
 const COLUMNS: GridColDef<IPet>[] = [
     {
         field: "photo",
-        headerName: "Thumbnail",
-        flex: 1,
+        headerName: "",
         align: "center",
         headerAlign: "center",
         renderCell: RenderImageCell,
@@ -45,7 +56,11 @@ const skeletonRows = Array.from({ length: 2 }, (_, index) => ({
 }));
 
 export default function PetsPage() {
-    const { data, isLoading } = useSWR<IPet[]>("/api/pets");
+    const { user } = useAuth();
+
+    const { data, isLoading } = useSWR<IPet[]>(
+        user?.id ? `/api/user/${user.id}/pets` : null,
+    );
 
     const rows = useMemo(
         () => (Array.isArray(data) && data.length > 0 ? data : []),

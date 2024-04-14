@@ -1,4 +1,4 @@
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
 
 export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -32,26 +32,12 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     "& .MuiDataGrid-iconSeparator": {
         display: "none",
     },
-    "& .MuiDataGrid-columnHeader": {
-        borderRight: `1px solid ${
-            theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
-        }`,
-    },
     "& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell": {
         borderBottom: `1px solid ${
             theme.palette.mode === "light" ? "#f0f0f0" : "#303030"
         }`,
     },
-    "& .MuiDataGrid-cell": {
-        backgroundColor:
-            theme.palette.mode === "light"
-                ? theme.palette.common.white
-                : theme.palette.neutral![800],
-        color:
-            theme.palette.mode === "light"
-                ? "rgba(0,0,0,.85)"
-                : "rgba(255,255,255,0.65)",
-    },
+
     "& .MuiPaginationItem-root": {
         borderRadius: 0,
     },
@@ -62,4 +48,14 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
         {
             outline: "none !important",
         },
+
+    "& .MuiDataGrid-row": {
+        backgroundColor: theme.palette.background.paper,
+    },
+
+    "& .MuiDataGrid-row:hover": {
+        cursor: "pointer",
+        backgroundColor: `${alpha(theme.palette.primary.light, 0.2)} !important`,
+        borderRadius: "10px",
+    },
 }));

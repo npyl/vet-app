@@ -37,6 +37,8 @@ model User {
 
   token           String? @unique
 
+  pets            Pets[]
+
   // User's working hours (Only a vet should have workingHours) 
   workingHours    WorkingHours?
   appointments    Appointment[]
@@ -62,6 +64,11 @@ model Pets {
   notes           String
   therapy_notes   String
 
+  // INFO: each pet has an owner (user or vet)
+  ownerId         Int
+  owner           User    @relation(fields: [ownerId], references: [id])
+
+  // INFO: each pet can have appointments.
   appointments    Appointment[]
 }
 

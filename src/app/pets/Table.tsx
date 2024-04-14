@@ -2,9 +2,13 @@
 
 import DataGrid from "@/components/DataGrid";
 import useSWR from "swr";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { IPet } from "@/types/pet";
-import { GridCellParams, GridColDef } from "@mui/x-data-grid";
+import {
+    GridCellParams,
+    GridColDef,
+    GridPaginationModel,
+} from "@mui/x-data-grid";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import useAuth from "@/hooks/useAuth";
@@ -55,6 +59,8 @@ const skeletonRows = Array.from({ length: 2 }, (_, index) => ({
     id: index + 1,
 }));
 
+const PAGE_SIZE = 5;
+
 export default function PetsPage() {
     const { user } = useAuth();
 
@@ -66,6 +72,17 @@ export default function PetsPage() {
         () => (Array.isArray(data) && data.length > 0 ? data : []),
         [data],
     );
+
+    // -------------------------------------------------------------
+
+    const [page, setPage] = useState(0);
+
+    const handlePaginationChange = useCallback(
+        ({ page }: GridPaginationModel) => setPage(page),
+        [],
+    );
+
+    // -------------------------------------------------------------
 
     return (
         <>
@@ -87,10 +104,13 @@ export default function PetsPage() {
                     rows={rows}
                     columns={COLUMNS}
                     // ...
-                    page={0}
-                    pageSize={10}
+                    paginationMode="client"
+                    page={page}
+                    pageSize={PAGE_SIZE}
+                    totalRows={data?.length ?? 0}
                     sortingBy=""
                     sortingOrder=""
+                    onPaginationModelChange={handlePaginationChange}
                     // ...
                     resource="pets"
                 />

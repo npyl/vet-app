@@ -109,6 +109,7 @@ const handlers: Record<ActionType, Handler> = {
 
         return {
             ...state,
+            isInitialized: true,
             isAuthenticated: true,
             user,
         };

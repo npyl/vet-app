@@ -24,7 +24,10 @@ export default function LoginForm({ type }: Props) {
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    const returnTo = searchParams.get("returnTo");
+    const returnTo =
+        searchParams.get("returnTo") || type === "USER"
+            ? "/pets"
+            : "/appointments";
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     // const [errorMsg, setErrorMsg] = useState("");

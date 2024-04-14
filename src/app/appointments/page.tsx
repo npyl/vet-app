@@ -119,6 +119,21 @@ const Schema = yup.object<IVetWorkingHoursPOST>().shape({
     vetId: yup.number().required(),
 });
 
+// ---------------------------------------------------------------------
+
+const useWorkingHours = () => {
+    const { user } = useAuth();
+
+    // Get user working hours
+    const { data: workingHours, isLoading } = useSWR<IVetWorkingHours>(
+        `/api/vets/workingHours/${user?.id}`,
+    );
+
+    return { workingHours, isLoading };
+};
+
+// ----------------------------------------------------------------------
+
 interface PopperProps extends MuiPopperProps {
     onClose: VoidFunction;
 }
@@ -129,8 +144,7 @@ const Popper = ({ onClose, ...props }: PopperProps) => {
     const { mutateTable } = useMutateTable();
 
     // Get user working hours
-    const { data: workingHours, isLoading: isGetLoading } =
-        useSWR<IVetWorkingHours>(`/api/vets/workingHours/${user?.id}`);
+    const { workingHours, isLoading: isGetLoading } = useWorkingHours();
 
     // --------------------------------------------------------------
     const [isMutating, setMutating] = useState(false);
@@ -284,6 +298,13 @@ const Appointments = () => {
     );
     const closePopper = useCallback(() => setAnchorEl(undefined), []);
 
+    const { workingHours, isLoading } = useWorkingHours();
+
+    const notSet = useMemo(
+        () => !workingHours && !isLoading,
+        [workingHours, isLoading],
+    );
+
     return (
         <>
             <Stack
@@ -299,6 +320,13 @@ const Appointments = () => {
                     onClick={openPopper}
                 >
                     Working Hours
+                    {notSet ? (
+                        <Typography ml={1} color="error.main">
+                            (Not yet set!)
+                        </Typography>
+                    ) : (
+                        ""
+                    )}
                 </Button>
             </Stack>
 

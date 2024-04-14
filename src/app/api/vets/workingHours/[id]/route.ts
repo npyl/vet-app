@@ -3,6 +3,8 @@ import prisma from "../../../_util/db";
 import { IVetWorkingHoursPOST } from "@/types/workingHours";
 import mapper from "./mapper";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
     params: { id: number };
 }

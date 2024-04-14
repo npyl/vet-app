@@ -4,6 +4,8 @@ import { IAppointmentPOST } from "@/types/appointment";
 import mapper from "./mapper";
 import { IPet } from "@/types/pet";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
     params: { id: number };
 }

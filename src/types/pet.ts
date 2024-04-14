@@ -1,3 +1,5 @@
+import IUser from "./user";
+
 export type IPetGender = "MALE" | "FEMALE";
 
 export interface IPet {
@@ -19,8 +21,10 @@ export interface IPet {
     passport: boolean;
     notes: string;
     therapy_notes: string;
+    owner: IUser;
 }
 
-export interface IPetPOST extends Omit<IPet, "id"> {
+export interface IPetPOST extends Omit<IPet, "id" | "owner"> {
     id?: number;
+    ownerId: number;
 }

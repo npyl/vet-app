@@ -20,9 +20,6 @@ const DataGridTable: FC<GridProps> = ({
     totalRows,
     onPaginationModelChange,
 
-    onBulkDelete,
-    onBulkEdit,
-
     ...other
 }) => {
     const router = useRouter();

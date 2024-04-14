@@ -51,6 +51,7 @@ const Schema = yup.object<IPetPOST>().shape({
     passport: yup.boolean().required(),
     notes: yup.string().required(),
     therapy_notes: yup.string().required(),
+    ownerId: yup.number().required(),
 });
 
 const AddPetDialog = ({ pet, ...props }: Props) => {
@@ -82,6 +83,7 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
             passport: !!pet?.passport,
             notes: pet?.notes || "",
             therapy_notes: pet?.therapy_notes || "",
+            ownerId: user?.id || -1,
         },
     });
 

@@ -3,6 +3,7 @@ import prisma from "../../../_util/db";
 import { IAppointmentPOST } from "@/types/appointment";
 import mapper from "./mapper";
 import { IPet } from "@/types/pet";
+import IUser from "@/types/user";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ interface Props {
     params: { id: number };
 }
 
-const getPetById = async (petId: number) => {
+const getPetById = async (petId: number): Promise<IPet> => {
     const res = await prisma.pets.findMany({
         where: {
             id: {
@@ -18,11 +19,17 @@ const getPetById = async (petId: number) => {
             },
         },
     });
-
     if (!Array.isArray(res) || !(res.length > 0))
         throw "Could not find pet with this id";
 
-    return res[0];
+    const owner = (await prisma.user.findUnique({
+        where: {
+            id: res[0].ownerId,
+        },
+    })) as IUser;
+    if (!owner) throw "Did not find owner of this pet.";
+
+    return { ...res[0], owner } as IPet;
 };
 
 //
@@ -64,11 +71,7 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
 
         // Map Database object
         const result = res.map((r, i) =>
-            mapper(
-                r as IAppointmentPOST,
-                users[0],
-                pets[i] as IPet, // TODO: maybe this is not perfect mapping
-            ),
+            mapper(r as IAppointmentPOST, users[0], pets[i]),
         );
 
         return new NextResponse(JSON.stringify(result), {

@@ -23,11 +23,7 @@ export interface AuthContextValue extends State {
         password: string,
         type: UserType,
     ) => Promise<void>;
-    signup: (
-        username: string,
-        password: string,
-        type: UserType,
-    ) => Promise<void>;
+    signup: (req: IRegisterReq) => Promise<void>;
     logout: () => Promise<void>;
 }
 
@@ -230,17 +226,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         dispatch({ type: ActionType.LOGOUT });
     };
 
-    const signup = async (
-        email: string,
-        password: string,
-        type: UserType,
-    ): Promise<void> => {
-        const registerRes = await register({
-            email,
-            password,
-            avatar: "", // TODO: ...
-            type,
-        });
+    const signup = async (req: IRegisterReq): Promise<void> => {
+        const registerRes = await register(req);
 
         localStorage.setItem("accessToken", registerRes.token);
 

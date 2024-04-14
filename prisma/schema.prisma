@@ -39,9 +39,10 @@ model User {
 
   pets            Pets[]
 
-  // User's working hours (Only a vet should have workingHours) 
+  // --- VET SPECIFIC ---
   workingHours    WorkingHours?
   appointments    Appointment[]
+  workplace       UserWorkplace?
 }
 
 model Pets {
@@ -99,4 +100,20 @@ model Appointment {
   pet     Pets @relation(fields: [petId], references: [id])
 
   date    String
+}
+
+// --------------------------------------------------------
+
+model UserWorkplace {
+  id        Int @id @default(autoincrement())
+
+  region    String
+  city      String
+  complex   String
+
+  telephone String
+
+  // One-to-One relationship with User
+  userId    Int?   @unique
+  user      User?  @relation(fields: [userId], references: [id])
 }

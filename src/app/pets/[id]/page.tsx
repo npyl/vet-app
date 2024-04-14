@@ -133,10 +133,16 @@ const PetPage = () => {
                                 status={!!pet?.microchip_date}
                             />
                             {pet?.microchip_date ? (
-                                <ListDateItem
-                                    label="Microchip Date"
-                                    value={pet?.microchip_date}
-                                />
+                                <>
+                                    <ListDateItem
+                                        label="Microchip Date"
+                                        value={pet?.microchip_date}
+                                    />
+                                    <ListDateItem
+                                        label="Microchip Code"
+                                        value={pet?.microchip_code}
+                                    />
+                                </>
                             ) : null}
                         </List>
                     </Grid>

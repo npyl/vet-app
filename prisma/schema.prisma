@@ -56,7 +56,10 @@ model Pets {
   birthday        String
   color           String  @db.VarChar(16)
   secondary_color String  @db.VarChar(16)
+  // ------------------------------------
   microchip_date  String
+  microchip_code  String? @unique
+  // ------------------------------------
   neutered        Boolean
   dead            Boolean
   blood_type      String  @db.VarChar(16)

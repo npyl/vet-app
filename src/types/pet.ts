@@ -14,7 +14,10 @@ export interface IPet {
     birthday: string;
     color: string;
     secondary_color: string;
+    // ---------------------
     microchip_date: string;
+    microchip_code: string;
+    // ---------------------
     neutered: boolean;
     dead: boolean;
     blood_type: string;

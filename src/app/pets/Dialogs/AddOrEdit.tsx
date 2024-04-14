@@ -56,17 +56,24 @@ const Schema = yup
         gender: yup.string().oneOf<IPetGender>(["MALE", "FEMALE"]).required(),
         type: yup.string().required("Please enter race"),
         race: yup.string().required("Please enter race"),
-        // birthday: yup.string().required(),
         color: yup.string().required("Please enter pet color"),
+        blood_type: yup.string().required("Please enter pet blood type"),
+        ownerId: yup.number().required(),
+
+        // INFO: Required if user has set microchip_date
+        microchip_code: yup.string().when("microchip_date", {
+            is: (value: any) => !!value,
+            then: () => yup.string().required(),
+        }),
+
+        // birthday: yup.string().required(),
         // secondary_color: yup.string().required(),
         // microchip_date: yup.string().required(),
         // neutered: yup.boolean().required(),
         // dead: yup.boolean().required(),
-        blood_type: yup.string().required("Please enter pet blood type"),
         // passport: yup.boolean().required(),
         // notes: yup.string().required(),
         // therapy_notes: yup.string().required(),
-        ownerId: yup.number().required(),
     })
     .required();
 
@@ -111,6 +118,8 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
     }, [user?.id]);
 
     const handleSubmit = useCallback((d: IPetPOSTYup) => {
+        console.log("d: ", d);
+
         if (pet) {
             // update
             setIsLoading(true);
@@ -240,10 +249,18 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
                                 />
 
                                 {chipped ? (
-                                    <RHFDatePicker
-                                        label="Microchip Date"
-                                        name="microchip_date"
-                                    />
+                                    <>
+                                        <RHFDatePicker
+                                            label="Microchip Date"
+                                            name="microchip_date"
+                                        />
+
+                                        <RHFTextField
+                                            fullWidth
+                                            label="Chip Code"
+                                            name="microchip_code"
+                                        />
+                                    </>
                                 ) : null}
                             </Stack>
                         </Stack>

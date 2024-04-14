@@ -138,7 +138,7 @@ const PetPage = () => {
                                         label="Microchip Date"
                                         value={pet?.microchip_date}
                                     />
-                                    <ListDateItem
+                                    <ListItem
                                         label="Microchip Code"
                                         value={pet?.microchip_code}
                                     />

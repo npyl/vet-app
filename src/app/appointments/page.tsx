@@ -7,8 +7,8 @@ import {
     Popper as MuiPopper,
     PopperProps as MuiPopperProps,
     Paper,
-    Button,
     Skeleton,
+    Button,
 } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { MouseEvent, useCallback, useMemo, useState } from "react";
@@ -23,6 +23,9 @@ import { RHFOnlyNumbers } from "@/components/hook-form";
 import useApiContext from "@/contexts/api";
 import useSWR from "swr";
 import useAuth from "@/hooks/useAuth";
+import useMutateTable from "@/hooks/useMutateTable";
+import { LoadingButton } from "@mui/lab";
+import toast, { Toaster } from "react-hot-toast";
 
 // ----------------------------------------------
 
@@ -123,11 +126,20 @@ interface PopperProps extends MuiPopperProps {
 const Popper = ({ onClose, ...props }: PopperProps) => {
     const { user } = useAuth();
     const { post, put } = useApiContext();
+    const { mutateTable } = useMutateTable();
 
     // Get user working hours
-    const { data: workingHours, isLoading } = useSWR<IVetWorkingHours>(
-        `/api/vets/workingHours/${user?.id}`,
-    );
+    const { data: workingHours, isLoading: isGetLoading } =
+        useSWR<IVetWorkingHours>(`/api/vets/workingHours/${user?.id}`);
+
+    // --------------------------------------------------------------
+    const [isMutating, setMutating] = useState(false);
+    const mutate = useCallback(() => {
+        mutateTable(`/api/vets/workingHours/${user?.id}`);
+        toast.success("Successfully updated working hours!");
+    }, [user?.id]);
+    const stopLoading = useCallback(() => setMutating(false), []);
+    // --------------------------------------------------------------
 
     const methods = useForm<IVetWorkingHoursPOST>({
         resolver: yupResolver(Schema),
@@ -145,18 +157,22 @@ const Popper = ({ onClose, ...props }: PopperProps) => {
 
     const handleSubmit = useCallback(
         (d: IVetWorkingHoursPOST) => {
-            console.log("d: ", d);
+            setMutating(true);
 
             if (!workingHours) {
                 // create
                 post("/api/vets/workingHours", {
                     body: JSON.stringify(d),
-                });
+                })
+                    .then(mutate)
+                    .finally(stopLoading);
             } else {
                 // update
                 put("/api/vets/workingHours", {
                     body: JSON.stringify({ ...d, id: workingHours.id }),
-                });
+                })
+                    .then(mutate)
+                    .finally(stopLoading);
             }
         },
         [workingHours],
@@ -172,19 +188,27 @@ const Popper = ({ onClose, ...props }: PopperProps) => {
         >
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(handleSubmit)}>
-                    <Paper sx={{ p: 2, position: "relative" }}>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            position: "relative",
+                            border: "1px solid #ddd",
+                            mt: 1,
+                            mr: 3,
+                        }}
+                    >
                         <IconButton
                             onClick={onClose}
                             sx={{
                                 position: "absolute",
-                                top: 10,
-                                right: 2,
+                                top: 3,
+                                right: 3,
                             }}
                         >
                             <CloseIcon />
                         </IconButton>
 
-                        {isLoading ? (
+                        {isGetLoading ? (
                             <Stack spacing={1} width="150px">
                                 <Skeleton height="30px" animation="pulse" />
                                 <Skeleton height="30px" animation="pulse" />
@@ -192,7 +216,7 @@ const Popper = ({ onClose, ...props }: PopperProps) => {
                             </Stack>
                         ) : (
                             <>
-                                <Typography variant="h6">
+                                <Typography variant="h6" mb={2}>
                                     {!workingHours
                                         ? "No working hours are set up yet!"
                                         : "These are your working hours! Do you want to update them?"}
@@ -230,13 +254,19 @@ const Popper = ({ onClose, ...props }: PopperProps) => {
                                     justifyContent="flex-end"
                                     direction="row"
                                 >
-                                    <Button type="submit" variant="contained">
+                                    <LoadingButton
+                                        loading={isMutating}
+                                        type="submit"
+                                        variant="contained"
+                                    >
                                         {workingHours ? "Update" : "Set"}
-                                    </Button>
+                                    </LoadingButton>
                                 </Stack>
                             </>
                         )}
                     </Paper>
+
+                    <Toaster />
                 </form>
             </FormProvider>
         </MuiPopper>
@@ -261,11 +291,15 @@ const Appointments = () => {
                 alignItems="center"
                 justifyContent="flex-end"
                 spacing={1}
+                mt={1}
             >
-                <Typography>Working Ours</Typography>
-                <IconButton onClick={openPopper}>
-                    <CalendarTodayIcon />
-                </IconButton>
+                <Button
+                    variant="outlined"
+                    endIcon={<CalendarTodayIcon />}
+                    onClick={openPopper}
+                >
+                    Working Hours
+                </Button>
             </Stack>
 
             <Calendar />

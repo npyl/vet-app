@@ -33,26 +33,42 @@ interface Props {
     pet?: IPet;
 }
 
-const Schema = yup.object<IPetPOST>().shape({
-    name: yup.string().required(),
-    photo: yup.string().required(),
-    age: yup.number().required(),
-    weight: yup.number().required(),
-    gender: yup.string().oneOf<IPetGender>(["MALE", "FEMALE"]).required(),
-    type: yup.string().required(),
-    race: yup.string().required(),
-    birthday: yup.string().required(),
-    color: yup.string().required(),
-    secondary_color: yup.string().required(),
-    microchip_date: yup.string().required(),
-    neutered: yup.boolean().required(),
-    dead: yup.boolean().required(),
-    blood_type: yup.string().required(),
-    passport: yup.boolean().required(),
-    notes: yup.string().required(),
-    therapy_notes: yup.string().required(),
-    ownerId: yup.number().required(),
-});
+interface IPetPOSTYup extends Partial<IPetPOST> {
+    name: string;
+    photo: string;
+    age: number;
+    weight: number;
+    gender: IPetGender;
+    type: string;
+    race: string;
+    color: string;
+    blood_type: string;
+    ownerId: number;
+}
+
+const Schema = yup
+    .object<IPetPOSTYup>()
+    .shape({
+        name: yup.string().required(),
+        photo: yup.string().required(),
+        age: yup.number().required(),
+        weight: yup.number().required(),
+        gender: yup.string().oneOf<IPetGender>(["MALE", "FEMALE"]).required(),
+        type: yup.string().required("Please enter race"),
+        race: yup.string().required("Please enter race"),
+        // birthday: yup.string().required(),
+        color: yup.string().required("Please enter pet color"),
+        // secondary_color: yup.string().required(),
+        // microchip_date: yup.string().required(),
+        // neutered: yup.boolean().required(),
+        // dead: yup.boolean().required(),
+        blood_type: yup.string().required("Please enter pet blood type"),
+        // passport: yup.boolean().required(),
+        // notes: yup.string().required(),
+        // therapy_notes: yup.string().required(),
+        ownerId: yup.number().required(),
+    })
+    .required();
 
 const AddPetDialog = ({ pet, ...props }: Props) => {
     const { user } = useAuth();
@@ -61,7 +77,7 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const methods = useForm<IPetPOST>({
+    const methods = useForm<IPetPOSTYup>({
         resolver: yupResolver(Schema),
         values: {
             name: pet?.name || "",
@@ -87,16 +103,14 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
         },
     });
 
-    const [chipped, setChipped] = useState(false);
+    const [chipped, setChipped] = useState(!!pet?.microchip_date);
 
     const mutate = useCallback(() => {
         mutateTable(`/api/user/${user?.id}/pets`);
         props.onClose();
     }, [user?.id]);
 
-    const handleSubmit = useCallback((d: IPetPOST) => {
-        console.log("got: ", d);
-
+    const handleSubmit = useCallback((d: IPetPOSTYup) => {
         if (pet) {
             // update
             setIsLoading(true);
@@ -127,7 +141,11 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
                 onSubmit={methods.handleSubmit(handleSubmit)}
                 // ...
                 maxWidth="sm"
-                title={<Typography variant="h6">Add Pet</Typography>}
+                title={
+                    <Typography variant="h6">
+                        {pet ? `Edit ${pet.name}` : "Add Pet"}
+                    </Typography>
+                }
                 content={
                     <Stack mt={2} spacing={1} alignItems="center" width={1}>
                         <RHFUploadPhoto name="photo" />
@@ -217,7 +235,7 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
                                 <FormControlLabel
                                     control={<Checkbox />}
                                     label="Chipped"
-                                    value={chipped}
+                                    checked={chipped}
                                     onChange={(e, b) => setChipped(b)}
                                 />
 

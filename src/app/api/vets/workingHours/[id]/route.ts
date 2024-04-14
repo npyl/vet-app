@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../_util/db";
 import { IVetWorkingHoursPOST } from "@/types/workingHours";
 import mapper from "./mapper";
+import IUser from "@/types/user";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +44,10 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
             throw "Could not find this workingHours record!";
 
         // Map Database object (IVetWorkingHoursPOST) to IVetWorkingHours
-        const result = mapper(res[0] as IVetWorkingHoursPOST, users[0]);
+        const result = mapper(
+            res[0] as IVetWorkingHoursPOST,
+            users[0] as IUser,
+        );
 
         return new NextResponse(JSON.stringify(result), {
             status: 200,

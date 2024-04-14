@@ -71,7 +71,7 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
 
         // Map Database object
         const result = res.map((r, i) =>
-            mapper(r as IAppointmentPOST, users[0], pets[i]),
+            mapper(r as IAppointmentPOST, users[0] as IUser, pets[i]),
         );
 
         return new NextResponse(JSON.stringify(result), {

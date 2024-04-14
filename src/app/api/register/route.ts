@@ -5,11 +5,31 @@ import prisma from "../_util/db";
 
 export async function POST(req: Request | NextRequest) {
     try {
-        const body = (await req.json()) as IRegisterReq;
+        const { workingHours, region, city, complex, telephone, ...body } =
+            (await req.json()) as IRegisterReq;
 
         const user = await prisma.user.create({
             data: body,
         });
+
+        // --- VET SPECIFIC ---
+        if (body.type === "VET" && workingHours) {
+            // Create & Assign working hours for this newly created vet
+            await prisma.workingHours.create({
+                data: { ...workingHours, vetId: user.id },
+            });
+
+            // Create & Assign Workplace
+            await prisma.userWorkplace.create({
+                data: {
+                    region: region || "",
+                    city: city || "",
+                    complex: complex || "",
+                    telephone: telephone || "",
+                    userId: user.id,
+                },
+            });
+        }
 
         // Randomly generated token
         const token = randomUUID();

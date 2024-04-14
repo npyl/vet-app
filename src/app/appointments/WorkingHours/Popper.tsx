@@ -19,7 +19,7 @@ import useMutateTable from "@/hooks/useMutateTable";
 import { LoadingButton } from "@mui/lab";
 import toast, { Toaster } from "react-hot-toast";
 import useWorkingHours from "./hook";
-import CustomTimePicker from "./CustomTimePicker";
+import CustomTimePicker from "@/components/WorkingHoursPicker";
 
 // -------------------------------------------------------------------------------
 

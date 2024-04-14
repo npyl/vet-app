@@ -36,7 +36,7 @@ const TUPLE = yup
     ])
     .required();
 
-const Schema = yup.object<IRegisterReq>().shape({
+const UserSchema = yup.object<IRegisterReq>().shape({
     email: yup.string().required(),
     password: yup.string().required(),
     type: yup.string().oneOf<UserType>(["USER", "VET"]).required(),
@@ -58,6 +58,30 @@ const Schema = yup.object<IRegisterReq>().shape({
         vetId: yup.number().required(),
     }),
 });
+
+const VetSchema = yup.object<IRegisterReq>().shape({
+    email: yup.string().required(),
+    password: yup.string().required(),
+    type: yup.string().oneOf<UserType>(["USER", "VET"]).required(),
+    avatar: yup.string().notRequired(),
+
+    // --- VET SPECIFIC ---
+    region: yup.string().required(),
+    city: yup.string().required(),
+    complex: yup.string().required(),
+    telephone: yup.string().required(),
+
+    workingHours: yup.object<IVetWorkingHoursPOST>().shape({
+        monday: TUPLE,
+        tuesday: TUPLE,
+        wednesday: TUPLE,
+        thursday: TUPLE,
+        friday: TUPLE,
+
+        vetId: yup.number().required(),
+    }),
+});
+
 // ----------------------------------------------------------
 
 interface UserFormProps {
@@ -128,7 +152,7 @@ export default function RegisterForm({ type }: Props) {
     // ---------------------------------------------------------------
 
     const methods = useForm<IRegisterReq>({
-        resolver: yupResolver(Schema) as any, // TODO: fix this any
+        resolver: yupResolver(type === "USER" ? UserSchema : VetSchema) as any, // TODO: fix this any
         values: {
             avatar: "",
             email: "",
@@ -165,6 +189,8 @@ export default function RegisterForm({ type }: Props) {
         },
         [type, returnTo],
     );
+
+    console.log("errors: ", methods.formState.errors);
 
     return (
         <FormProvider {...methods}>

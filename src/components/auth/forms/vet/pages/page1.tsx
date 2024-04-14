@@ -1,5 +1,6 @@
+import { RHFTextField } from "@/components/hook-form";
 import Iconify from "@/components/iconify";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { IconButton, InputAdornment } from "@mui/material";
 import { useState } from "react";
 
 const Page1 = () => {
@@ -8,9 +9,9 @@ const Page1 = () => {
 
     return (
         <>
-            <TextField name="email" label="Email address" />
+            <RHFTextField name="email" label="Email address" />
 
-            <TextField
+            <RHFTextField
                 name="password"
                 label="Password"
                 type={password ? "text" : "password"}

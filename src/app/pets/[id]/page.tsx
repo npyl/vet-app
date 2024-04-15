@@ -1,5 +1,4 @@
 "use client";
-
 import {
     List,
     ListBooleanItem,
@@ -7,21 +6,23 @@ import {
     ListItem,
 } from "@/components/List";
 import useDialog from "@/hooks/useDialog";
-import { IPet } from "@/types/pet";
-import { Avatar, Button, Stack } from "@mui/material";
+import { Avatar, Button, Skeleton, Stack } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useParams } from "next/navigation";
 import EditDialog from "../Dialogs/AddOrEdit";
-import useSWR from "swr";
 import BookDialog from "./Book";
+import { useAppointments, usePetById } from "./hook";
+import Iconify from "@/components/iconify";
 
 const PetPage = () => {
     const { id } = useParams();
 
-    const { data: pet } = useSWR<IPet>(`/api/pets/${id}`);
+    const { appointments, isLoading: isAppointmentsLoading } =
+        useAppointments(+id);
+    const { pet } = usePetById(+id);
 
     const [isEditOpen, openEdit, closeEdit] = useDialog();
     const [isBookOpen, openBook, closeBook] = useDialog();
@@ -44,9 +45,24 @@ const PetPage = () => {
                     direction="row"
                     spacing={0.5}
                 >
-                    <Button variant="outlined" onClick={openBook}>
-                        Book Appointment
+                    <Button
+                        variant="outlined"
+                        onClick={openBook}
+                        startIcon={<Iconify icon="tabler:sthetoscope" />}
+                    >
+                        Appointments
+                        {isAppointmentsLoading ? (
+                            <Skeleton
+                                sx={{
+                                    width: "100px",
+                                }}
+                                animation="wave"
+                            />
+                        ) : (
+                            ` (${appointments.length})`
+                        )}
                     </Button>
+
                     <Button variant="contained" onClick={openEdit}>
                         Edit
                     </Button>

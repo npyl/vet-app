@@ -1,5 +1,5 @@
 import Dialog from "@/components/Dialog";
-import { Button } from "@mui/material";
+import { Box, Button, CircularProgress, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { useCallback, useState } from "react";
 import { useAppointments } from "./hook";
@@ -14,9 +14,16 @@ import { IAppointment } from "@/types/appointment";
 const StyledListItem = styled(ListItem)(({ theme }) => ({
     borderRadius: "15px",
     "&:hover": {
-        backgroundColor: alpha(theme.palette.primary.main, 0.3),
+        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+        color: theme.palette.primary.main,
         cursor: "pointer",
     },
+}));
+
+const StyledList = styled(List)(({ theme }) => ({
+    borderRadius: "15px",
+    border: "1px solid",
+    borderColor: alpha(theme.palette.primary.main, 0.4),
 }));
 
 // ----------------------------------------------------------------
@@ -26,14 +33,32 @@ interface AppointmentsListProp {
 }
 
 const AppointmentsList = ({ petId }: AppointmentsListProp) => {
-    const { appointments } = useAppointments(petId);
+    const { appointments, isLoading } = useAppointments(petId);
 
     const [clickedItem, setClickedItem] = useState<IAppointment>();
     const closeDialog = useCallback(() => setClickedItem(undefined), []);
 
+    if (isLoading) {
+        return (
+            <Stack mt={4} alignItems="center">
+                <CircularProgress />
+            </Stack>
+        );
+    }
+
+    if (appointments.length === 0) {
+        return (
+            <Stack mt={4} alignItems="center">
+                <Typography>No appointments booked yet!</Typography>
+            </Stack>
+        );
+    }
+
     return (
         <>
-            <List>
+            <Box mt={4} />
+
+            <StyledList>
                 {appointments.map((a, i) => (
                     <StyledListItem
                         key={i}
@@ -42,7 +67,7 @@ const AppointmentsList = ({ petId }: AppointmentsListProp) => {
                         onClick={() => setClickedItem(a)}
                     />
                 ))}
-            </List>
+            </StyledList>
 
             {clickedItem ? (
                 <AddOrEditDialog

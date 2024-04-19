@@ -4,7 +4,7 @@ import {
     RHFSelect,
     RHFTimePicker,
 } from "@/components/hook-form";
-import { SoftAlert, SpaceBetween } from "@/components/styled";
+import { SpaceBetween } from "@/components/styled";
 import useApiContext from "@/contexts/api";
 import IBookAppointment from "@/types/book";
 import IUser from "@/types/user";
@@ -145,7 +145,6 @@ const AddOrEditDialog = ({ petId, appointment, ...props }: Props) => {
     const { post, put } = useApiContext();
     const { mutate } = useSWRConfig();
 
-    const [error, setError] = useState("");
     const [isSubmitting, setSubmitting] = useState(false);
 
     const methods = useForm<IBookAppointment>({
@@ -161,11 +160,6 @@ const AddOrEditDialog = ({ petId, appointment, ...props }: Props) => {
         toast.success("Success!");
         mutate(`/api/pets/${petId}/appointments`);
     }, []);
-
-    const handleError = useCallback(
-        (e: any) => setError(e.errorMessage || "error"),
-        [],
-    );
 
     const handleSubmit = useCallback((d: IBookAppointment) => {
         console.log("d: ", d);

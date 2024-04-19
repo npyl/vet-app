@@ -25,9 +25,40 @@ export interface IPet {
     notes: string;
     therapy_notes: string;
     owner: IUser;
+    // ---------------------
+    examinationHistory: ExaminationHistory[];
 }
 
-export interface IPetPOST extends Omit<IPet, "id" | "owner"> {
+export interface IPetPOST
+    extends Omit<IPet, "id" | "owner" | "examinationHistory"> {
     id?: number;
     ownerId: number;
+    examinationHistory: ExaminationHistoryPOST[];
+}
+
+export interface ExaminationHistory {
+    id: number;
+
+    date: string;
+
+    findings: string;
+    diagnosis: string;
+    procedure: string;
+    therapy: string;
+    notes: string;
+
+    weight: number;
+    apot_swmatos: string;
+    temperature: number;
+    heartrate: number;
+    CRT: string; // χρώμα βλεννογόνου / C.R.T.
+    tummy: string; // ψιλάφηση κοιλιάς
+    thorax: string;
+    ears_eyes_mouth: string;
+    lymphNodes: string;
+    penis_vulva_breast: string;
+}
+
+export interface ExaminationHistoryPOST extends Omit<ExaminationHistory, "id"> {
+    id?: number;
 }

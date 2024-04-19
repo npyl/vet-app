@@ -29,7 +29,15 @@ const getPetById = async (petId: number): Promise<IPet> => {
     })) as IUser;
     if (!owner) throw "Did not find owner of this pet.";
 
-    return { ...res[0], owner } as IPet;
+    const examinationHistory = await prisma.doctorExamination.findMany({
+        where: {
+            petId: { equals: res[0].id },
+        },
+    });
+    if (!examinationHistory)
+        throw "Did not find examinationHistory of this pet.";
+
+    return { ...res[0], owner, examinationHistory } as IPet;
 };
 
 //

@@ -45,6 +45,8 @@ model User {
   workplace       UserWorkplace?
 }
 
+// --------------------------------------------------------
+
 model Pets {
   id              Int     @id @default(autoincrement())
   name            String  @db.VarChar(16)
@@ -74,7 +76,38 @@ model Pets {
 
   // INFO: each pet can have appointments.
   appointments    Appointment[]
+
+  // INFO: each pet can have multiple examinations
+  examinations    DoctorExamination[]
 }
+
+model DoctorExamination {
+  id Int @id @default(autoincrement())
+
+  date                String
+
+  findings            String
+  diagnosis           String
+  procedure           String
+  therapy             String
+  notes               String
+
+  weight              Int
+  apot_swmatos        String
+  temperature         Int
+  heartrate           Float
+  CRT                 String  // χρώμα βλεννογόνου / C.R.T.
+  tummy               String  // ψιλάφηση κοιλιάς
+  thorax              String
+  ears_eyes_mouth     String
+  lymphNodes          String
+  penis_vulva_breast  String
+
+  petId               Int
+  pet                 Pets @relation(fields: [petId], references: [id])
+}
+
+// --------------------------------------------------------
 
 model WorkingHours {
   id Int @id @default(autoincrement())

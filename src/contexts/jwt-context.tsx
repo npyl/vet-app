@@ -22,8 +22,8 @@ export interface AuthContextValue extends State {
         username: string,
         password: string,
         type: UserType,
-    ) => Promise<void>;
-    signup: (req: IRegisterReq) => Promise<void>;
+    ) => Promise<any>;
+    signup: (req: IRegisterReq) => Promise<any>;
     logout: () => Promise<void>;
 }
 
@@ -199,7 +199,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         email: string,
         password: string,
         type: UserType,
-    ): Promise<void> => {
+    ): Promise<any> => {
         const loginRes = await login({
             email,
             password,
@@ -219,6 +219,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
                 user,
             },
         });
+
+        return loginRes;
     };
 
     const logout = async (): Promise<void> => {
@@ -226,7 +228,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         dispatch({ type: ActionType.LOGOUT });
     };
 
-    const signup = async (req: IRegisterReq): Promise<void> => {
+    const signup = async (req: IRegisterReq): Promise<any> => {
         const registerRes = await register(req);
 
         localStorage.setItem("accessToken", registerRes.token);
@@ -242,6 +244,8 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
                 user,
             },
         });
+
+        return registerRes;
     };
 
     const providerValues = useMemo(

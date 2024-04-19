@@ -12,15 +12,27 @@ export async function POST(req: Request | NextRequest) {
             data: body,
         });
 
+        if (!user) {
+            throw {
+                errorMessage: `Could not create ${body.type === "VET" ? "vet" : "user"}!`,
+            };
+        }
+
         // --- VET SPECIFIC ---
         if (body.type === "VET" && workingHours) {
             // Create & Assign working hours for this newly created vet
-            await prisma.workingHours.create({
+            const res0 = await prisma.workingHours.create({
                 data: { ...workingHours, vetId: user.id },
             });
 
+            if (!res0) {
+                throw {
+                    errorMessage: `Could not assign working hours for this user!`,
+                };
+            }
+
             // Create & Assign Workplace
-            await prisma.userWorkplace.create({
+            const res1 = await prisma.userWorkplace.create({
                 data: {
                     region: region || "",
                     city: city || "",
@@ -29,13 +41,19 @@ export async function POST(req: Request | NextRequest) {
                     userId: user.id,
                 },
             });
+
+            if (!res1) {
+                throw {
+                    errorMessage: `Could not assign workplace information to this user!`,
+                };
+            }
         }
 
         // Randomly generated token
         const token = randomUUID();
 
         // Update user token
-        await prisma.user.update({
+        const res2 = await prisma.user.update({
             where: {
                 id: user.id,
             },
@@ -43,6 +61,10 @@ export async function POST(req: Request | NextRequest) {
                 token,
             },
         });
+
+        if (!res2) {
+            throw { errorMessage: `Could not set jwt token for this user.` };
+        }
 
         return new NextResponse<IAuthRes>(JSON.stringify({ token }), {
             status: 200,

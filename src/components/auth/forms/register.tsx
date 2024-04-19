@@ -22,6 +22,7 @@ import { UserType } from "@/types/user";
 import { IRegisterReq } from "@/types/auth";
 import { IVetWorkingHoursPOST } from "@/types/workingHours";
 import { RHFTextField } from "@/components/hook-form";
+import { SoftAlert } from "@/components/styled";
 
 // ----------------------------------------------------------
 
@@ -179,13 +180,19 @@ export default function RegisterForm({ type }: Props) {
         },
     });
 
+    const [error, setError] = useState("");
+    const handleError = useCallback(
+        (e: any) => setError(e.errorMessage || "An error has occured"),
+        [],
+    );
+
     const handleSubmit = useCallback(
         (d: IRegisterReq) => {
             console.log("d: ", d);
 
             signup(d)
                 .then(() => returnTo && router.push(returnTo))
-                .catch((error) => console.error(error));
+                .catch(handleError);
         },
         [type, returnTo],
     );
@@ -195,6 +202,12 @@ export default function RegisterForm({ type }: Props) {
     return (
         <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(handleSubmit)}>
+                {error ? (
+                    <SoftAlert severity="error" sx={{ mb: 3 }}>
+                        {error}
+                    </SoftAlert>
+                ) : null}
+
                 {type === "USER" ? (
                     <UserForm isSubmitting={methods.formState.isSubmitting} />
                 ) : (

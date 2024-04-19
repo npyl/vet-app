@@ -1,6 +1,7 @@
 // Working Hours
 
 import CustomTimePicker from "@/components/WorkingHoursPicker";
+import Typography from "@mui/material/Typography";
 
 const getNames = (day: string) => ({
     day: `${day[0].toUpperCase()}${day.slice(1)}`,
@@ -10,6 +11,15 @@ const getNames = (day: string) => ({
 
 const Page3 = () => (
     <>
+        <Typography
+            variant="h5"
+            color="text.secondary"
+            textAlign="center"
+            mb={2}
+        >
+            Working Hours
+        </Typography>
+
         <CustomTimePicker {...getNames("monday")} />
         <CustomTimePicker {...getNames("tuesday")} />
         <CustomTimePicker {...getNames("wednesday")} />

@@ -1,14 +1,22 @@
 import { RHFTextField } from "@/components/hook-form";
 import Iconify from "@/components/iconify";
-import { IconButton, InputAdornment } from "@mui/material";
+import { IconButton, InputAdornment, Typography } from "@mui/material";
 import { useState } from "react";
 
 const Page1 = () => {
-    // const [errorMsg, setErrorMsg] = useState("");
     const [password, setPassword] = useState(false);
 
     return (
         <>
+            <Typography
+                variant="h5"
+                color="text.secondary"
+                textAlign="center"
+                mb={2}
+            >
+                Credentials
+            </Typography>
+
             <RHFTextField name="email" label="Email address" />
 
             <RHFTextField

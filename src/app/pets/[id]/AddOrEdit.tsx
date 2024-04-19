@@ -4,7 +4,7 @@ import {
     RHFSelect,
     RHFTimePicker,
 } from "@/components/hook-form";
-import { SpaceBetween } from "@/components/styled";
+import { SoftAlert, SpaceBetween } from "@/components/styled";
 import useApiContext from "@/contexts/api";
 import IBookAppointment from "@/types/book";
 import IUser from "@/types/user";
@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 import { useCallback, useMemo, useState } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import * as yup from "yup";
 import { IAppointment } from "@/types/appointment";
 
@@ -137,31 +137,52 @@ interface Props {
     open: boolean;
     onClose: VoidFunction;
 
+    petId: number;
     appointment?: IAppointment;
 }
 
-const AddOrEditDialog = ({ appointment, ...props }: Props) => {
-    const { post } = useApiContext();
+const AddOrEditDialog = ({ petId, appointment, ...props }: Props) => {
+    const { post, put } = useApiContext();
+    const { mutate } = useSWRConfig();
 
-    // const [isSubmitting, setSubmitting] = useState(false);
+    const [error, setError] = useState("");
+    const [isSubmitting, setSubmitting] = useState(false);
 
     const methods = useForm<IBookAppointment>({
         resolver: yupResolver(Schema),
         values: {
             vetId: appointment?.vet?.id ?? -1,
-            petId: appointment?.pet?.id ?? -1,
+            petId,
             date: appointment?.date || "",
         },
     });
 
+    const ok = useCallback(() => {
+        toast.success("Success!");
+        mutate(`/api/pets/${petId}/appointments`);
+    }, []);
+
+    const handleError = useCallback(
+        (e: any) => setError(e.errorMessage || "error"),
+        [],
+    );
+
     const handleSubmit = useCallback((d: IBookAppointment) => {
         console.log("d: ", d);
 
-        // setSubmitting(true);
-        post("/api/book", { body: JSON.stringify(d) }).then(() =>
-            toast.success("Appointment booked!"),
-        );
-        // .finally(() => setSubmitting(false));
+        setSubmitting(true);
+
+        if (appointment) {
+            put("/api/book", {
+                body: JSON.stringify({ ...d, id: appointment.id }),
+            })
+                .then(ok)
+                .finally(() => setSubmitting(false));
+        } else {
+            post("/api/book", { body: JSON.stringify(d) })
+                .then(ok)
+                .finally(() => setSubmitting(false));
+        }
     }, []);
 
     return (
@@ -173,7 +194,13 @@ const AddOrEditDialog = ({ appointment, ...props }: Props) => {
                 onSubmit={methods.handleSubmit(handleSubmit)}
                 // ...
                 maxWidth="md"
-                title={<Typography>Book Appointment</Typography>}
+                title={
+                    <Typography>
+                        {appointment
+                            ? `Update appointment for ${appointment?.date ? new Date(appointment?.date).toDateString() : "..."}`
+                            : "New Appointment"}
+                    </Typography>
+                }
                 content={
                     <SpaceBetween mt={2} alignItems="center" width={1}>
                         <SelectVet />
@@ -182,7 +209,15 @@ const AddOrEditDialog = ({ appointment, ...props }: Props) => {
                         <Toaster />
                     </SpaceBetween>
                 }
-                actions={<LoadingButton>Book</LoadingButton>}
+                actions={
+                    <LoadingButton
+                        type="submit"
+                        loading={isSubmitting}
+                        variant="contained"
+                    >
+                        Book
+                    </LoadingButton>
+                }
             />
         </FormProvider>
     );

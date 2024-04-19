@@ -6,6 +6,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Button from "@mui/material/Button";
 // Pages
 import { Page1 } from "./pages";
+import PageSkeleton from "./pages/Skeleton";
 const Page2 = lazy(() => import("./pages/page2"));
 const Page3 = lazy(() => import("./pages/page3"));
 
@@ -67,7 +68,7 @@ export default function VetForm({ isSubmitting }: Props) {
 
     return (
         <Stack spacing={1}>
-            <Suspense>
+            <Suspense fallback={<PageSkeleton />}>
                 {page === 0 ? <Page1 /> : null}
                 {page === 1 ? <Page2 /> : null}
                 {page === 2 ? <Page3 /> : null}

@@ -1,4 +1,5 @@
 "use client";
+
 import {
     List,
     ListBooleanItem,
@@ -12,7 +13,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useParams } from "next/navigation";
-import EditDialog from "../Dialogs/AddOrEdit";
+import AddOrEditDialog from "../Dialogs/AddOrEdit";
 import BookDialog from "./Book";
 import { useAppointments, usePetById } from "./hook";
 import Iconify from "@/components/iconify";
@@ -203,7 +204,11 @@ const PetPage = () => {
             {/* Dialogs */}
 
             {isEditOpen ? (
-                <EditDialog open={isEditOpen} pet={pet} onClose={closeEdit} />
+                <AddOrEditDialog
+                    open={isEditOpen}
+                    pet={pet}
+                    onClose={closeEdit}
+                />
             ) : null}
 
             {isBookOpen ? (

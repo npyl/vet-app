@@ -12,9 +12,9 @@ import { IAppointment } from "@/types/appointment";
 // ----------------------------------------------------------------
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
+    borderRadius: "15px",
     "&:hover": {
         backgroundColor: alpha(theme.palette.primary.main, 0.3),
-        borderRadius: "15px",
         cursor: "pointer",
     },
 }));
@@ -47,6 +47,7 @@ const AppointmentsList = ({ petId }: AppointmentsListProp) => {
             {clickedItem ? (
                 <AddOrEditDialog
                     open={!!clickedItem}
+                    petId={petId}
                     appointment={clickedItem}
                     onClose={closeDialog}
                 />
@@ -94,7 +95,11 @@ const BookDialog = ({ petId, ...props }: Props) => {
             />
 
             {isAddOpen ? (
-                <AddOrEditDialog open={isAddOpen} onClose={closeAdd} />
+                <AddOrEditDialog
+                    open={isAddOpen}
+                    petId={petId}
+                    onClose={closeAdd}
+                />
             ) : null}
         </>
     );

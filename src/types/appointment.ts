@@ -1,14 +1,6 @@
+import { IExaminationHistory } from "./examination";
 import { IPet } from "./pet";
 import IUser from "./user";
-
-export interface IAppointmentPOST {
-    id?: number;
-
-    vetId: number;
-    petId: number;
-
-    date: string;
-}
 
 export interface IAppointment {
     id: number;
@@ -17,4 +9,16 @@ export interface IAppointment {
     pet: IPet;
 
     date: string;
+
+    examination?: IExaminationHistory;
+}
+
+export interface IAppointmentPOST
+    extends Omit<IAppointment, "id" | "vet" | "pet" | "examination"> {
+    id?: number;
+
+    vetId: number;
+    petId: number;
+
+    examinationId: number;
 }

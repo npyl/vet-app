@@ -76,9 +76,6 @@ model Pets {
 
   // INFO: each pet can have appointments.
   appointments    Appointment[]
-
-  // INFO: each pet can have multiple examinations
-  examinations    DoctorExamination[]
 }
 
 model DoctorExamination {
@@ -103,8 +100,7 @@ model DoctorExamination {
   lymphNodes          String
   penis_vulva_breast  String
 
-  petId               Int
-  pet                 Pets @relation(fields: [petId], references: [id])
+  appointment         Appointment? @relation
 }
 
 // --------------------------------------------------------
@@ -124,18 +120,22 @@ model WorkingHours {
 }
 
 model Appointment {
-  id      Int @id @default(autoincrement())
+  id                  Int @id @default(autoincrement())
 
-  vetId   Int
-  vet     User @relation(fields: [vetId], references: [id])
+  vetId               Int
+  vet                 User @relation(fields: [vetId], references: [id])
 
-  petId   Int
-  pet     Pets @relation(fields: [petId], references: [id])
+  petId               Int
+  pet                 Pets @relation(fields: [petId], references: [id])
 
-  date    String
+  date                String
+
+  // INFO: An appointment when completed will be connected to a doctor examination
+  doctorExamination   DoctorExamination? @relation(fields: [examinationId], references: [id])
+  examinationId       Int? @unique
 }
 
-// --------------------------------------------------------
+// ---------------------- @unique----------------------------------
 
 model UserWorkplace {
   id        Int @id @default(autoincrement())

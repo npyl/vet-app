@@ -4,6 +4,7 @@ import { IAppointmentPOST } from "@/types/appointment";
 import mapper from "./mapper";
 import { IPet } from "@/types/pet";
 import IUser from "@/types/user";
+import { IExaminationHistory } from "@/types/examination";
 
 export const dynamic = "force-dynamic";
 
@@ -29,15 +30,26 @@ const getPetById = async (petId: number): Promise<IPet> => {
     })) as IUser;
     if (!owner) throw "Did not find owner of this pet.";
 
-    const examinationHistory = await prisma.doctorExamination.findMany({
+    return { ...res[0], owner } as IPet;
+};
+
+const getDoctorExamination = async (
+    id: number,
+): Promise<IExaminationHistory> => {
+    const res = await prisma.doctorExamination.findMany({
         where: {
-            petId: { equals: res[0].id },
+            id: {
+                equals: id,
+            },
         },
     });
-    if (!examinationHistory)
-        throw "Did not find examinationHistory of this pet.";
 
-    return { ...res[0], owner, examinationHistory } as IPet;
+    if (!Array.isArray(res) || res.length !== 1)
+        throw {
+            errorMessage: "Could not find this doctor examination",
+        };
+
+    return res[0];
 };
 
 //
@@ -76,10 +88,28 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
         const pets = await Promise.all(
             res.map(({ petId }) => getPetById(petId)),
         );
+        const examinations = await Promise.all(
+            res.map(({ examinationId }) =>
+                examinationId ? getDoctorExamination(examinationId) : undefined,
+            ),
+        );
 
         // Map Database object
-        const result = res.map((r, i) =>
-            mapper(r as IAppointmentPOST, users[0] as IUser, pets[i]),
+        const result = res.map(
+            (
+                {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    examinationId,
+                    ...r
+                },
+                i,
+            ) =>
+                mapper(
+                    r as IAppointmentPOST,
+                    users[0] as IUser,
+                    pets[i],
+                    examinations[i],
+                ),
         );
 
         return new NextResponse(JSON.stringify(result), {

@@ -11,6 +11,7 @@ const mapper = (
     date: from.date,
     vet,
     pet,
+    completed: false,
 });
 
 export default mapper;

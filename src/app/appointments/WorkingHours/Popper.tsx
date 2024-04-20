@@ -111,7 +111,7 @@ const Popper = ({ onClose, ...props }: PopperProps) => {
     // --------------------------------------------------------------
     const [isMutating, setMutating] = useState(false);
     const mutate = useCallback(() => {
-        mutateTable(`/api/vets/workingHours/${user?.id}`);
+        mutateTable(`/api/vets/${user?.id}/workingHours`);
         toast.success("Successfully updated working hours!");
     }, [user?.id]);
     const stopLoading = useCallback(() => setMutating(false), []);

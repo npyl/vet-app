@@ -7,7 +7,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import timelinePlugin from "@fullcalendar/timeline";
 //
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useCallback } from "react";
 // next
 import Head from "next/head";
 // @mui
@@ -19,20 +19,26 @@ import { StyledCalendar, CalendarToolbar } from "@/components/Calendar";
 import ICalendarEvent2EventSourceInput from "./constants";
 import useSWR from "swr";
 import useAuth from "@/hooks/useAuth";
+import { EventClickArg } from "@fullcalendar/common";
+import { IAppointment } from "@/types/appointment";
 
 // ----------------------------------------------------------------------
 
 const view = "timeGridWeek";
 
-export default function Events() {
+interface CalendarProps {
+    onEventClick: (id: number) => void;
+}
+
+export default function Calendar({ onEventClick }: CalendarProps) {
     const { user } = useAuth();
 
     const calendarRef = useRef<FullCalendar>(null);
 
     const [date, setDate] = useState(new Date());
 
-    const { data } = useSWR(
-        user?.id ? `/api/vets/appointments/${user.id}` : null,
+    const { data } = useSWR<IAppointment[]>(
+        user?.id ? `/api/vets/${user.id}/appointments` : null,
     );
 
     const events = useMemo(
@@ -57,6 +63,11 @@ export default function Events() {
             setDate(calendarApi.getDate());
         }
     };
+
+    const handleEventClick = useCallback(
+        (e: EventClickArg) => onEventClick(+e.event.id),
+        [],
+    );
 
     return (
         <>
@@ -93,7 +104,7 @@ export default function Events() {
                             headerToolbar={false}
                             // select={handleSelectRange}
                             // eventDrop={handleDropEvent}
-                            // eventClick={handleSelectEvent}
+                            eventClick={handleEventClick as any}
                             eventResize={() => {}}
                             height={720}
                             plugins={[

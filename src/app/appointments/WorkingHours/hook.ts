@@ -7,7 +7,7 @@ const useWorkingHours = () => {
 
     // Get user working hours
     const { data: workingHours, isLoading } = useSWR<IVetWorkingHours>(
-        `/api/vets/workingHours/${user?.id}`,
+        `/api/vets/${user?.id}/workingHours`,
     );
 
     return { workingHours, isLoading };

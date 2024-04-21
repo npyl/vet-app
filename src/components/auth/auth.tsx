@@ -85,6 +85,7 @@ export default function AuthPage() {
                                                     cursor: "pointer",
                                                 },
                                             }}
+                                            color="primary.main"
                                             onClick={setRegister}
                                         >
                                             Create an account
@@ -105,7 +106,7 @@ export default function AuthPage() {
                                     }}
                                 />
 
-                                <Stack spacing={2} sx={{ mb: 5 }}>
+                                <Stack spacing={2} mb={2}>
                                     <Typography variant="h4">
                                         Sign up
                                     </Typography>
@@ -123,6 +124,7 @@ export default function AuthPage() {
                                                     cursor: "pointer",
                                                 },
                                             }}
+                                            color="primary.main"
                                             onClick={setLogin}
                                         >
                                             Sign in

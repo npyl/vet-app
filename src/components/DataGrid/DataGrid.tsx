@@ -1,12 +1,7 @@
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import { Button } from "@mui/material";
 import {
-    GridDeleteIcon,
     GridRowParams,
-    GridRowSelectionModel,
     GridSortDirection,
     GridSortModel,
-    GridToolbarContainer,
 } from "@mui/x-data-grid";
 import { FC, useCallback, useEffect, useState } from "react";
 import { StyledDataGrid } from "./styles";
@@ -25,14 +20,10 @@ const DataGridTable: FC<GridProps> = ({
     totalRows,
     onPaginationModelChange,
 
-    onBulkDelete,
-    onBulkEdit,
-
     ...other
 }) => {
     const router = useRouter();
 
-    const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
     const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
     useEffect(() => {
@@ -41,40 +32,10 @@ const DataGridTable: FC<GridProps> = ({
         ]);
     }, [sortingBy, sortingOrder]);
 
-    const BulkEditButton = () => (
-        <Button
-            onClick={() => onBulkEdit?.(selectedRows)}
-            startIcon={<EditNoteIcon />}
-            sx={{ position: "absolute", right: 0, mr: 1, mt: 0.5 }}
-        >
-            {"Edit"}
-        </Button>
+    const handleSortChange = useCallback(
+        (newSortModel: any) => setSortModel(newSortModel),
+        [],
     );
-
-    const BulkDeleteButton = () => (
-        <Button
-            startIcon={<GridDeleteIcon />}
-            onClick={() => onBulkDelete?.(selectedRows)}
-        >
-            {"Delete"}
-        </Button>
-    );
-
-    const CustomToolbar = () => (
-        <GridToolbarContainer>
-            {selectedRows && selectedRows.length > 0 && (
-                <>
-                    {onBulkDelete && <BulkDeleteButton />}
-                    {onBulkEdit && <BulkEditButton />}
-                </>
-            )}
-        </GridToolbarContainer>
-    );
-
-    const handleSortChange = (newSortModel: any) => setSortModel(newSortModel);
-
-    const handleRowSelectionChange = (model: GridRowSelectionModel) =>
-        setSelectedRows(model);
 
     const handleRowClick = useCallback(
         (e: GridRowParams) => router.push(`/${other.resource}/${e.row.id}`),
@@ -82,47 +43,35 @@ const DataGridTable: FC<GridProps> = ({
     );
 
     return (
-        <>
-            <StyledDataGrid
-                slots={{
-                    toolbar: CustomToolbar,
-                }}
-                localeText={{
-                    toolbarColumns: "Fields",
-                    MuiTablePagination: {
-                        labelRowsPerPage: "Rows per page",
-                    },
-                }}
-                sx={{
-                    "& .MuiDataGrid-row": {
-                        cursor: "pointer",
-                    },
-                }}
-                // --- selection ---
-                onRowSelectionModelChange={handleRowSelectionChange}
-                // --- pagination ---
-                paginationMode="server"
-                rowCount={totalRows}
-                paginationModel={{ page, pageSize }}
-                onPaginationModelChange={onPaginationModelChange}
-                // ------------------
-                disableColumnFilter
-                disableDensitySelector
-                rowHeight={100}
-                getRowId={(e) => e.id}
-                checkboxSelection
-                autoHeight
-                disableRowSelectionOnClick
-                sortModel={sortModel}
-                onSortModelChange={handleSortChange}
-                rows={rows}
-                columns={columns}
-                pageSizeOptions={[25, 50, 100]}
-                // ...
-                onRowClick={handleRowClick}
-                {...other}
-            />
-        </>
+        <StyledDataGrid
+            localeText={{
+                toolbarColumns: "Fields",
+                MuiTablePagination: {
+                    labelRowsPerPage: "Rows per page",
+                },
+            }}
+            // --- pagination ---
+            paginationMode="server"
+            rowCount={totalRows}
+            paginationModel={{ page, pageSize }}
+            onPaginationModelChange={onPaginationModelChange}
+            // ------------------
+            disableColumnFilter
+            disableDensitySelector
+            rowHeight={100}
+            getRowId={(e) => e.id}
+            // checkboxSelection
+            autoHeight
+            disableRowSelectionOnClick
+            sortModel={sortModel}
+            onSortModelChange={handleSortChange}
+            rows={rows}
+            columns={columns}
+            pageSizeOptions={[25, 50, 100]}
+            // ...
+            onRowClick={handleRowClick}
+            {...other}
+        />
     );
 };
 

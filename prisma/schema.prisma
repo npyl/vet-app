@@ -32,15 +32,20 @@ model User {
   id              Int      @id @default(autoincrement())
   email           String   @unique
   password        String
-  avatar          String
   type            UserType @default(USER)
+  avatar          String?
 
   token           String? @unique
 
-  // User's working hours (Only a vet should have workingHours) 
+  pets            Pets[]
+
+  // --- VET SPECIFIC ---
   workingHours    WorkingHours?
   appointments    Appointment[]
+  workplace       UserWorkplace?
 }
+
+// --------------------------------------------------------
 
 model Pets {
   id              Int     @id @default(autoincrement())
@@ -54,7 +59,10 @@ model Pets {
   birthday        String
   color           String  @db.VarChar(16)
   secondary_color String  @db.VarChar(16)
+  // ------------------------------------
   microchip_date  String
+  microchip_code  String? @unique
+  // ------------------------------------
   neutered        Boolean
   dead            Boolean
   blood_type      String  @db.VarChar(16)
@@ -62,8 +70,40 @@ model Pets {
   notes           String
   therapy_notes   String
 
+  // INFO: each pet has an owner (user or vet)
+  ownerId         Int
+  owner           User    @relation(fields: [ownerId], references: [id])
+
+  // INFO: each pet can have appointments.
   appointments    Appointment[]
 }
+
+model DoctorExamination {
+  id Int @id @default(autoincrement())
+
+  date                String
+
+  findings            String
+  diagnosis           String
+  procedure           String
+  therapy             String
+  notes               String
+
+  weight              Int
+  apot_swmatos        String
+  temperature         Int
+  heartrate           Float
+  CRT                 String  // χρώμα βλεννογόνου / C.R.T.
+  tummy               String  // ψιλάφηση κοιλιάς
+  thorax              String
+  ears_eyes_mouth     String
+  lymphNodes          String
+  penis_vulva_breast  String
+
+  appointment         Appointment? @relation
+}
+
+// --------------------------------------------------------
 
 model WorkingHours {
   id Int @id @default(autoincrement())
@@ -80,13 +120,33 @@ model WorkingHours {
 }
 
 model Appointment {
-  id      Int @id @default(autoincrement())
+  id                  Int @id @default(autoincrement())
 
-  vetId   Int
-  vet     User @relation(fields: [vetId], references: [id])
+  vetId               Int
+  vet                 User @relation(fields: [vetId], references: [id])
 
-  petId   Int
-  pet     Pets @relation(fields: [petId], references: [id])
+  petId               Int
+  pet                 Pets @relation(fields: [petId], references: [id])
 
-  date    String
+  date                String
+
+  // INFO: An appointment when completed will be connected to a doctor examination
+  examination         DoctorExamination? @relation(fields: [examinationId], references: [id])
+  examinationId       Int? @unique
+}
+
+// ---------------------- @unique----------------------------------
+
+model UserWorkplace {
+  id        Int @id @default(autoincrement())
+
+  region    String
+  city      String
+  complex   String
+
+  telephone String
+
+  // One-to-One relationship with User
+  userId    Int?   @unique
+  user      User?  @relation(fields: [userId], references: [id])
 }

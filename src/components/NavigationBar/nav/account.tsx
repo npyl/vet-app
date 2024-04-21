@@ -1,29 +1,38 @@
+import VetBadge from "@/components/Badge/Vet";
 import { SpaceBetween } from "@/components/styled";
 import useAuth from "@/hooks/useAuth";
 import { Logout } from "@mui/icons-material";
-import { Avatar, Box, IconButton, Stack, Typography } from "@mui/material";
-
-const VetBadge = (
-    <Box
-        px={1}
-        border="1px solid"
-        borderColor="success.dark"
-        borderRadius="10px"
-        bgcolor="success.light"
-    >
-        <Typography color="success.dark">VET</Typography>
-    </Box>
-);
+import { Avatar, IconButton, Stack, Typography, alpha } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 const NavAccount = () => {
+    const router = useRouter();
     const { logout, user } = useAuth();
+
+    const gotoProfile = useCallback(
+        () => router.push(`/profile/${user?.id}`),
+        [],
+    );
 
     return (
         <SpaceBetween alignItems="center" p={2} borderTop="1px solid #ddd">
-            <Stack>
+            <Stack
+                sx={{
+                    borderRadius: "15px",
+                    "&:hover": {
+                        cursor: "pointer",
+                        backgroundColor: (theme) =>
+                            alpha(theme.palette.primary.main, 0.3),
+                        color: "primary.main",
+                    },
+                    p: 1,
+                }}
+                onClick={gotoProfile}
+            >
                 <Stack direction="row" alignItems="center" spacing={1}>
                     <Avatar src={user?.avatar || ""} />
-                    {user?.type === "VET" ? VetBadge : null}
+                    {user?.type === "VET" ? <VetBadge /> : null}
                 </Stack>
                 <Typography variant="button">{user?.email}</Typography>
             </Stack>

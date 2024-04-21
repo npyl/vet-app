@@ -1,10 +1,8 @@
 "use client";
-
 // React
-import { FormEvent, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 // MUI
 import LoadingButton from "@mui/lab/LoadingButton";
-import { TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
@@ -13,7 +11,130 @@ import Iconify from "@/components/iconify";
 // Hooks
 import useAuth from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
+// React-Hook-Form
+import { FormProvider, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+// Vet Form
+import VetForm from "./vet";
+// Types
 import { UserType } from "@/types/user";
+import { IRegisterReq } from "@/types/auth";
+import { IVetWorkingHoursPOST } from "@/types/workingHours";
+import { RHFTextField } from "@/components/hook-form";
+import { SoftAlert } from "@/components/styled";
+
+// ----------------------------------------------------------
+
+const TUPLE = yup
+    .tuple([
+        yup
+            .number()
+            .min(8, "must be more than / or 8")
+            .max(22, "must be less than / or 22")
+            .required(),
+        yup.number().min(8).max(22).required(),
+    ])
+    .required();
+
+const UserSchema = yup.object<IRegisterReq>().shape({
+    email: yup.string().required(),
+    password: yup.string().required(),
+    type: yup.string().oneOf<UserType>(["USER", "VET"]).required(),
+    avatar: yup.string().notRequired(),
+
+    // --- VET SPECIFIC ---
+    region: yup.string(),
+    city: yup.string(),
+    complex: yup.string(),
+    telephone: yup.string(),
+
+    workingHours: yup.object<IVetWorkingHoursPOST>().shape({
+        monday: TUPLE,
+        tuesday: TUPLE,
+        wednesday: TUPLE,
+        thursday: TUPLE,
+        friday: TUPLE,
+
+        vetId: yup.number().required(),
+    }),
+});
+
+const VetSchema = yup.object<IRegisterReq>().shape({
+    email: yup.string().required(),
+    password: yup.string().required(),
+    type: yup.string().oneOf<UserType>(["USER", "VET"]).required(),
+    avatar: yup.string().notRequired(),
+
+    // --- VET SPECIFIC ---
+    region: yup.string().required(),
+    city: yup.string().required(),
+    complex: yup.string().required(),
+    telephone: yup.string().required(),
+
+    workingHours: yup.object<IVetWorkingHoursPOST>().shape({
+        monday: TUPLE,
+        tuesday: TUPLE,
+        wednesday: TUPLE,
+        thursday: TUPLE,
+        friday: TUPLE,
+
+        vetId: yup.number().required(),
+    }),
+});
+
+// ----------------------------------------------------------
+
+interface UserFormProps {
+    isSubmitting: boolean;
+}
+
+const UserForm = ({ isSubmitting }: UserFormProps) => {
+    const [password, setPassword] = useState(false);
+
+    return (
+        <Stack spacing={1}>
+            <RHFTextField name="email" label="Email address" />
+
+            <RHFTextField
+                name="password"
+                label="Password"
+                type={password ? "text" : "password"}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                onClick={() => setPassword((old) => !old)}
+                                edge="end"
+                            >
+                                <Iconify
+                                    icon={
+                                        password
+                                            ? "solar:eye-bold"
+                                            : "solar:eye-closed-bold"
+                                    }
+                                />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+
+            <LoadingButton
+                fullWidth
+                color="primary"
+                size="large"
+                type="submit"
+                variant="contained"
+                loading={isSubmitting}
+            >
+                Sign up
+            </LoadingButton>
+        </Stack>
+    );
+};
+
+// ----------------------------------------------------------
 
 interface Props {
     type: UserType;
@@ -24,72 +145,75 @@ export default function RegisterForm({ type }: Props) {
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    const returnTo = searchParams.get("returnTo");
+    const returnTo =
+        searchParams.get("returnTo") || type === "USER"
+            ? "/pets"
+            : "/appointments";
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    // const [errorMsg, setErrorMsg] = useState("");
-    const [password, setPassword] = useState(false);
+    // ---------------------------------------------------------------
+
+    const methods = useForm<IRegisterReq>({
+        resolver: yupResolver(type === "USER" ? UserSchema : VetSchema) as any, // TODO: fix this any
+        values: {
+            avatar: "",
+            email: "",
+            password: "",
+            type,
+
+            // --- VET SPECIFIC ---
+            region: "",
+            city: "",
+            complex: "",
+
+            telephone: "",
+
+            workingHours: {
+                // 9am-5pm
+                monday: [9, 17],
+                tuesday: [9, 17],
+                wednesday: [9, 17],
+                thursday: [9, 17],
+                friday: [9, 17],
+
+                vetId: -1,
+            },
+        },
+    });
+
+    const [error, setError] = useState("");
+    const handleError = useCallback(
+        (e: any) => setError(e.errorMessage || "An error has occured"),
+        [],
+    );
 
     const handleSubmit = useCallback(
-        (e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
+        (d: IRegisterReq) => {
+            console.log("d: ", d);
 
-            setIsSubmitting(true);
-
-            const form = e.target as HTMLFormElement;
-
-            signup(form.email.value, form.password.value, type)
+            signup(d)
                 .then(() => returnTo && router.push(returnTo))
-                .catch((error) => console.error(error))
-                .finally(() => setIsSubmitting(false));
+                .catch(handleError);
         },
         [type, returnTo],
     );
 
+    console.log("errors: ", methods.formState.errors);
+
     return (
-        <>
-            <form method="POST" onSubmit={handleSubmit}>
-                <Stack spacing={2.5}>
-                    <TextField name="email" label="Email address" />
+        <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(handleSubmit)}>
+                {error ? (
+                    <SoftAlert severity="error" sx={{ mb: 3 }}>
+                        {error}
+                    </SoftAlert>
+                ) : null}
 
-                    <TextField
-                        name="password"
-                        label="Password"
-                        type={password ? "text" : "password"}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={() =>
-                                            setPassword((old) => !old)
-                                        }
-                                        edge="end"
-                                    >
-                                        <Iconify
-                                            icon={
-                                                password
-                                                    ? "solar:eye-bold"
-                                                    : "solar:eye-closed-bold"
-                                            }
-                                        />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-
-                    <LoadingButton
-                        fullWidth
-                        color="primary"
-                        size="large"
-                        type="submit"
-                        variant="contained"
-                        loading={isSubmitting}
-                    >
-                        Sign up
-                    </LoadingButton>
-                </Stack>
+                {type === "USER" ? (
+                    <UserForm isSubmitting={methods.formState.isSubmitting} />
+                ) : (
+                    <VetForm isSubmitting={methods.formState.isSubmitting} />
+                )}
             </form>
-        </>
+        </FormProvider>
     );
 }

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import prisma from "../_util/db";
 
+export const dynamic = "force-dynamic";
+
 //
 //  Get all users that are VETs
 //

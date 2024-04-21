@@ -8,4 +8,16 @@ type IUser = {
     type: UserType;
 };
 
+export type IUserWorkplace = {
+    id: number;
+
+    region: string;
+    city: string;
+    complex: string;
+
+    telephone: string;
+
+    user: IUser;
+};
+
 export default IUser;

@@ -1,13 +1,22 @@
 import { IAppointment } from "@/types/appointment";
 
-const IAppointmentToCalendarEvent = ({ id, date, pet }: IAppointment) => ({
+// see: https://fullcalendar.io/docs/event-object
+
+const IAppointmentToCalendarEvent = ({
+    id,
+    date,
+    pet,
+    examination,
+}: IAppointment) => ({
     id: `${id}`,
-    color: "primary.main",
     start: date,
     title: pet.name,
 
-    // description: "example",
-    // end: dayjs(date).minute(30),
+    extendedProps: {
+        avatar: pet.photo,
+        completed: !!examination,
+        petId: pet.id,
+    },
 });
 
 export default IAppointmentToCalendarEvent;

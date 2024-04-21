@@ -23,7 +23,9 @@ export async function POST(req: Request | NextRequest) {
         });
 
         if (!user || user.length === 0) {
-            throw "Could not find user with these credentials!";
+            throw {
+                errorMessage: "Could not find user with these credentials!",
+            };
         }
 
         // Generate token

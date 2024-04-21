@@ -24,6 +24,7 @@ import useApiContext from "@/contexts/api";
 import dayjs from "dayjs";
 import useMutateTable from "@/hooks/useMutateTable";
 import { LoadingButton } from "@mui/lab";
+import useAuth from "@/hooks/useAuth";
 
 interface Props {
     open: boolean;
@@ -32,33 +33,58 @@ interface Props {
     pet?: IPet;
 }
 
-const Schema = yup.object<IPetPOST>().shape({
-    name: yup.string().required(),
-    photo: yup.string().required(),
-    age: yup.number().required(),
-    weight: yup.number().required(),
-    gender: yup.string().oneOf<IPetGender>(["MALE", "FEMALE"]).required(),
-    type: yup.string().required(),
-    race: yup.string().required(),
-    birthday: yup.string().required(),
-    color: yup.string().required(),
-    secondary_color: yup.string().required(),
-    microchip_date: yup.string().required(),
-    neutered: yup.boolean().required(),
-    dead: yup.boolean().required(),
-    blood_type: yup.string().required(),
-    passport: yup.boolean().required(),
-    notes: yup.string().required(),
-    therapy_notes: yup.string().required(),
-});
+interface IPetPOSTYup extends Partial<IPetPOST> {
+    name: string;
+    photo: string;
+    age: number;
+    weight: number;
+    gender: IPetGender;
+    type: string;
+    race: string;
+    color: string;
+    blood_type: string;
+    ownerId: number;
+}
+
+const Schema = yup
+    .object<IPetPOSTYup>()
+    .shape({
+        name: yup.string().required(),
+        photo: yup.string().required(),
+        age: yup.number().required(),
+        weight: yup.number().required(),
+        gender: yup.string().oneOf<IPetGender>(["MALE", "FEMALE"]).required(),
+        type: yup.string().required("Please enter race"),
+        race: yup.string().required("Please enter race"),
+        color: yup.string().required("Please enter pet color"),
+        blood_type: yup.string().required("Please enter pet blood type"),
+        ownerId: yup.number().required(),
+
+        // INFO: Required if user has set microchip_date
+        microchip_code: yup.string().when("microchip_date", {
+            is: (value: any) => !!value,
+            then: () => yup.string().required(),
+        }),
+
+        // birthday: yup.string().required(),
+        // secondary_color: yup.string().required(),
+        // microchip_date: yup.string().required(),
+        // neutered: yup.boolean().required(),
+        // dead: yup.boolean().required(),
+        // passport: yup.boolean().required(),
+        // notes: yup.string().required(),
+        // therapy_notes: yup.string().required(),
+    })
+    .required();
 
 const AddPetDialog = ({ pet, ...props }: Props) => {
+    const { user } = useAuth();
     const { post, put } = useApiContext();
     const { mutateTable } = useMutateTable();
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const methods = useForm<IPetPOST>({
+    const methods = useForm<IPetPOSTYup>({
         resolver: yupResolver(Schema),
         values: {
             name: pet?.name || "",
@@ -80,18 +106,19 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
             passport: !!pet?.passport,
             notes: pet?.notes || "",
             therapy_notes: pet?.therapy_notes || "",
+            ownerId: user?.id || -1,
         },
     });
 
-    const [chipped, setChipped] = useState(false);
+    const [chipped, setChipped] = useState(!!pet?.microchip_date);
 
     const mutate = useCallback(() => {
-        mutateTable("/api/pets");
+        mutateTable(`/api/user/${user?.id}/pets`);
         props.onClose();
-    }, []);
+    }, [user?.id]);
 
-    const handleSubmit = useCallback((d: IPetPOST) => {
-        console.log("got: ", d);
+    const handleSubmit = useCallback((d: IPetPOSTYup) => {
+        console.log("d: ", d);
 
         if (pet) {
             // update
@@ -123,7 +150,11 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
                 onSubmit={methods.handleSubmit(handleSubmit)}
                 // ...
                 maxWidth="sm"
-                title={<Typography variant="h6">Add Pet</Typography>}
+                title={
+                    <Typography variant="h6">
+                        {pet ? `Edit ${pet.name}` : "Add Pet"}
+                    </Typography>
+                }
                 content={
                     <Stack mt={2} spacing={1} alignItems="center" width={1}>
                         <RHFUploadPhoto name="photo" />
@@ -213,15 +244,23 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
                                 <FormControlLabel
                                     control={<Checkbox />}
                                     label="Chipped"
-                                    value={chipped}
+                                    checked={chipped}
                                     onChange={(e, b) => setChipped(b)}
                                 />
 
                                 {chipped ? (
-                                    <RHFDatePicker
-                                        label="Microchip Date"
-                                        name="microchip_date"
-                                    />
+                                    <>
+                                        <RHFDatePicker
+                                            label="Microchip Date"
+                                            name="microchip_date"
+                                        />
+
+                                        <RHFTextField
+                                            fullWidth
+                                            label="Chip Code"
+                                            name="microchip_code"
+                                        />
+                                    </>
                                 ) : null}
                             </Stack>
                         </Stack>

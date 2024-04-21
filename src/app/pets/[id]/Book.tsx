@@ -1,134 +1,85 @@
 import Dialog from "@/components/Dialog";
-import {
-    RHFDatePicker,
-    RHFSelect,
-    RHFTimePicker,
-} from "@/components/hook-form";
-import { SpaceBetween } from "@/components/styled";
-import useApiContext from "@/contexts/api";
-import IBookAppointment from "@/types/book";
-import IUser from "@/types/user";
-import { IVetWorkingHours } from "@/types/workingHours";
-import { yupResolver } from "@hookform/resolvers/yup";
-import LoadingButton from "@mui/lab/LoadingButton";
-import { MenuItem, Skeleton } from "@mui/material";
+import { Box, Button, CircularProgress, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import dayjs from "dayjs";
-import { useCallback, useMemo } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import useSWR from "swr";
-import * as yup from "yup";
+import { useCallback, useState } from "react";
+import { useAppointments } from "./hook";
+import { List, ListItem } from "@/components/List";
+import { styled, alpha } from "@mui/material/styles";
+import useDialog from "@/hooks/useDialog";
+import AddOrEditDialog from "./AddOrEdit";
+import { IAppointment } from "@/types/appointment";
 
 // ----------------------------------------------------------------
 
-const SelectVet = () => {
-    const { data, isLoading } = useSWR<IUser[]>("/api/vets");
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+    borderRadius: "15px",
+    "&:hover": {
+        backgroundColor: alpha(theme.palette.primary.main, 0.1),
+        color: theme.palette.primary.main,
+        cursor: "pointer",
+    },
+}));
 
-    const vets = useMemo(
-        () => (Array.isArray(data) && data.length > 0 ? data : []),
-        [data],
-    );
-
-    return isLoading ? (
-        <Skeleton width={100} height={50} animation="pulse" />
-    ) : (
-        <RHFSelect label="Available vets" name="vetId">
-            {vets.map(({ email, id }, i) => (
-                <MenuItem key={i} value={id}>
-                    {email}
-                </MenuItem>
-            ))}
-        </RHFSelect>
-    );
-};
+const StyledList = styled(List)(({ theme }) => ({
+    borderRadius: "15px",
+    border: "1px solid",
+    borderColor: alpha(theme.palette.primary.main, 0.4),
+}));
 
 // ----------------------------------------------------------------
 
-function disableWeekends(date: dayjs.Dayjs) {
-    // 0 -> sunday, 6 -> saturday
-    return date.day() === 0 || date.day() === 6;
+interface AppointmentsListProp {
+    petId: number;
 }
 
-const minMaxForDay = (w: IVetWorkingHours, day: number) => {
-    if (day === 1) {
-        return w.monday;
-    } else if (day === 2) {
-        return w.tuesday;
-    } else if (day === 3) {
-        return w.wednesday;
-    } else if (day === 4) {
-        return w.thursday;
-    } else if (day === 5) {
-        return w.friday;
-    } else return [-1, -1];
-};
+const AppointmentsList = ({ petId }: AppointmentsListProp) => {
+    const { appointments, isLoading } = useAppointments(petId);
 
-const getSafeRange = (date: string) => [
-    dayjs(date).hour(9),
-    dayjs(date).hour(17),
-];
+    const [clickedItem, setClickedItem] = useState<IAppointment>();
+    const closeDialog = useCallback(() => setClickedItem(undefined), []);
 
-const DateSelect = () => {
-    const { watch } = useFormContext();
+    if (isLoading) {
+        return (
+            <Stack mt={4} alignItems="center">
+                <CircularProgress />
+            </Stack>
+        );
+    }
 
-    const vetId = watch("vetId");
-    const date = watch("date");
+    if (appointments.length === 0) {
+        return (
+            <Stack mt={4} alignItems="center">
+                <Typography>No appointments booked yet!</Typography>
+            </Stack>
+        );
+    }
 
-    const { data: workingHours, isLoading } = useSWR<IVetWorkingHours>(
-        vetId ? `/api/vets/workingHours/${vetId}` : null,
-    );
-
-    const [minDate, maxDate] = useMemo(() => {
-        if (!workingHours) return getSafeRange(date);
-
-        const currentDay = date ? dayjs(date).day() : -1;
-        if (currentDay === -1) return getSafeRange(date);
-
-        console.log("currentDay: ", currentDay);
-
-        const [minTime, maxTime] = minMaxForDay(workingHours, currentDay);
-        if (minTime === -1 || maxTime === -1) return getSafeRange(date);
-
-        const minDate = dayjs(date).hour(minTime);
-        const maxDate = dayjs(date).hour(maxTime);
-
-        console.log("minDate: ", minDate, " maxDate: ", maxDate);
-
-        return [minDate, maxDate];
-    }, [workingHours, date]);
-
-    return isLoading ? (
-        <Skeleton width={100} height={50} animation="pulse" />
-    ) : vetId > 0 ? (
+    return (
         <>
-            {/* is a vet selected? */}
-            <RHFDatePicker
-                label="Available Dates"
-                name="date"
-                disablePast
-                shouldDisableDate={disableWeekends}
-            />
+            <Box mt={4} />
 
-            <RHFTimePicker
-                label="Time"
-                name="date"
-                disableFuture
-                minTime={minDate}
-                maxTime={maxDate}
-                skipDisabled
-                ampm={false}
-            />
+            <StyledList>
+                {appointments.map((a, i) => (
+                    <StyledListItem
+                        key={i}
+                        label={`${i + 1}.`}
+                        value={new Date(a.date).toDateString()}
+                        onClick={() => setClickedItem(a)}
+                    />
+                ))}
+            </StyledList>
+
+            {clickedItem ? (
+                <AddOrEditDialog
+                    open={!!clickedItem}
+                    petId={petId}
+                    appointment={clickedItem}
+                    onClose={closeDialog}
+                />
+            ) : null}
         </>
-    ) : null;
+    );
 };
-
-// ----------------------------------------------------------------
-
-const Schema = yup.object<IBookAppointment>().shape({
-    vetId: yup.number().required(),
-    petId: yup.number().required(),
-    date: yup.string().required(),
-});
 
 interface Props {
     open: boolean;
@@ -138,51 +89,44 @@ interface Props {
 }
 
 const BookDialog = ({ petId, ...props }: Props) => {
-    const { post } = useApiContext();
-
-    const methods = useForm<IBookAppointment>({
-        resolver: yupResolver(Schema),
-        values: {
-            vetId: -1,
-            petId,
-            date: "",
-        },
-    });
-
-    const handleSubmit = useCallback((d: IBookAppointment) => {
-        console.log("d: ", d);
-
-        post("/api/book", { body: JSON.stringify(d) });
-    }, []);
+    const [isAddOpen, openAdd, closeAdd] = useDialog();
 
     return (
-        <FormProvider {...methods}>
+        <>
             <Dialog
                 {...props}
                 // ...
-                submit
-                onSubmit={methods.handleSubmit(handleSubmit)}
-                // ...
                 maxWidth="md"
-                title={<Typography variant="h6">Book Appointment</Typography>}
-                content={
-                    <SpaceBetween mt={2} alignItems="center" width={1}>
-                        <SelectVet />
-                        <DateSelect />
-                    </SpaceBetween>
+                title={
+                    <>
+                        <Typography variant="h6">Appointments</Typography>
+
+                        <Button
+                            variant="contained"
+                            sx={{
+                                // TODO: all these are hardcoded...
+                                position: "absolute",
+                                mr: 10,
+                                top: 15,
+                                right: 0,
+                            }}
+                            onClick={openAdd}
+                        >
+                            Add
+                        </Button>
+                    </>
                 }
-                actions={
-                    <LoadingButton
-                        type="submit"
-                        variant="contained"
-                        disabled={false}
-                        loading={false}
-                    >
-                        Book
-                    </LoadingButton>
-                }
+                content={<AppointmentsList petId={petId} />}
             />
-        </FormProvider>
+
+            {isAddOpen ? (
+                <AddOrEditDialog
+                    open={isAddOpen}
+                    petId={petId}
+                    onClose={closeAdd}
+                />
+            ) : null}
+        </>
     );
 };
 

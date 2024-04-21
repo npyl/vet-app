@@ -1,34 +1,59 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../_util/db";
+import prisma from "../../../_util/db";
 import { IVetWorkingHoursPOST } from "@/types/workingHours";
 
-export async function POST(req: Request | NextRequest) {
-    try {
-        const body = (await req.json()) as IVetWorkingHoursPOST;
-        if (!body) throw "Bad body!";
+export const dynamic = "force-dynamic";
 
-        const vetId = body.vetId;
-        if (!vetId) throw "Bad vetId in body!";
+interface Props {
+    params: { id: number };
+}
+
+//
+//  Receive a vet's working hours
+//
+export async function GET(req: Request | NextRequest, { params }: Props) {
+    req;
+
+    try {
+        // INFO: get user id
+        const { id } = params || {};
+        if (!id) throw "Did not pass an id!";
 
         const users = await prisma.user.findMany({
             where: {
                 id: {
-                    equals: vetId,
+                    equals: +id,
                 },
             },
         });
 
+        // Check if user is VET
         if (!Array.isArray(users) || users.length === 0)
-            throw "Could not find this user!";
-        if (users[0].type !== "VET") throw "Not a vet!";
+            throw {
+                errorMessage: "Could not find this user!",
+            };
+        if (users[0].type !== "VET")
+            throw {
+                errorMessage: "Not a vet!",
+            };
 
-        // Create workingHours record for a user
-        const res = await prisma.workingHours.create({
-            data: body,
+        const res = await prisma.workingHours.findMany({
+            where: {
+                vetId: {
+                    equals: +id,
+                },
+            },
+            include: {
+                vet: true,
+            },
         });
-        if (!res) throw "Could not find create workingHours record!";
 
-        return new NextResponse(JSON.stringify(res), {
+        if (!Array.isArray(res) || res.length === 0)
+            throw {
+                errorMessage: "Could not find this workingHours record!",
+            };
+
+        return new NextResponse(JSON.stringify(res[0]), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });
@@ -41,14 +66,16 @@ export async function POST(req: Request | NextRequest) {
     }
 }
 
+//
+//  Update a Vet's WorkingHours
+//
 export async function PUT(req: Request | NextRequest) {
     try {
-        const { id, ...body } = (await req.json()) as IVetWorkingHoursPOST;
-        if (!body) throw "Bad body!";
+        const { id, vetId, ...body } =
+            (await req.json()) as IVetWorkingHoursPOST;
         if (!id) throw "Cannot update workingHours record without record id";
-
-        const vetId = body.vetId;
         if (!vetId) throw "Bad vetId in body!";
+        if (!body) throw "Bad body!";
 
         const users = await prisma.user.findMany({
             where: {
@@ -58,9 +85,15 @@ export async function PUT(req: Request | NextRequest) {
             },
         });
 
+        // Check if user is VET
         if (!Array.isArray(users) || users.length === 0)
-            throw "Could not find this user!";
-        if (users[0].type !== "VET") throw "Not a vet!";
+            throw {
+                errorMessage: "Could not find this user!",
+            };
+        if (users[0].type !== "VET")
+            throw {
+                errorMessage: "Not a vet!",
+            };
 
         // Create workingHours record for a user
         const res = await prisma.workingHours.update({
@@ -69,7 +102,8 @@ export async function PUT(req: Request | NextRequest) {
             },
             data: body,
         });
-        if (!res) throw "Could not find create workingHours record!";
+        if (!res)
+            throw { errorMessage: "Could not update workingHours record!" };
 
         return new NextResponse(JSON.stringify(res), {
             status: 200,

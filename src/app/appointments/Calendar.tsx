@@ -140,6 +140,7 @@ export default function Calendar({ events, onEventClick }: CalendarProps) {
 
                 <FullCalendar
                     // ---
+                    height="auto"
                     allDaySlot={false}
                     weekends={false}
                     editable={false}
@@ -172,6 +173,9 @@ export default function Calendar({ events, onEventClick }: CalendarProps) {
                     eventContent={RenderEvent}
                     eventClick={handleEventClick as any}
                     eventResize={() => {}}
+                    // ---
+                    slotMinTime="08:00:00"
+                    slotMaxTime="21:00:00"
                 />
             </StyledCalendar>
         </>

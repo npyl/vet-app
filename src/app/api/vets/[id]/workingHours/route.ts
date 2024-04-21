@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../_util/db";
-import { IVetWorkingHoursPOST } from "@/types/workingHours";
-import mapper from "./mapper";
-import IUser from "@/types/user";
 
 export const dynamic = "force-dynamic";
 
@@ -29,9 +26,15 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
             },
         });
 
+        // Check if user is VET
         if (!Array.isArray(users) || users.length === 0)
-            throw "Could not find this user!";
-        if (users[0].type !== "VET") throw "Not a vet!";
+            throw {
+                errorMessage: "Could not find this user!",
+            };
+        if (users[0].type !== "VET")
+            throw {
+                errorMessage: "Not a vet!",
+            };
 
         const res = await prisma.workingHours.findMany({
             where: {
@@ -39,17 +42,17 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
                     equals: +id,
                 },
             },
+            include: {
+                vet: true,
+            },
         });
+
         if (!Array.isArray(res) || res.length === 0)
-            throw "Could not find this workingHours record!";
+            throw {
+                errorMessage: "Could not find this workingHours record!",
+            };
 
-        // Map Database object (IVetWorkingHoursPOST) to IVetWorkingHours
-        const result = mapper(
-            res[0] as IVetWorkingHoursPOST,
-            users[0] as IUser,
-        );
-
-        return new NextResponse(JSON.stringify(result), {
+        return new NextResponse(JSON.stringify(res[0]), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });

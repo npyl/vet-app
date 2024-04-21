@@ -14,29 +14,23 @@ export async function POST(req: Request | NextRequest) {
 
         // Get Body
         const body = (await req.json()) as IExaminationHistoryPOST;
-        if (!body) throw "Bad body!";
+        if (!body) throw { errorMessage: "Bad body!" };
 
         // Create
-        const res = await prisma.doctorExamination.create({
-            data: body,
+        const res = await prisma.appointment.update({
+            where: {
+                id: +appointmentId,
+            },
+            data: {
+                examination: {
+                    create: body,
+                },
+            },
         });
 
         if (!res)
             throw {
                 errorMessage: "Could not create-assign doctorExamination",
-            };
-
-        const res2 = await prisma.appointment.update({
-            where: {
-                id: +appointmentId,
-            },
-            data: res,
-        });
-
-        if (!res2)
-            throw {
-                errorMessage:
-                    "Could not assign newly created doctorExamination",
             };
 
         return new NextResponse(JSON.stringify(res), {

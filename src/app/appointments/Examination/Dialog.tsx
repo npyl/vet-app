@@ -123,7 +123,14 @@ const ExaminationDialog = ({ eventId, ...props }: ExaminationDialogProps) => {
                 onSubmit={methods.handleSubmit(handleSubmit)}
                 // ...
                 maxWidth="lg"
-                title={<Typography>sss</Typography>}
+                title={
+                    <Stack spacing={1} alignItems="center">
+                        <Typography variant="h6">{`${appointment?.pet?.name}'s Examination`}</Typography>
+                        <Typography variant="subtitle1" color="text.secondary">
+                            {new Date(appointment?.date).toDateString()}
+                        </Typography>
+                    </Stack>
+                }
                 content={<Content />}
                 actions={
                     <>

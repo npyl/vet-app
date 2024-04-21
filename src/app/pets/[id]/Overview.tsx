@@ -17,13 +17,17 @@ import { useAppointments, usePetById } from "./hook";
 import useDialog from "@/hooks/useDialog";
 import AddOrEditDialog from "../Dialogs/AddOrEdit";
 import BookDialog from "./Book";
+import useAuth from "@/hooks/useAuth";
 
 const Overview = () => {
     const { id } = useParams();
 
+    const { user } = useAuth();
     const { pet } = usePetById(+id);
     const { appointments, isLoading: isAppointmentsLoading } =
         useAppointments(+id);
+
+    const isVet = user?.type === "VET";
 
     const [isEditOpen, openEdit, closeEdit] = useDialog();
     const [isBookOpen, openBook, closeBook] = useDialog();
@@ -48,6 +52,7 @@ const Overview = () => {
                         spacing={0.5}
                     >
                         <Button
+                            disabled={isVet}
                             variant="outlined"
                             onClick={openBook}
                             startIcon={<Iconify icon="tabler:sthetoscope" />}
@@ -65,7 +70,11 @@ const Overview = () => {
                             )}
                         </Button>
 
-                        <Button variant="contained" onClick={openEdit}>
+                        <Button
+                            disabled={isVet}
+                            variant="contained"
+                            onClick={openEdit}
+                        >
                             Edit
                         </Button>
                     </Stack>

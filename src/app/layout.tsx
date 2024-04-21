@@ -5,6 +5,7 @@ import "./global.css";
 import DashboardLayout from "@/components/NavigationBar";
 import { AuthGuard } from "@/guards/is-authenticated";
 import AuthPage from "@/components/auth";
+import CorrectEntryUrl from "@/guards/is-correct-first-url";
 
 export const metadata: Metadata = {
     title: "Bobos App",
@@ -20,7 +21,9 @@ export default function RootLayout({
             <body>
                 <Providers>
                     <AuthGuard alternative={<AuthPage />}>
-                        <DashboardLayout>{children}</DashboardLayout>
+                        <CorrectEntryUrl>
+                            <DashboardLayout>{children}</DashboardLayout>
+                        </CorrectEntryUrl>
                     </AuthGuard>
                 </Providers>
             </body>

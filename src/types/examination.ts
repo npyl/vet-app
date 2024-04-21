@@ -1,3 +1,5 @@
+import { IAppointment } from "./appointment";
+
 export interface IExaminationHistory {
     id: number;
 
@@ -19,9 +21,11 @@ export interface IExaminationHistory {
     ears_eyes_mouth: string;
     lymphNodes: string;
     penis_vulva_breast: string;
+
+    appointment: IAppointment;
 }
 
 export interface IExaminationHistoryPOST
-    extends Omit<IExaminationHistory, "id"> {
+    extends Omit<IExaminationHistory, "id" | "appointment"> {
     id?: number;
 }

@@ -16,18 +16,19 @@ import useApiContext from "@/contexts/api";
 // ----------------------------------------------------------------
 
 const Schema = yup.object<IExaminationHistoryPOST>().shape({
+    // required
     date: yup.string().required(),
+    weight: yup.number().required(),
+    temperature: yup.number().required(),
+    heartrate: yup.number().required(),
 
+    // non-required
     findings: yup.string().notRequired(),
     diagnosis: yup.string().notRequired(),
     procedure: yup.string().notRequired(),
     therapy: yup.string().notRequired(),
     notes: yup.string().notRequired(),
-
-    weight: yup.number().required(),
     apot_swmatos: yup.string().notRequired(),
-    temperature: yup.number().required(),
-    heartrate: yup.number().required(),
     CRT: yup.string().notRequired(),
     tummy: yup.string().notRequired(),
     thorax: yup.string().notRequired(),
@@ -45,9 +46,14 @@ const useGetAppointment = (eventId: number) => {
         user?.id ? `/api/vets/${user.id}/appointments` : null,
     );
 
-    const appointment = useMemo(
-        () => data?.find(({ id }) => id === eventId),
+    const appointments = useMemo(
+        () => (Array.isArray(data) ? data : []),
         [data],
+    );
+
+    const appointment = useMemo(
+        () => appointments.find(({ id }) => id === eventId),
+        [appointments],
     );
 
     return { appointment, isLoading };
@@ -56,48 +62,60 @@ const useGetAppointment = (eventId: number) => {
 // ----------------------------------------------------------------
 
 interface ExaminationDialogProps {
-    eventId: number;
+    appointmentId: number;
+    onMutate: VoidFunction;
     open: boolean;
     onClose: VoidFunction;
 }
 
-const ExaminationDialog = ({ eventId, ...props }: ExaminationDialogProps) => {
-    const { post } = useApiContext();
+const ExaminationDialog = ({
+    appointmentId,
+    onMutate,
+    ...props
+}: ExaminationDialogProps) => {
+    const { post, put } = useApiContext();
 
-    const { appointment, isLoading } = useGetAppointment(eventId);
+    const { appointment, isLoading } = useGetAppointment(appointmentId);
+    const { examination } = appointment || {};
 
     const methods = useForm<IExaminationHistoryPOST>({
         resolver: yupResolver(Schema) as any,
         values: {
             date: appointment?.date || new Date().toISOString(),
 
-            findings: "",
-            diagnosis: "",
-            procedure: "",
-            therapy: "",
-            notes: "",
-
-            weight: -1,
-            apot_swmatos: "",
-            temperature: -1,
-            heartrate: -1,
-            CRT: "",
-            tummy: "",
-            thorax: "",
-            ears_eyes_mouth: "",
-            lymphNodes: "",
-            penis_vulva_breast: "",
+            findings: examination?.findings || "",
+            diagnosis: examination?.diagnosis || "",
+            procedure: examination?.procedure || "",
+            therapy: examination?.therapy || "",
+            notes: examination?.notes || "",
+            weight: examination?.weight ?? -1,
+            apot_swmatos: examination?.apot_swmatos || "",
+            temperature: examination?.temperature ?? -1,
+            heartrate: examination?.heartrate ?? -1,
+            CRT: examination?.CRT || "",
+            tummy: examination?.tummy || "",
+            thorax: examination?.thorax || "",
+            ears_eyes_mouth: examination?.ears_eyes_mouth || "",
+            lymphNodes: examination?.lymphNodes || "",
+            penis_vulva_breast: examination?.penis_vulva_breast || "",
         },
     });
 
     const handleSubmit = useCallback(
         (d: IExaminationHistoryPOST) => {
-            console.log("got: ", d);
-            post(`/api/examination?appointmentId=${appointment?.id}`, {
-                body: JSON.stringify(d),
-            });
+            if (examination) {
+                // update
+                put(`/api/examination`, {
+                    body: JSON.stringify({ ...d, id: examination?.id }),
+                }).then(onMutate);
+            } else {
+                // create
+                post(`/api/examination?appointmentId=${appointment?.id}`, {
+                    body: JSON.stringify(d),
+                }).then(onMutate);
+            }
         },
-        [appointment?.id],
+        [appointment?.id, examination],
     );
 
     console.log("errors: ", methods.formState.errors);
@@ -139,7 +157,7 @@ const ExaminationDialog = ({ eventId, ...props }: ExaminationDialogProps) => {
                             variant="contained"
                             loading={methods.formState.isSubmitting}
                         >
-                            Save
+                            {examination ? "Update" : "Save"}
                         </LoadingButton>
                     </>
                 }

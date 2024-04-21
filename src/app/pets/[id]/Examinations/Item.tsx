@@ -15,7 +15,7 @@ interface ExaminationItemProps {
 }
 
 const ExaminationItem = ({ e, isVet, onEditClick }: ExaminationItemProps) => {
-    const handleEditClick = () => onEditClick(e.id);
+    const handleEditClick = () => onEditClick(e?.appointment?.id);
 
     return (
         <Grid container>

@@ -5,30 +5,33 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
     req: Request | NextRequest,
-    { params }: { params: { id: number } },
+    { params }: { params: { id: string } },
 ) {
     const { id } = params || {};
 
     try {
         if (!id) throw { errorMessage: "Did not pass an id!" };
 
-        const res = await prisma.appointment.findMany({
+        const res = await prisma.doctorExamination.findMany({
             where: {
-                petId: {
-                    equals: +id,
+                appointment: {
+                    petId: {
+                        equals: +id,
+                    },
                 },
             },
             include: {
-                examination: true,
+                appointment: true,
+            },
+            orderBy: {
+                date: "desc",
             },
         });
 
         if (!Array.isArray(res))
-            throw { errorMessage: "Could not find any appointments!" };
+            throw { errorMessage: "Could not find any examinations!" };
 
-        const examinations = res.map(({ examination }) => examination);
-
-        return new NextResponse(JSON.stringify(examinations), {
+        return new NextResponse(JSON.stringify(res), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });

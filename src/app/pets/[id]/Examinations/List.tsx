@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { useParams } from "next/navigation";
-import { useExaminations } from "../hook";
+import { useExaminations } from "@/hooks/pets";
 import useAuth from "@/hooks/useAuth";
 import { useState } from "react";
 import ExaminationDialog from "../../../_shared/Examination";
@@ -15,9 +15,10 @@ import ExaminationItemSkeleton from "./Skeleton";
 const ExaminationsList = () => {
     const { user } = useAuth();
     const { id } = useParams();
-    const { examinations, isLoading } = useExaminations(+id);
+    const { examinations, isLoading, mutate } = useExaminations(+id);
 
-    const [clickedExamination, setClickedExamination] = useState(-1);
+    // INFO: comes from examination
+    const [clickedAppointment, setClickedAppointment] = useState(-1);
 
     return (
         <>
@@ -32,24 +33,25 @@ const ExaminationsList = () => {
                 {isLoading ? <ExaminationItemSkeleton /> : null}
 
                 {/* Items */}
-                {examinations?.map((e) =>
+                {examinations.map((e) =>
                     e ? (
                         <ExaminationItem
                             key={e?.id}
                             e={e}
                             isVet={user?.type === "VET"}
-                            onEditClick={setClickedExamination}
+                            onEditClick={setClickedAppointment}
                         />
                     ) : null,
                 )}
             </Paper>
 
             {/* Examination Record */}
-            {clickedExamination !== -1 ? (
+            {clickedAppointment !== -1 ? (
                 <ExaminationDialog
-                    open={clickedExamination !== -1}
-                    eventId={clickedExamination}
-                    onClose={() => setClickedExamination(-1)}
+                    open={clickedAppointment !== -1}
+                    appointmentId={clickedAppointment}
+                    onMutate={mutate}
+                    onClose={() => setClickedAppointment(-1)}
                 />
             ) : null}
         </>

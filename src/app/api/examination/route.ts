@@ -45,3 +45,35 @@ export async function POST(req: Request | NextRequest) {
         });
     }
 }
+
+export async function PUT(req: Request | NextRequest) {
+    try {
+        // Get Body
+        const { id, ...body } = (await req.json()) as IExaminationHistoryPOST;
+        if (!id) throw { errorMessage: "Bad id!" };
+        if (!body) throw { errorMessage: "Bad body!" };
+
+        // Create
+        const res = await prisma.doctorExamination.update({
+            where: {
+                id,
+            },
+            data: body,
+        });
+        if (!res)
+            throw {
+                errorMessage: "Could not update doctorExamination",
+            };
+
+        return new NextResponse(JSON.stringify(res), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (error) {
+        console.error(error);
+        return new NextResponse(JSON.stringify(error), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+        });
+    }
+}

@@ -1,4 +1,3 @@
-import { IAppointment } from "./appointment";
 import IUser from "./user";
 
 export type IPetGender = "MALE" | "FEMALE";

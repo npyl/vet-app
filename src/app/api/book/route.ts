@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../_util/db";
 import { IAppointmentPOST } from "@/types/appointment";
 
+// TODO: maybe update this route.ts aswell to work with prisma's "connect" field (in order to be sure that all connections are correct.)
+
 export async function POST(req: Request | NextRequest) {
     try {
         const body = (await req.json()) as IAppointmentPOST;

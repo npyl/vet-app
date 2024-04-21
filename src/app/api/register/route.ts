@@ -5,11 +5,44 @@ import prisma from "../_util/db";
 
 export async function POST(req: Request | NextRequest) {
     try {
-        const { workingHours, region, city, complex, telephone, ...body } =
-            (await req.json()) as IRegisterReq;
+        const {
+            workingHours: workingHoursWithVetId,
+            region,
+            city,
+            complex,
+            telephone,
+            ...body
+        } = (await req.json()) as IRegisterReq;
+
+        const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            vetId,
+            ...workingHours
+        } = workingHoursWithVetId || {};
 
         const user = await prisma.user.create({
-            data: body,
+            data: {
+                ...body,
+
+                // --- VET SPECIFIC ---
+                ...(body.type === "VET" && workingHours
+                    ? {
+                          // create-assign workingHours
+                          workingHours: {
+                              create: workingHours,
+                          },
+                          // create-assign Workplace
+                          workplace: {
+                              create: {
+                                  region: region || "",
+                                  city: city || "",
+                                  complex: complex || "",
+                                  telephone: telephone || "",
+                              },
+                          },
+                      }
+                    : {}),
+            },
         });
 
         if (!user) {
@@ -18,42 +51,11 @@ export async function POST(req: Request | NextRequest) {
             };
         }
 
-        // --- VET SPECIFIC ---
-        if (body.type === "VET" && workingHours) {
-            // Create & Assign working hours for this newly created vet
-            const res0 = await prisma.workingHours.create({
-                data: { ...workingHours, vetId: user.id },
-            });
-
-            if (!res0) {
-                throw {
-                    errorMessage: `Could not assign working hours for this user!`,
-                };
-            }
-
-            // Create & Assign Workplace
-            const res1 = await prisma.userWorkplace.create({
-                data: {
-                    region: region || "",
-                    city: city || "",
-                    complex: complex || "",
-                    telephone: telephone || "",
-                    userId: user.id,
-                },
-            });
-
-            if (!res1) {
-                throw {
-                    errorMessage: `Could not assign workplace information to this user!`,
-                };
-            }
-        }
-
         // Randomly generated token
         const token = randomUUID();
 
         // Update user token
-        const res2 = await prisma.user.update({
+        const res0 = await prisma.user.update({
             where: {
                 id: user.id,
             },
@@ -62,7 +64,7 @@ export async function POST(req: Request | NextRequest) {
             },
         });
 
-        if (!res2) {
+        if (!res0) {
             throw { errorMessage: `Could not set jwt token for this user.` };
         }
 

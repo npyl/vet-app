@@ -15,7 +15,7 @@ import Iconify from "@/components/iconify";
 import { useParams } from "next/navigation";
 import { useAppointments, usePetById } from "./hook";
 import useDialog from "@/hooks/useDialog";
-import AddOrEditDialog from "./AddOrEdit";
+import AddOrEditDialog from "../Dialogs/AddOrEdit";
 import BookDialog from "./Book";
 
 const Overview = () => {
@@ -214,7 +214,7 @@ const Overview = () => {
             {isEditOpen ? (
                 <AddOrEditDialog
                     open={isEditOpen}
-                    petId={id ? +id : -1}
+                    pet={pet}
                     onClose={closeEdit}
                 />
             ) : null}

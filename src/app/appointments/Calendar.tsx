@@ -11,7 +11,14 @@ import { useState, useRef, useMemo, useCallback } from "react";
 // next
 import Head from "next/head";
 // @mui
-import { Avatar, Stack, Typography, alpha } from "@mui/material";
+import {
+    Avatar,
+    Button,
+    Stack,
+    Tooltip,
+    Typography,
+    alpha,
+} from "@mui/material";
 
 // sections
 import { StyledCalendar, CalendarToolbar } from "@/components/Calendar";
@@ -22,23 +29,57 @@ import useAuth from "@/hooks/useAuth";
 import { EventClickArg, EventContentArg } from "@fullcalendar/common";
 import { IAppointment } from "@/types/appointment";
 import { useTheme } from "@mui/material";
+import Iconify from "@/components/iconify";
 
 // ----------------------------------------------------------------------
 
 const RenderEvent = (e: EventContentArg) => {
-    const { avatar, completed } = e?.event?.extendedProps || {};
+    const { avatar, completed, petId } = e?.event?.extendedProps || {};
 
     return (
-        <Stack direction="row" spacing={1} py={0.2} overflow="hidden">
-            <Avatar
-                src={avatar || ""}
+        <Tooltip
+            title={
+                <Stack>
+                    <Typography>Want to see this pet?</Typography>
+                    <Button variant="contained" href={`/pets/${petId}`}>
+                        Go
+                    </Button>
+                </Stack>
+            }
+        >
+            <Stack
+                direction="row"
+                spacing={1}
+                py={0.2}
+                position="relative"
                 sx={{
-                    width: 35,
-                    height: 35,
+                    cursor: "pointer",
                 }}
-            />
-            <Typography fontWeight="bold">{e?.event?.title}</Typography>
-        </Stack>
+            >
+                <Avatar
+                    src={avatar || ""}
+                    sx={{
+                        width: 35,
+                        height: 35,
+                    }}
+                />
+
+                <Typography fontWeight="bold" overflow="hidden">
+                    {e?.event?.title}
+                </Typography>
+
+                {completed ? (
+                    <Iconify
+                        icon="carbon:task-complete"
+                        height={30}
+                        width={30}
+                        position="absolute"
+                        top={-8}
+                        right={-2}
+                    />
+                ) : null}
+            </Stack>
+        </Tooltip>
     );
 };
 
@@ -116,7 +157,7 @@ export default function Calendar({ onEventClick }: CalendarProps) {
                     // ---
                     allDaySlot={false}
                     weekends={false}
-                    editable
+                    editable={false}
                     droppable={false}
                     selectable
                     // ---

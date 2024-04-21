@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Examinations from "./Examinationts";
+import Examinations from "./Examinations";
 import Overview from "./Overview";
 
 const PetPage = () => (

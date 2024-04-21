@@ -21,9 +21,9 @@ import BookDialog from "./Book";
 const Overview = () => {
     const { id } = useParams();
 
+    const { pet } = usePetById(+id);
     const { appointments, isLoading: isAppointmentsLoading } =
         useAppointments(+id);
-    const { pet } = usePetById(+id);
 
     const [isEditOpen, openEdit, closeEdit] = useDialog();
     const [isBookOpen, openBook, closeBook] = useDialog();

@@ -1,3 +1,4 @@
+import { IAppointment } from "./appointment";
 import IUser from "./user";
 
 export type IPetGender = "MALE" | "FEMALE";
@@ -24,6 +25,7 @@ export interface IPet {
     passport: boolean;
     notes: string;
     therapy_notes: string;
+    // ---------------------
     owner: IUser;
 }
 

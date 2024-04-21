@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Calendar from "./Calendar";
 import WorkingHours from "./WorkingHours";
-import ExaminationDialog from "./Examination";
+import ExaminationDialog from "../_shared/Examination";
 
 const Appointments = () => {
     const [clickedEvent, setClickedEvent] = useState(-1);

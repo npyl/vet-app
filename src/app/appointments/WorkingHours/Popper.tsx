@@ -137,21 +137,21 @@ const Popper = ({ onClose, ...props }: PopperProps) => {
 
             if (!workingHours) {
                 // create
-                post("/api/vets/workingHours", {
+                post(`/api/vets/${user?.id}/workingHours`, {
                     body: JSON.stringify(d),
                 })
                     .then(mutate)
                     .finally(stopLoading);
             } else {
                 // update
-                put("/api/vets/workingHours", {
+                put(`/api/vets/${user?.id}/workingHours`, {
                     body: JSON.stringify({ ...d, id: workingHours.id }),
                 })
                     .then(mutate)
                     .finally(stopLoading);
             }
         },
-        [workingHours],
+        [workingHours, user?.id],
     );
 
     return (

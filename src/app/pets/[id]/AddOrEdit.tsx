@@ -77,7 +77,7 @@ const DateSelect = () => {
     const date = watch("date");
 
     const { data: workingHours, isLoading } = useSWR<IVetWorkingHours>(
-        vetId ? `/api/vets/workingHours/${vetId}` : null,
+        vetId ? `/api/vets/${vetId}/workingHours` : null,
     );
 
     const [minDate, maxDate] = useMemo(() => {

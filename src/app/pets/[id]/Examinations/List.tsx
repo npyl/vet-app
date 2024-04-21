@@ -11,8 +11,13 @@ import { useState } from "react";
 import ExaminationDialog from "../../../_shared/Examination";
 import ExaminationItem from "./Item";
 import ExaminationItemSkeleton from "./Skeleton";
+import { Button } from "@mui/material";
 
-const ExaminationsList = () => {
+interface ExaminationsListProps {
+    onOpenDiagrams: VoidFunction;
+}
+
+const ExaminationsList = ({ onOpenDiagrams }: ExaminationsListProps) => {
     const { user } = useAuth();
     const { id } = useParams();
     const { examinations, isLoading, mutate } = useExaminations(+id);
@@ -22,9 +27,16 @@ const ExaminationsList = () => {
 
     return (
         <>
-            <Paper>
-                <Stack p={2} position="relative">
+            <Paper
+                sx={{
+                    border: "1px solid #ddd",
+                }}
+            >
+                <Stack p={2} direction="row" spacing={1} position="relative">
                     <Typography variant="h5">Examinations</Typography>
+                    <Button variant="outlined" onClick={onOpenDiagrams}>
+                        Diagrams
+                    </Button>
                 </Stack>
 
                 <Divider />

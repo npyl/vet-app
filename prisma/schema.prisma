@@ -131,7 +131,7 @@ model Appointment {
   date                String
 
   // INFO: An appointment when completed will be connected to a doctor examination
-  doctorExamination   DoctorExamination? @relation(fields: [examinationId], references: [id])
+  examination         DoctorExamination? @relation(fields: [examinationId], references: [id])
   examinationId       Int? @unique
 }
 

@@ -3,8 +3,6 @@ import Chart, { useChart } from "@/components/chart";
 import { IVetWorkingHours } from "@/types/workingHours";
 import { useMemo } from "react";
 
-const view = "timeGridWeek";
-
 interface WorkingHoursProps {
     d?: IVetWorkingHours;
 }

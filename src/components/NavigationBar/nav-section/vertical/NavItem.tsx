@@ -6,6 +6,7 @@ import { Box, Link, ListItemText, Tooltip } from "@mui/material";
 //
 import { NavItemProps } from "../types";
 import { StyledDotIcon, StyledIcon, StyledItem } from "./styles";
+import Iconify from "@/components/iconify";
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,9 @@ export default function NavItem({
             caption={!!caption}
             {...other}
         >
-            {icon && <StyledIcon>{icon}</StyledIcon>}
+            {icon ? (
+                <Iconify icon={icon} width={20} height={20} marginRight={1} />
+            ) : null}
 
             {subItem && (
                 <StyledIcon>

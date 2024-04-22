@@ -18,6 +18,10 @@ export async function GET(
                     equals: +id,
                 },
             },
+            include: {
+                workplace: true,
+                workingHours: true,
+            },
         });
 
         if (!Array.isArray(users) || users.length !== 1)

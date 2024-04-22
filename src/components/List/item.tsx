@@ -30,6 +30,9 @@ const ListItem: FC<ListItemProps> = (props) => {
         align = "horizontal",
         children,
         disableGutters,
+        // ...
+        labelNode,
+        // ...
         value,
         label,
         ...other
@@ -45,7 +48,11 @@ const ListItem: FC<ListItemProps> = (props) => {
             <CustomListItemText
                 align={align}
                 disableTypography
-                primary={<Typography variant="subtitle2">{label}</Typography>}
+                primary={
+                    labelNode || (
+                        <Typography variant="subtitle2">{label}</Typography>
+                    )
+                }
                 secondary={
                     children || (
                         <Typography

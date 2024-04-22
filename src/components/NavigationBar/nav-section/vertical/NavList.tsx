@@ -45,7 +45,6 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
 
     // show different sections for VET and USER
     if (user?.type === "USER" && !!data.vetOnly) return null;
-    if (user?.type === "VET" && !data.vetOnly) return null;
 
     return (
         <>

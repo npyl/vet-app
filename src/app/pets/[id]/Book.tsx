@@ -6,7 +6,7 @@ import { useAppointments } from "./hook";
 import { List, ListItem } from "@/components/List";
 import { styled, alpha } from "@mui/material/styles";
 import useDialog from "@/hooks/useDialog";
-import AddOrEditDialog from "./AddOrEdit";
+import AddOrEditDialog from "./AppointmentDialog";
 import { IAppointment } from "@/types/appointment";
 
 // ----------------------------------------------------------------

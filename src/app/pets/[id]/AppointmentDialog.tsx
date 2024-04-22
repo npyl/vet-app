@@ -141,7 +141,11 @@ interface Props {
     appointment?: IAppointment;
 }
 
-const AddOrEditDialog = ({ petId, appointment, ...props }: Props) => {
+const AddOrEditAppointmentDialog = ({
+    petId,
+    appointment,
+    ...props
+}: Props) => {
     const { post, put } = useApiContext();
     const { mutate } = useSWRConfig();
 
@@ -217,4 +221,4 @@ const AddOrEditDialog = ({ petId, appointment, ...props }: Props) => {
     );
 };
 
-export default AddOrEditDialog;
+export default AddOrEditAppointmentDialog;

@@ -17,6 +17,6 @@ export const useAppointments = (id: number) => {
 };
 
 export const usePetById = (id: number) => {
-    const { data: pet } = useSWR<IPet>(`/api/pets/${id}`);
-    return { pet };
+    const { data: pet, isLoading, mutate } = useSWR<IPet>(`/api/pets/${id}`);
+    return { pet, isLoading, mutate };
 };

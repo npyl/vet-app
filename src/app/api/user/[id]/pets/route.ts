@@ -18,6 +18,9 @@ export async function GET(
                     equals: +id,
                 },
             },
+            include: {
+                owner: true,
+            },
         });
 
         if (!Array.isArray(petsForUserId)) throw "Failure searching for pets.";

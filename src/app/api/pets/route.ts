@@ -3,23 +3,11 @@ import prisma from "../_util/db";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: Request | NextRequest) {
+export async function GET() {
     try {
-        console.log("clients: GET!");
-
-        // Parse the URL from the request
-        const url = new URL(req.url);
-
-        const search = url.searchParams.get("search") ?? "";
-        // const pageSize = parseInt(url.searchParams.get("pageSize") ?? "") || 5;
-        // const page = parseInt(url.searchParams.get("page") ?? "") || 0;
-        // const pageOrder = url.searchParams.get("pageOrder") ?? "desc";
-
         const data = await prisma.pets.findMany({
-            where: {
-                name: {
-                    contains: search,
-                },
+            include: {
+                owner: true,
             },
         });
 

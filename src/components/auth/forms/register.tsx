@@ -145,10 +145,7 @@ export default function RegisterForm({ type }: Props) {
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    const returnTo =
-        searchParams.get("returnTo") || type === "USER"
-            ? "/pets"
-            : "/appointments";
+    const returnTo = searchParams.get("returnTo");
 
     // ---------------------------------------------------------------
 

@@ -20,7 +20,9 @@ export default function RootLayout({
             <body>
                 <Providers>
                     <AuthGuard alternative={<AuthPage />}>
+                        {/* <CorrectEntryUrl> */}
                         <DashboardLayout>{children}</DashboardLayout>
+                        {/* </CorrectEntryUrl> */}
                     </AuthGuard>
                 </Providers>
             </body>

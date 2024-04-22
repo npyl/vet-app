@@ -22,12 +22,12 @@ import {
 } from "@/components/hook-form";
 import useApiContext from "@/contexts/api";
 import dayjs from "dayjs";
-import useMutateTable from "@/hooks/useMutateTable";
 import { LoadingButton } from "@mui/lab";
 import useAuth from "@/hooks/useAuth";
 
 interface Props {
     open: boolean;
+    onMutate: () => void;
     onClose: () => void;
     // ...
     pet?: IPet;
@@ -77,12 +77,13 @@ const Schema = yup
     })
     .required();
 
-const AddPetDialog = ({ pet, ...props }: Props) => {
+const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
     const { user } = useAuth();
     const { post, put } = useApiContext();
-    const { mutateTable } = useMutateTable();
 
     const [isLoading, setIsLoading] = useState(false);
+
+    console.log("got pet: ", pet);
 
     const methods = useForm<IPetPOSTYup>({
         resolver: yupResolver(Schema),
@@ -100,46 +101,54 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
             microchip_date: pet?.microchip_date
                 ? dayjs(pet.microchip_date).toISOString()
                 : "",
+            microchip_code: pet?.microchip_code || "",
             neutered: !!pet?.neutered,
             dead: !!pet?.dead,
             blood_type: pet?.blood_type || "",
             passport: !!pet?.passport,
             notes: pet?.notes || "",
             therapy_notes: pet?.therapy_notes || "",
-            ownerId: user?.id || -1,
+            ownerId: -1,
         },
     });
 
     const [chipped, setChipped] = useState(!!pet?.microchip_date);
 
-    const mutate = useCallback(() => {
-        mutateTable(`/api/user/${user?.id}/pets`);
+    const handleMutate = useCallback(() => {
+        onMutate();
         props.onClose();
     }, [user?.id]);
 
-    const handleSubmit = useCallback((d: IPetPOSTYup) => {
-        console.log("d: ", d);
+    const handleSubmit = useCallback(
+        (d: IPetPOSTYup) => {
+            console.log("d: ", d);
 
-        if (pet) {
-            // update
-            setIsLoading(true);
+            if (pet) {
+                // update
+                setIsLoading(true);
 
-            put("/api/pets", {
-                body: JSON.stringify({ ...d, id: pet?.id }),
-            })
-                .then(mutate)
-                .finally(() => setIsLoading(false));
-        } else {
-            setIsLoading(true);
+                put("/api/pets", {
+                    body: JSON.stringify({
+                        ...d,
+                        ownerId: pet?.owner?.id,
+                        id: pet?.id,
+                    }),
+                })
+                    .then(handleMutate)
+                    .finally(() => setIsLoading(false));
+            } else {
+                setIsLoading(true);
 
-            // create
-            post("/api/pets", {
-                body: JSON.stringify(d),
-            })
-                .then(mutate)
-                .finally(() => setIsLoading(false));
-        }
-    }, []);
+                // create
+                post("/api/pets", {
+                    body: JSON.stringify({ ...d, ownerId: user?.id }),
+                })
+                    .then(handleMutate)
+                    .finally(() => setIsLoading(false));
+            }
+        },
+        [pet?.owner?.id, user?.id],
+    );
 
     return (
         <FormProvider {...methods}>

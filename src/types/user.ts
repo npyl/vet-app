@@ -1,3 +1,5 @@
+import { IVetWorkingHours } from "./workingHours";
+
 export type UserType = "VET" | "USER";
 
 // INFO: can be a vet or a normal user
@@ -6,6 +8,10 @@ type IUser = {
     email: string;
     avatar: string;
     type: UserType;
+
+    // misc information
+    workplace?: IUserWorkplace;
+    workingHours?: IVetWorkingHours;
 };
 
 export type IUserWorkplace = {

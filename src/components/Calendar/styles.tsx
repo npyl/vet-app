@@ -4,6 +4,20 @@ import { styled, alpha } from "@mui/material/styles";
 const StyledCalendar = styled(Box)(({ theme }) => ({
     boxShadow: theme.shadows[16],
 
+    "& .fc th": {
+        borderStyle: "none !important",
+    },
+    ".fc td": {
+        borderBottomRightRadius: "15px",
+        borderBottomLeftRadius: "15px",
+    },
+
+    "& .fc-scroller": {
+        overflow: "hidden hidden !important",
+        paddingRight: "0px",
+        marginRight: "0px",
+    },
+
     "& .fc": {
         "--fc-list-event-dot-width": "8px",
         "--fc-border-color": theme.palette.divider,
@@ -16,10 +30,8 @@ const StyledCalendar = styled(Box)(({ theme }) => ({
         "--fc-highlight-color": alpha(theme.palette.primary.main, 0.08),
     },
 
-    "& .fc-theme-standard .fc-scrollgrid": {
-        border: "1px solid",
-        borderColor: alpha(theme.palette.primary.main, 0.3),
-        borderRadius: "15px",
+    "& .fc-scrollgrid": {
+        border: 0,
     },
 
     // WARN: this is important to silence stupid message

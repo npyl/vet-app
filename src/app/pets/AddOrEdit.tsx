@@ -83,6 +83,8 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    console.log("got pet: ", pet);
+
     const methods = useForm<IPetPOSTYup>({
         resolver: yupResolver(Schema),
         values: {
@@ -99,13 +101,14 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
             microchip_date: pet?.microchip_date
                 ? dayjs(pet.microchip_date).toISOString()
                 : "",
+            microchip_code: pet?.microchip_code || "",
             neutered: !!pet?.neutered,
             dead: !!pet?.dead,
             blood_type: pet?.blood_type || "",
             passport: !!pet?.passport,
             notes: pet?.notes || "",
             therapy_notes: pet?.therapy_notes || "",
-            ownerId: user?.id || -1,
+            ownerId: -1,
         },
     });
 
@@ -116,29 +119,36 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
         props.onClose();
     }, [user?.id]);
 
-    const handleSubmit = useCallback((d: IPetPOSTYup) => {
-        console.log("d: ", d);
+    const handleSubmit = useCallback(
+        (d: IPetPOSTYup) => {
+            console.log("d: ", d);
 
-        if (pet) {
-            // update
-            setIsLoading(true);
+            if (pet) {
+                // update
+                setIsLoading(true);
 
-            put("/api/pets", {
-                body: JSON.stringify({ ...d, id: pet?.id }),
-            })
-                .then(handleMutate)
-                .finally(() => setIsLoading(false));
-        } else {
-            setIsLoading(true);
+                put("/api/pets", {
+                    body: JSON.stringify({
+                        ...d,
+                        ownerId: pet?.owner?.id,
+                        id: pet?.id,
+                    }),
+                })
+                    .then(handleMutate)
+                    .finally(() => setIsLoading(false));
+            } else {
+                setIsLoading(true);
 
-            // create
-            post("/api/pets", {
-                body: JSON.stringify(d),
-            })
-                .then(handleMutate)
-                .finally(() => setIsLoading(false));
-        }
-    }, []);
+                // create
+                post("/api/pets", {
+                    body: JSON.stringify({ ...d, ownerId: user?.id }),
+                })
+                    .then(handleMutate)
+                    .finally(() => setIsLoading(false));
+            }
+        },
+        [pet?.owner?.id, user?.id],
+    );
 
     return (
         <FormProvider {...methods}>

@@ -15,7 +15,7 @@ import Iconify from "@/components/iconify";
 import { useParams } from "next/navigation";
 import { useAppointments, usePetById } from "./hook";
 import useDialog from "@/hooks/useDialog";
-import AddOrEditDialog from "../Dialogs/AddOrEdit";
+import AddOrEditDialog from "../AddOrEdit";
 import BookDialog from "./Book";
 import useAuth from "@/hooks/useAuth";
 
@@ -23,7 +23,7 @@ const Overview = () => {
     const { id } = useParams();
 
     const { user } = useAuth();
-    const { pet } = usePetById(+id);
+    const { pet, isLoading, mutate: mutatePetById } = usePetById(+id);
     const { appointments, isLoading: isAppointmentsLoading } =
         useAppointments(+id);
 
@@ -31,6 +31,10 @@ const Overview = () => {
 
     const [isEditOpen, openEdit, closeEdit] = useDialog();
     const [isBookOpen, openBook, closeBook] = useDialog();
+
+    if (isLoading) {
+        return null;
+    }
 
     return (
         <>
@@ -71,7 +75,7 @@ const Overview = () => {
                         </Button>
 
                         <Button
-                            disabled={isVet}
+                            disabled={!isVet}
                             variant="contained"
                             onClick={openEdit}
                         >
@@ -224,6 +228,7 @@ const Overview = () => {
                 <AddOrEditDialog
                     open={isEditOpen}
                     pet={pet}
+                    onMutate={mutatePetById}
                     onClose={closeEdit}
                 />
             ) : null}

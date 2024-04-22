@@ -22,12 +22,12 @@ import {
 } from "@/components/hook-form";
 import useApiContext from "@/contexts/api";
 import dayjs from "dayjs";
-import useMutateTable from "@/hooks/useMutateTable";
 import { LoadingButton } from "@mui/lab";
 import useAuth from "@/hooks/useAuth";
 
 interface Props {
     open: boolean;
+    onMutate: () => void;
     onClose: () => void;
     // ...
     pet?: IPet;
@@ -77,10 +77,9 @@ const Schema = yup
     })
     .required();
 
-const AddPetDialog = ({ pet, ...props }: Props) => {
+const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
     const { user } = useAuth();
     const { post, put } = useApiContext();
-    const { mutateTable } = useMutateTable();
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -112,8 +111,8 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
 
     const [chipped, setChipped] = useState(!!pet?.microchip_date);
 
-    const mutate = useCallback(() => {
-        mutateTable(`/api/user/${user?.id}/pets`);
+    const handleMutate = useCallback(() => {
+        onMutate();
         props.onClose();
     }, [user?.id]);
 
@@ -127,7 +126,7 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
             put("/api/pets", {
                 body: JSON.stringify({ ...d, id: pet?.id }),
             })
-                .then(mutate)
+                .then(handleMutate)
                 .finally(() => setIsLoading(false));
         } else {
             setIsLoading(true);
@@ -136,7 +135,7 @@ const AddPetDialog = ({ pet, ...props }: Props) => {
             post("/api/pets", {
                 body: JSON.stringify(d),
             })
-                .then(mutate)
+                .then(handleMutate)
                 .finally(() => setIsLoading(false));
         }
     }, []);

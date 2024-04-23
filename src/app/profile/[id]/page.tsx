@@ -13,7 +13,7 @@ import useSWR from "swr";
 import { useParams } from "next/navigation";
 import Office from "./Office";
 import WorkingHours from "./WorkingHours";
-import ProfileSkeleton from "./Skeleton";
+import { ProfileSkeleton } from "@/components/Skeleton";
 
 const Profile = () => {
     const { id } = useParams();

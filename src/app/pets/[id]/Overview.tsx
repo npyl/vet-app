@@ -18,6 +18,7 @@ import useDialog from "@/hooks/useDialog";
 import AddOrEditDialog from "../AddOrEdit";
 import BookDialog from "./Book";
 import useAuth from "@/hooks/useAuth";
+import { ProfileSkeleton } from "@/components/Skeleton";
 
 const Overview = () => {
     const { id } = useParams();
@@ -33,7 +34,7 @@ const Overview = () => {
     const [isBookOpen, openBook, closeBook] = useDialog();
 
     if (isLoading) {
-        return null;
+        return <ProfileSkeleton />;
     }
 
     return (
@@ -101,6 +102,10 @@ const Overview = () => {
                         <Grid item xs={6}>
                             <List>
                                 <ListItem label={"Age"} value={pet?.age} />
+                                <ListBooleanItem
+                                    label="Passport"
+                                    status={!!pet?.passport}
+                                />
                             </List>
                         </Grid>
                         <Grid item xs={6}>
@@ -158,17 +163,13 @@ const Overview = () => {
                         <Grid item xs={6}>
                             <List>
                                 <ListBooleanItem
-                                    label="Passport"
-                                    status={!!pet?.passport}
+                                    label={"Chipped"}
+                                    status={!!pet?.microchip_date}
                                 />
                             </List>
                         </Grid>
                         <Grid item xs={6}>
                             <List>
-                                <ListBooleanItem
-                                    label={"Chipped"}
-                                    status={!!pet?.microchip_date}
-                                />
                                 {pet?.microchip_date ? (
                                     <>
                                         <ListDateItem
@@ -199,22 +200,6 @@ const Overview = () => {
                                 <ListBooleanItem
                                     label="Dead"
                                     status={!!pet?.dead}
-                                />
-                            </List>
-                        </Grid>
-                    </Grid>
-                    <Divider />
-                    <Grid container>
-                        <Grid item xs={6}>
-                            <List>
-                                <ListItem label={"Notes"} value={pet?.notes} />
-                            </List>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <List>
-                                <ListItem
-                                    label={"Therapy Notes"}
-                                    value={pet?.therapy_notes}
                                 />
                             </List>
                         </Grid>

@@ -18,7 +18,6 @@ import {
     RHFCheckbox,
     RHFUploadPhoto,
     RHFSelect,
-    RHFMultiline,
 } from "@/components/hook-form";
 import useApiContext from "@/contexts/api";
 import dayjs from "dayjs";
@@ -106,8 +105,6 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
             dead: !!pet?.dead,
             blood_type: pet?.blood_type || "",
             passport: !!pet?.passport,
-            notes: pet?.notes || "",
-            therapy_notes: pet?.therapy_notes || "",
             ownerId: -1,
         },
     });
@@ -277,23 +274,6 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
                         <Stack direction="row" spacing={1} width={1}>
                             <RHFCheckbox label="Neutered" name="neutered" />
                             <RHFCheckbox label="Dead" name="dead" />
-                        </Stack>
-
-                        <Box width={1} borderBottom="1px solid #ddd" />
-
-                        <Stack width={1} spacing={1}>
-                            <RHFMultiline
-                                label="Notes"
-                                name="notes"
-                                multiline
-                                rows={5}
-                            />
-                            <RHFMultiline
-                                label="Therapy Notes"
-                                name="therapy_notes"
-                                multiline
-                                rows={5}
-                            />
                         </Stack>
                     </Stack>
                 }

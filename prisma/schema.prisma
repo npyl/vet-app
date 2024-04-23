@@ -67,8 +67,6 @@ model Pets {
   dead            Boolean
   blood_type      String  @db.VarChar(16)
   passport        Boolean
-  notes           String
-  therapy_notes   String
 
   // INFO: each pet has an owner (user or vet)
   ownerId         Int

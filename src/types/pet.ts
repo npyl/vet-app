@@ -22,8 +22,6 @@ export interface IPet {
     dead: boolean;
     blood_type: string;
     passport: boolean;
-    notes: string;
-    therapy_notes: string;
     // ---------------------
     owner: IUser;
 }

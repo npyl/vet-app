@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
-import Stack from "@mui/material/Stack";
-import { FormHelperText, TextFieldProps, TextField } from "@mui/material";
+import { TextFieldProps, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import ErrorTooltip from "./ErrorTooltip";
 
 export const MultilineTextField = styled(TextField)(({ theme }) => ({
     "& .MuiInputBase-root": {
@@ -26,13 +26,9 @@ const RHFMultilineTextField = ({ name, ...props }: Props) => {
             name={name}
             control={control}
             render={({ field, fieldState: { error } }) => (
-                <Stack spacing={1}>
+                <ErrorTooltip error={error?.message || ""}>
                     <MultilineTextField {...field} {...props} />
-
-                    {error ? (
-                        <FormHelperText error>{error?.message}</FormHelperText>
-                    ) : null}
-                </Stack>
+                </ErrorTooltip>
             )}
         />
     );

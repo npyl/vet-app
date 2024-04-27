@@ -2,6 +2,8 @@
 import { Controller, useFormContext } from "react-hook-form";
 // @mui
 import { TextField, TextFieldProps } from "@mui/material";
+// custom
+import ErrorTooltip from "./ErrorTooltip";
 
 // ----------------------------------------------------------------------
 
@@ -17,20 +19,17 @@ export default function RHFTextField({ name, ...other }: Props) {
             name={name}
             control={control}
             render={({ field, fieldState: { error } }) => (
-                <TextField
-                    {...field}
-                    value={
-                        typeof field.value === "number" && field.value === 0
-                            ? ""
-                            : field.value || ""
-                    }
-                    inputProps={{
-                        autoComplete: "new-password",
-                    }}
-                    error={!!error}
-                    helperText={error?.message ?? ""}
-                    {...other}
-                />
+                <ErrorTooltip error={error?.message || ""}>
+                    <TextField
+                        {...field}
+                        value={
+                            typeof field.value === "number" && field.value === 0
+                                ? ""
+                                : field.value || ""
+                        }
+                        {...other}
+                    />
+                </ErrorTooltip>
             )}
         />
     );

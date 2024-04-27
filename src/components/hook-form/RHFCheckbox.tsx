@@ -6,6 +6,8 @@ import {
     FormControlLabel,
     FormControlLabelProps,
 } from "@mui/material";
+// custom
+import ErrorTooltip from "./ErrorTooltip";
 
 // ----------------------------------------------------------------------
 
@@ -20,11 +22,18 @@ function RHFCheckbox({ name, ...other }: RHFCheckboxProps) {
         <Controller
             name={name}
             control={control}
-            render={({ field }) => (
-                <FormControlLabel
-                    control={<Checkbox {...field} checked={field.value} />}
-                    {...other}
-                />
+            render={({ field, fieldState: { error } }) => (
+                <ErrorTooltip
+                    error={error?.message || ""}
+                    sx={{
+                        right: -9,
+                    }}
+                >
+                    <FormControlLabel
+                        control={<Checkbox {...field} checked={field.value} />}
+                        {...other}
+                    />
+                </ErrorTooltip>
             )}
         />
     );

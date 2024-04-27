@@ -1,10 +1,10 @@
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import { Controller, useFormContext } from "react-hook-form";
-import FormHelperText from "@mui/material/FormHelperText";
 import { alpha, styled } from "@mui/material/styles";
 import Iconify from "@/components/iconify";
 import { ChangeEvent, useCallback, useRef } from "react";
+import ErrorTooltip from "./ErrorTooltip";
 
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
     width: "50px",
@@ -53,48 +53,53 @@ const RHFUploadPhoto = ({ name }: Props) => {
             name={name}
             control={control}
             render={({ field, fieldState: { error } }) => (
-                <>
-                    {/* Invisible Input Element */}
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        onChange={handleChange}
-                        style={{ display: "none" }}
-                        accept="image/*" // Restrict file input to images only
-                    />
-
-                    {/* Avatar */}
-                    <Stack
-                        justifyContent="center"
-                        position="relative"
-                        onClick={onAvatarClick}
-                    >
-                        <StyledAvatar
-                            sx={{
-                                width: "150px",
-                                height: "150px",
-                            }}
-                            src={field.value}
+                <ErrorTooltip
+                    error={error?.message || ""}
+                    sx={{
+                        top: "unset",
+                        bottom: -10,
+                        right: 10,
+                    }}
+                >
+                    <>
+                        {/* Invisible Input Element */}
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            onChange={handleChange}
+                            style={{ display: "none" }}
+                            accept="image/*" // Restrict file input to images only
                         />
 
-                        <Iconify
-                            icon="gridicons:add"
-                            sx={{
-                                position: "absolute",
-                                top: 10,
-                                right: 10,
-                                height: "30px",
-                                width: "30px",
-                                backgroundColor: "white",
-                                borderRadius: "15px",
-                            }}
-                        />
-                    </Stack>
+                        {/* Avatar */}
+                        <Stack
+                            justifyContent="center"
+                            position="relative"
+                            onClick={onAvatarClick}
+                        >
+                            <StyledAvatar
+                                sx={{
+                                    width: "150px",
+                                    height: "150px",
+                                }}
+                                src={field.value}
+                            />
 
-                    {error ? (
-                        <FormHelperText error>{error?.message}</FormHelperText>
-                    ) : null}
-                </>
+                            <Iconify
+                                icon="gridicons:add"
+                                sx={{
+                                    position: "absolute",
+                                    top: 10,
+                                    right: 10,
+                                    height: "30px",
+                                    width: "30px",
+                                    backgroundColor: "white",
+                                    borderRadius: "15px",
+                                }}
+                            />
+                        </Stack>
+                    </>
+                </ErrorTooltip>
             )}
         />
     );

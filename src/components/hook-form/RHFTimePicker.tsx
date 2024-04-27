@@ -1,12 +1,12 @@
 import { Controller, useFormContext } from "react-hook-form";
-import Stack from "@mui/material/Stack";
-import { FormControlLabel, FormHelperText } from "@mui/material";
+import { FormControlLabel } from "@mui/material";
 import {
     TimePicker as MuiTimePicker,
     TimePickerProps as MuiTimePickerProps,
 } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useCallback } from "react";
+import ErrorTooltip from "./ErrorTooltip";
 
 interface Props extends MuiTimePickerProps<dayjs.Dayjs> {
     label: string;
@@ -27,23 +27,20 @@ const TimePicker = ({ name, label, ...props }: Props) => {
             name={name}
             control={control}
             render={({ field: { value, ...field }, fieldState: { error } }) => (
-                <Stack spacing={1}>
-                    <FormControlLabel
-                        labelPlacement="top"
-                        label={label}
-                        control={
+                <FormControlLabel
+                    labelPlacement="top"
+                    label={label}
+                    control={
+                        <ErrorTooltip error={error?.message || ""}>
                             <MuiTimePicker
                                 {...field}
                                 {...props}
                                 value={value ? dayjs(value) : null}
                                 onChange={handleChange}
                             />
-                        }
-                    />
-                    {error ? (
-                        <FormHelperText error>{error?.message}</FormHelperText>
-                    ) : null}
-                </Stack>
+                        </ErrorTooltip>
+                    }
+                />
             )}
         />
     );

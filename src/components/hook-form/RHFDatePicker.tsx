@@ -1,12 +1,16 @@
+// react
+import { useCallback } from "react";
+// react-hook-form
 import { Controller, useFormContext } from "react-hook-form";
-import Stack from "@mui/material/Stack";
-import { FormControlLabel, FormHelperText } from "@mui/material";
+// mui
 import {
     DatePicker as MuiDatePicker,
     DatePickerProps as MuiDatePickerProps,
 } from "@mui/x-date-pickers";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import dayjs from "dayjs";
-import { useCallback } from "react";
+// custom
+import ErrorTooltip from "./ErrorTooltip";
 
 interface Props extends MuiDatePickerProps<dayjs.Dayjs> {
     label: string;
@@ -27,23 +31,25 @@ const DatePicker = ({ name, label, ...props }: Props) => {
             name={name}
             control={control}
             render={({ field: { value, ...field }, fieldState: { error } }) => (
-                <Stack spacing={1}>
-                    <FormControlLabel
-                        labelPlacement="top"
-                        label={label}
-                        control={
+                <FormControlLabel
+                    labelPlacement="top"
+                    label={label}
+                    control={
+                        <ErrorTooltip
+                            error={error?.message || ""}
+                            sx={{
+                                right: 35,
+                            }}
+                        >
                             <MuiDatePicker
                                 {...field}
                                 {...props}
                                 value={value ? dayjs(value) : null}
                                 onChange={handleChange}
                             />
-                        }
-                    />
-                    {error ? (
-                        <FormHelperText error>{error?.message}</FormHelperText>
-                    ) : null}
-                </Stack>
+                        </ErrorTooltip>
+                    }
+                />
             )}
         />
     );

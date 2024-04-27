@@ -14,10 +14,10 @@ const Page2 = () => (
             Office
         </Typography>
 
-        <RHFTextField label="Region" name="region" />
-        <RHFTextField label="City" name="city" />
-        <RHFTextField label="Neighbourhood" name="complex" />
-        <RHFTextField label="Telephone" name="telephone" />
+        <RHFTextField fullWidth label="Region" name="region" />
+        <RHFTextField fullWidth label="City" name="city" />
+        <RHFTextField fullWidth label="Neighbourhood" name="complex" />
+        <RHFTextField fullWidth label="Telephone" name="telephone" />
     </>
 );
 

@@ -17,9 +17,10 @@ const Page1 = () => {
                 Credentials
             </Typography>
 
-            <RHFTextField name="email" label="Email address" />
+            <RHFTextField fullWidth name="email" label="Email address" />
 
             <RHFTextField
+                fullWidth
                 name="password"
                 label="Password"
                 type={password ? "text" : "password"}

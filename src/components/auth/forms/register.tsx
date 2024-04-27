@@ -95,9 +95,10 @@ const UserForm = ({ isSubmitting }: UserFormProps) => {
     return (
         <>
             <Stack spacing={0.5}>
-                <RHFTextField name="email" label="Email address" />
+                <RHFTextField fullWidth name="email" label="Email address" />
 
                 <RHFTextField
+                    fullWidth
                     name="password"
                     label="Password"
                     type={password ? "text" : "password"}

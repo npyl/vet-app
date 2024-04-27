@@ -82,8 +82,6 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    console.log("got pet: ", pet);
-
     const methods = useForm<IPetPOSTYup>({
         resolver: yupResolver(Schema),
         values: {
@@ -199,7 +197,6 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
                                 sx={{
                                     width: "120px",
                                 }}
-                                fullWidth
                                 label="Race"
                                 name="race"
                             >
@@ -231,44 +228,43 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
                             />
                         </Stack>
 
-                        {/* TODO: only number */}
-                        <Stack width={1}>
+                        <Stack>
                             <RHFDatePicker label="Birthday" name="birthday" />
                         </Stack>
 
                         <Box width={1} borderBottom="1px solid #ddd" />
 
-                        <Stack spacing={1} width={1}>
+                        <Stack width={1}>
                             <RHFCheckbox label="Passport" name="passport" />
+                        </Stack>
 
-                            <Stack
-                                direction="row"
-                                spacing={1}
-                                flexGrow={1}
-                                alignItems="flex-end"
-                            >
-                                <FormControlLabel
-                                    control={<Checkbox />}
-                                    label="Chipped"
-                                    checked={chipped}
-                                    onChange={(e, b) => setChipped(b)}
-                                />
+                        <Stack
+                            direction="row"
+                            spacing={1}
+                            flexGrow={1}
+                            alignItems="flex-end"
+                        >
+                            <FormControlLabel
+                                control={<Checkbox />}
+                                label="Chipped"
+                                checked={chipped}
+                                onChange={(e, b) => setChipped(b)}
+                            />
 
-                                {chipped ? (
-                                    <>
-                                        <RHFDatePicker
-                                            label="Microchip Date"
-                                            name="microchip_date"
-                                        />
+                            {chipped ? (
+                                <>
+                                    <RHFDatePicker
+                                        label="Microchip Date"
+                                        name="microchip_date"
+                                    />
 
-                                        <RHFTextField
-                                            fullWidth
-                                            label="Chip Code"
-                                            name="microchip_code"
-                                        />
-                                    </>
-                                ) : null}
-                            </Stack>
+                                    <RHFTextField
+                                        fullWidth
+                                        label="Chip Code"
+                                        name="microchip_code"
+                                    />
+                                </>
+                            ) : null}
                         </Stack>
 
                         <Stack direction="row" spacing={1} width={1}>

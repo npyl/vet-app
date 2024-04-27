@@ -69,7 +69,7 @@ export default function AuthPage() {
                     >
                         {mode === "login" ? (
                             <>
-                                <Stack spacing={2} sx={{ mb: 5 }}>
+                                <Stack spacing={1} mb={1}>
                                     <Typography variant="h4">
                                         Sign in
                                     </Typography>
@@ -108,7 +108,7 @@ export default function AuthPage() {
                                     }}
                                 />
 
-                                <Stack spacing={2} mb={2}>
+                                <Stack spacing={1} mb={1}>
                                     <Typography variant="h4">
                                         Sign up
                                     </Typography>

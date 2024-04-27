@@ -56,7 +56,7 @@ export default function LoginForm({ type }: Props) {
     return (
         <>
             <form method="POST" onSubmit={handleSubmit}>
-                <Stack spacing={1}>
+                <Stack spacing={0.5}>
                     <TextField name="email" label="Email address" />
 
                     <TextField
@@ -85,32 +85,24 @@ export default function LoginForm({ type }: Props) {
                         }}
                     />
 
-                    {/* <Link
-                        variant="body2"
-                        color="inherit"
-                        underline="always"
-                        sx={{ alignSelf: "flex-end" }}
-                    >
-                        Forgot password?
-                    </Link> */}
-
                     {error ? (
-                        <SoftAlert severity="error" sx={{ mb: 3 }}>
-                            {error}
-                        </SoftAlert>
+                        <SoftAlert severity="error">{error}</SoftAlert>
                     ) : null}
-
-                    <LoadingButton
-                        fullWidth
-                        color="primary"
-                        size="large"
-                        type="submit"
-                        variant="contained"
-                        loading={isSubmitting}
-                    >
-                        Login
-                    </LoadingButton>
                 </Stack>
+
+                <LoadingButton
+                    sx={{
+                        mt: 5,
+                    }}
+                    fullWidth
+                    color="primary"
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    loading={isSubmitting}
+                >
+                    Login
+                </LoadingButton>
             </form>
         </>
     );

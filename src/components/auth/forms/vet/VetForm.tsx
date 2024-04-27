@@ -27,7 +27,7 @@ const Navigation = ({
     page,
     isSubmitting,
 }: NavigationProps) => (
-    <Stack direction="row" spacing={1} justifyContent="center">
+    <Stack direction="row" spacing={1} justifyContent="center" mt={5}>
         {page !== 0 ? (
             <Button variant="outlined" onClick={onPrevious}>
                 Previous
@@ -67,12 +67,14 @@ export default function VetForm({ isSubmitting }: Props) {
     // ---------------------------------------------------------------
 
     return (
-        <Stack spacing={1}>
-            <Suspense fallback={<PageSkeleton />}>
-                {page === 0 ? <Page1 /> : null}
-                {page === 1 ? <Page2 /> : null}
-                {page === 2 ? <Page3 /> : null}
-            </Suspense>
+        <>
+            <Stack spacing={0.5}>
+                <Suspense fallback={<PageSkeleton />}>
+                    {page === 0 ? <Page1 /> : null}
+                    {page === 1 ? <Page2 /> : null}
+                    {page === 2 ? <Page3 /> : null}
+                </Suspense>
+            </Stack>
 
             <Navigation
                 page={page}
@@ -80,6 +82,6 @@ export default function VetForm({ isSubmitting }: Props) {
                 onNext={nextPage}
                 onPrevious={previousPage}
             />
-        </Stack>
+        </>
     );
 }

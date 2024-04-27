@@ -93,34 +93,39 @@ const UserForm = ({ isSubmitting }: UserFormProps) => {
     const [password, setPassword] = useState(false);
 
     return (
-        <Stack spacing={1}>
-            <RHFTextField name="email" label="Email address" />
+        <>
+            <Stack spacing={0.5}>
+                <RHFTextField name="email" label="Email address" />
 
-            <RHFTextField
-                name="password"
-                label="Password"
-                type={password ? "text" : "password"}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton
-                                onClick={() => setPassword((old) => !old)}
-                                edge="end"
-                            >
-                                <Iconify
-                                    icon={
-                                        password
-                                            ? "solar:eye-bold"
-                                            : "solar:eye-closed-bold"
-                                    }
-                                />
-                            </IconButton>
-                        </InputAdornment>
-                    ),
-                }}
-            />
+                <RHFTextField
+                    name="password"
+                    label="Password"
+                    type={password ? "text" : "password"}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    onClick={() => setPassword((old) => !old)}
+                                    edge="end"
+                                >
+                                    <Iconify
+                                        icon={
+                                            password
+                                                ? "solar:eye-bold"
+                                                : "solar:eye-closed-bold"
+                                        }
+                                    />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+            </Stack>
 
             <LoadingButton
+                sx={{
+                    mt: 5,
+                }}
                 fullWidth
                 color="primary"
                 size="large"
@@ -130,7 +135,7 @@ const UserForm = ({ isSubmitting }: UserFormProps) => {
             >
                 Sign up
             </LoadingButton>
-        </Stack>
+        </>
     );
 };
 
@@ -199,11 +204,7 @@ export default function RegisterForm({ type }: Props) {
     return (
         <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(handleSubmit)}>
-                {error ? (
-                    <SoftAlert severity="error" sx={{ mb: 3 }}>
-                        {error}
-                    </SoftAlert>
-                ) : null}
+                {error ? <SoftAlert severity="error">{error}</SoftAlert> : null}
 
                 {type === "USER" ? (
                     <UserForm isSubmitting={methods.formState.isSubmitting} />

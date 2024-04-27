@@ -4,6 +4,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { InputAdornment, TextField, TextFieldProps } from "@mui/material";
 import { NumberFormatValues, NumericFormat } from "react-number-format";
 import { useCallback, useState } from "react";
+import ErrorTooltip from "./ErrorTooltip";
 
 // ----------------------------------------------------------------------
 
@@ -46,32 +47,31 @@ export default function RHFOnlyNumbers({
             name={name}
             control={control}
             render={({ field, fieldState: { error } }) => (
-                <NumericFormat
-                    fullWidth
-                    label={label}
-                    customInput={TextField}
-                    disabled={disabled}
-                    value={displayValue || getFormattedValue(field.value)}
-                    // formatting
-                    decimalSeparator=","
-                    allowedDecimalSeparators={[",", "."]}
-                    decimalScale={acceptsDecimal ? undefined : 0} // (*)
-                    fixedDecimalScale={acceptsDecimal} // (*)
-                    allowNegative={false}
-                    onValueChange={handleChange}
-                    valueIsNumericString
-                    // error
-                    error={Boolean(error)}
-                    helperText={error ? error.message : null}
-                    // adornment
-                    InputProps={{
-                        endAdornment: adornment ? (
-                            <InputAdornment position="end">
-                                {adornment}
-                            </InputAdornment>
-                        ) : null,
-                    }}
-                />
+                <ErrorTooltip error={error?.message || ""}>
+                    <NumericFormat
+                        fullWidth
+                        label={label}
+                        customInput={TextField}
+                        disabled={disabled}
+                        value={displayValue || getFormattedValue(field.value)}
+                        // formatting
+                        decimalSeparator=","
+                        allowedDecimalSeparators={[",", "."]}
+                        decimalScale={acceptsDecimal ? undefined : 0} // (*)
+                        fixedDecimalScale={acceptsDecimal} // (*)
+                        allowNegative={false}
+                        onValueChange={handleChange}
+                        valueIsNumericString
+                        // adornment
+                        InputProps={{
+                            endAdornment: adornment ? (
+                                <InputAdornment position="end">
+                                    {adornment}
+                                </InputAdornment>
+                            ) : null,
+                        }}
+                    />
+                </ErrorTooltip>
             )}
         />
     );

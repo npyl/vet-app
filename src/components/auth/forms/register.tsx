@@ -61,7 +61,7 @@ const UserSchema = yup.object<IRegisterReq>().shape({
 });
 
 const VetSchema = yup.object<IRegisterReq>().shape({
-    email: yup.string().required(),
+    email: yup.string().email().required(),
     password: yup.string().required(),
     type: yup.string().oneOf<UserType>(["USER", "VET"]).required(),
     avatar: yup.string().notRequired(),
@@ -198,8 +198,6 @@ export default function RegisterForm({ type }: Props) {
         },
         [type, returnTo],
     );
-
-    console.log("errors: ", methods.formState.errors);
 
     return (
         <FormProvider {...methods}>

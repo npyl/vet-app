@@ -6,7 +6,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import timelinePlugin from "@fullcalendar/timeline";
 //
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useMemo } from "react";
 // next
 import Head from "next/head";
 // @mui
@@ -25,6 +25,8 @@ import { StyledCalendar, CalendarToolbar } from "@/components/Calendar";
 import { EventClickArg, EventContentArg } from "@fullcalendar/common";
 import { useTheme } from "@mui/material";
 import Iconify from "@/components/iconify";
+import { useGetAppointments } from "../_shared/Examination/hook";
+import ICalendarEvent2EventSourceInput from "./constants";
 
 // ----------------------------------------------------------------------
 
@@ -83,14 +85,23 @@ const RenderEvent = (e: EventContentArg) => {
 const view = "timeGridWeek";
 
 interface CalendarProps {
-    events: any[];
     onEventClick: (id: number) => void;
 }
 
-export default function Calendar({ events, onEventClick }: CalendarProps) {
+export default function Calendar({ onEventClick }: CalendarProps) {
     const calendarRef = useRef<FullCalendar>(null);
 
     const [date, setDate] = useState(new Date());
+
+    const { appointments } = useGetAppointments();
+
+    const events = useMemo(
+        () =>
+            Array.isArray(appointments)
+                ? appointments.map(ICalendarEvent2EventSourceInput)
+                : [],
+        [appointments],
+    );
 
     const handleClickDatePrev = () => {
         const calendarEl = calendarRef.current;

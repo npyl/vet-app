@@ -1,5 +1,7 @@
 ### Bobos App
 
+[See it live](https://bobos.vercel.app/)
+
 Concept veterinary app, where a client can register his pet, book appointments, view examination history and statistics
 
 #### Built with
@@ -8,12 +10,10 @@ Concept veterinary app, where a client can register his pet, book appointments, 
 
 [NextJS 14](https://nextjs.org/)
 
-- App Router
+-   App Router
 
 [SWR](https://swr.vercel.app/)
 
 [Prisma ORM](https://www.prisma.io/)
-
-
 
 [Material UI 5](https://mui.com/)

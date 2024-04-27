@@ -14,6 +14,7 @@ import { Background } from "./styled";
 import { useCallback, useState } from "react";
 import { LoginForm, RegisterForm } from "./forms";
 import { UserType } from "@prisma/client";
+import Hero from "./Hero";
 
 // ----------------------------------------------------------------------
 
@@ -56,12 +57,13 @@ export default function AuthPage() {
     return (
         <main>
             <Background>
+                <Hero />
+
                 <Container maxWidth="sm">
                     <Paper
                         sx={{
                             p: 5,
                             borderRadius: "15px",
-                            backgroundColor: "background.paper",
                             position: "relative",
                         }}
                     >

@@ -1,8 +1,21 @@
 // @mui
-import { Box, BoxProps, Container } from "@mui/material";
-import BreadCrumbsLayout from "./BreadCrumbsLayout";
+import { MenuOutlined } from "@mui/icons-material";
+import { Box, BoxProps, Container, IconButton, Stack } from "@mui/material";
+import BreadCrumbs from "./BreadCrumbs";
+import useResponsive from "@/hooks/useResponsive";
 
-export default function Main({ children, sx, ...other }: BoxProps) {
+interface MainProps extends BoxProps {
+    onOpenSidebar: VoidFunction;
+}
+
+export default function Main({
+    onOpenSidebar,
+    children,
+    sx,
+    ...other
+}: MainProps) {
+    const isDesktop = useResponsive("up", "lg");
+
     return (
         <Box
             component="main"
@@ -12,9 +25,30 @@ export default function Main({ children, sx, ...other }: BoxProps) {
             }}
             {...other}
         >
-            <BreadCrumbsLayout>
-                <Container maxWidth="xl">{children}</Container>
-            </BreadCrumbsLayout>
+            {/* Top bar */}
+            <Stack
+                direction={{
+                    xs: "row",
+                    lg: "column",
+                }}
+                alignItems={{
+                    xs: "center",
+                    lg: "initial",
+                }}
+                p={2}
+                borderBottom="1px solid #ddd"
+                spacing={1}
+            >
+                {isDesktop ? null : (
+                    <IconButton onClick={onOpenSidebar}>
+                        <MenuOutlined />
+                    </IconButton>
+                )}
+
+                <BreadCrumbs />
+            </Stack>
+
+            <Container maxWidth="xl">{children}</Container>
         </Box>
     );
 }

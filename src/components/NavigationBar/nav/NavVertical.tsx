@@ -13,6 +13,7 @@ import navConfig from "./config";
 
 import BobosLogo from "public/images/bobos_logo.jpg";
 import NavAccount from "./account";
+import Image from "next/image";
 
 // ----------------------------------------------------------------------
 
@@ -34,9 +35,12 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
     const renderContent = (
         <>
             <Stack justifyContent="center" alignItems="center">
-                <Stack width="70%">
-                    <img src={BobosLogo.src} width="100%" height="100%" />
-                </Stack>
+                <Image
+                    alt="Bobos logo"
+                    src={BobosLogo.src}
+                    width={200}
+                    height={200}
+                />
             </Stack>
 
             <NavSectionVertical data={navConfig} />

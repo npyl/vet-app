@@ -9,14 +9,15 @@ import {
 } from "@mui/x-data-grid";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import Image from "next/image";
 
 const RenderImageCell = ({ row }: GridCellParams<IPet>) => (
     <Stack justifyContent="center" alignItems="center" width={1} height={1}>
-        <img
+        <Image
             src={row.photo}
             alt="petPhoto"
-            width="70px"
-            height="70px"
+            width={70}
+            height={70}
             style={{
                 borderRadius: "100%",
             }}

@@ -12,6 +12,12 @@ const navConfig = [
                 icon: "teenyicons:appointments-outline",
                 vetOnly: true,
             },
+            {
+                title: "Logistics",
+                path: "/logistics",
+                icon: "material-symbols-light:order-approve-outline-sharp",
+                vetOnly: true,
+            },
         ],
     },
 ];

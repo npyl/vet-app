@@ -71,6 +71,7 @@ const VetSchema = yup.object<IRegisterReq>().shape({
     city: yup.string().required(),
     complex: yup.string().required(),
     telephone: yup.string().required(),
+    afm: yup.string().required(),
 
     workingHours: yup.object<IVetWorkingHoursPOST>().shape({
         monday: TUPLE,
@@ -169,6 +170,7 @@ export default function RegisterForm({ type }: Props) {
             complex: "",
 
             telephone: "",
+            afm: "",
 
             workingHours: {
                 // 9am-5pm

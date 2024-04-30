@@ -17,6 +17,7 @@ export type IRegisterReq = {
     complex?: string;
 
     telephone?: string;
+    afm?: string;
 
     workingHours?: IVetWorkingHoursPOST;
 } & ILoginReq;

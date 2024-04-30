@@ -133,8 +133,6 @@ model Appointment {
   examinationId       Int? @unique
 }
 
-// ---------------------- @unique----------------------------------
-
 model UserWorkplace {
   id        Int @id @default(autoincrement())
 
@@ -143,8 +141,40 @@ model UserWorkplace {
   complex   String
 
   telephone String
+  afm       String @unique
 
   // One-to-One relationship with User
   userId    Int?   @unique
   user      User?  @relation(fields: [userId], references: [id])
+
+  // One-to-Many relationship with Product
+  products  Product[]
+}
+
+// ----------------------------------------------------------------------
+
+enum ProductType {
+  ANIMAL_FEED
+  MEDICINE
+  TOY
+}
+
+enum TaxType {
+  TWENTY_THREE_PERCENT
+}
+
+model Product {
+  id             Int            @id @default(autoincrement())
+  code           String
+  barcode        String
+  type           ProductType
+  name           String
+  cost           Int
+  tax            TaxType
+  
+  stock          Int // quantity in stock
+
+  // A product corresponds to a workplace
+  workplaceId  Int?
+  workplace    UserWorkplace? @relation(fields: [workplaceId], references: [id])
 }

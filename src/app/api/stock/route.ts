@@ -1,26 +1,102 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../_util/db";
+import { IProductPOST } from "@/types/products";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
     try {
-        const url = new URL(req.url);
+        const authorization = req.headers.get("Authorization");
+        if (!authorization) throw "Did not receive authorization token";
+        const token = authorization.split(" ")[1];
+        if (!token) throw "Did not receive token";
 
-        // const search = url.searchParams.get("search") ?? "";
-
-        const workplaceId = url.searchParams.get("workplaceId") ?? -1;
-        if (workplaceId === -1)
-            throw {
-                errorMessage: "Bad workplace id",
-            };
+        // First, get the user or userWorkplace ID from the User table
+        const user = await prisma.user.findUnique({
+            where: { token },
+            include: {
+                workplace: true,
+            },
+        });
+        if (!user) throw "User not found with provided token";
+        if (!user.workplace) throw "Workplace not found";
 
         const data = await prisma.product.findMany({
             where: {
                 workplaceId: {
-                    equals: +workplaceId,
+                    equals: user.workplace.id,
                 },
             },
+        });
+
+        return new NextResponse(JSON.stringify(data), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (error) {
+        console.error(error);
+
+        return new NextResponse(JSON.stringify(error), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+        });
+    }
+}
+
+export async function POST(req: NextRequest) {
+    try {
+        const authorization = req.headers.get("Authorization");
+        if (!authorization) throw "Did not receive authorization token";
+        const token = authorization.split(" ")[1];
+        if (!token) throw "Did not receive token";
+
+        // Get Body
+        const body = (await req.json()) as IProductPOST;
+        if (!body) throw { errorMessage: "Bad body!" };
+
+        // First, get the user or userWorkplace ID from the User table
+        const user = await prisma.user.findUnique({
+            where: { token: token },
+        });
+        if (!user) throw "User not found with provided token";
+
+        // Then, update the userWorkplace using the retrieved ID
+        const data = await prisma.userWorkplace.update({
+            where: {
+                userId: user.id,
+            },
+            data: {
+                products: {
+                    create: body,
+                },
+            },
+        });
+
+        return new NextResponse(JSON.stringify(data), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (error) {
+        console.error(error);
+
+        return new NextResponse(JSON.stringify(error), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+        });
+    }
+}
+
+export async function PUT(req: NextRequest) {
+    try {
+        // Get Body
+        const { id, ...body } = (await req.json()) as IProductPOST;
+        if (!body) throw { errorMessage: "Bad body!" };
+
+        const data = await prisma.product.update({
+            where: {
+                id,
+            },
+            data: body,
         });
 
         return new NextResponse(JSON.stringify(data), {

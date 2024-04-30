@@ -3,21 +3,13 @@
 import DataGrid from "@/components/DataGrid";
 import { SpaceBetween } from "@/components/styled";
 import { IProduct } from "@/types/products";
-import {
-    Fab,
-    Grid,
-    Skeleton,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
+import { Fab, Skeleton, Stack, TextField, Typography } from "@mui/material";
 import { GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import { useCallback, useMemo, useState } from "react";
 import useSWR from "swr";
 import AddIcon from "@mui/icons-material/Add";
 import useDialog from "@/hooks/useDialog";
 import AddOrEditDialog from "./AddOrEdit";
-import useAuth from "@/hooks/useAuth";
 
 const COLUMNS: GridColDef<IProduct>[] = [
     {
@@ -41,12 +33,7 @@ const PAGE_SIZE = 5;
 // ---------------------------------------------------------------------------------------
 
 const useGetStock = () => {
-    const { user } = useAuth();
-    const workplaceId = user?.workplace?.id;
-
-    const { data, isLoading, mutate } = useSWR<IProduct[]>(
-        workplaceId ? `/api/stock?workplaceId=${workplaceId}` : null,
-    );
+    const { data, isLoading, mutate } = useSWR<IProduct[]>("/api/stock");
 
     const { all, almostOutOfStock } = useMemo(
         () => ({
@@ -64,7 +51,7 @@ const useGetStock = () => {
 // ---------------------------------------------------------------------------------------
 
 const Logistics = () => {
-    const { all, almostOutOfStock, isLoading } = useGetStock();
+    const { all, almostOutOfStock, isLoading, mutate } = useGetStock();
 
     const [search, setSearch] = useState("");
 
@@ -119,7 +106,7 @@ const Logistics = () => {
                         sortingOrder=""
                         onPaginationModelChange={handlePaginationChange}
                         // ...
-                        resource="stock"
+                        resource="logistics"
                     />
                 )}
 
@@ -151,12 +138,18 @@ const Logistics = () => {
                         sortingOrder=""
                         onPaginationModelChange={handlePaginationChange}
                         // ...
-                        resource="stock"
+                        resource="logistics"
                     />
                 )}
             </Stack>
 
-            {isDialogOpen ? <AddOrEditDialog /> : null}
+            {isDialogOpen ? (
+                <AddOrEditDialog
+                    open={isDialogOpen}
+                    onClose={closeDialog}
+                    onMutate={mutate}
+                />
+            ) : null}
         </>
     );
 };

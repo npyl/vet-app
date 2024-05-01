@@ -112,3 +112,32 @@ export async function PUT(req: NextRequest) {
         });
     }
 }
+
+export async function DELETE(req: NextRequest) {
+    try {
+        const url = new URL(req.url);
+        const id = url.searchParams.get("id") ?? "";
+        if (!id)
+            throw {
+                errorMessage: "Bad id",
+            };
+
+        const data = await prisma.product.delete({
+            where: {
+                id: +id,
+            },
+        });
+
+        return new NextResponse(JSON.stringify(data), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+        });
+    } catch (error) {
+        console.error(error);
+
+        return new NextResponse(JSON.stringify(error), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+        });
+    }
+}

@@ -1,22 +1,120 @@
 "use client";
-
 import DataGrid from "@/components/DataGrid";
 import { SpaceBetween } from "@/components/styled";
 import { IProduct } from "@/types/products";
-import { Fab, Skeleton, Stack, TextField, Typography } from "@mui/material";
-import { GridColDef, GridPaginationModel } from "@mui/x-data-grid";
-import { useCallback, useMemo, useState } from "react";
+import {
+    Fab,
+    IconButton,
+    Skeleton,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
+import {
+    GridCellParams,
+    GridColDef,
+    GridPaginationModel,
+} from "@mui/x-data-grid";
+import { MouseEvent, useCallback, useMemo, useState } from "react";
 import useSWR from "swr";
 import AddIcon from "@mui/icons-material/Add";
-import useDialog from "@/hooks/useDialog";
 import AddOrEditDialog from "./AddOrEdit";
+import Iconify from "@/components/iconify";
+import { ProductType } from "@prisma/client";
+import useApiContext from "@/contexts/api";
 
-const COLUMNS: GridColDef<IProduct>[] = [
+const ICONS: Record<ProductType, string> = {
+    ANIMAL_FEED: "fluent:food-fish-24-regular",
+    MEDICINE: "game-icons:medicines",
+    TOY: "game-icons:medicines",
+};
+
+const RenderMainCell = ({ row }: GridCellParams<IProduct>) => (
+    <Stack
+        direction="row"
+        justifyContent="left"
+        alignItems="center"
+        width={1}
+        height={1}
+        spacing={1}
+    >
+        <Iconify icon={ICONS[row.type]} width={30} height={30} />
+        <Typography>{row?.name}</Typography>
+    </Stack>
+);
+
+interface RenderButtonsCellProps {
+    params: GridCellParams<IProduct>;
+    onEditClick: (id: number) => void;
+    onDeleteClick: (id: number) => void;
+}
+
+const RenderButtonsCell = ({
+    params,
+    onEditClick,
+    onDeleteClick,
+}: RenderButtonsCellProps) => {
+    const handleEditClick = useCallback((e: MouseEvent) => {
+        e.stopPropagation();
+        onEditClick(params.row.id);
+    }, []);
+    const handleDeleteClick = useCallback((e: MouseEvent) => {
+        e.stopPropagation();
+        onDeleteClick(params.row.id);
+    }, []);
+
+    return (
+        <Stack
+            direction="row"
+            spacing={1}
+            justifyContent="center"
+            alignItems="center"
+            width={1}
+            height={1}
+        >
+            <IconButton onClick={handleDeleteClick}>
+                <Iconify
+                    icon="material-symbols-light:delete"
+                    width={30}
+                    height={30}
+                    color="error.main"
+                />
+            </IconButton>
+            <IconButton onClick={handleEditClick}>
+                <Iconify
+                    icon="material-symbols:edit-outline"
+                    width={30}
+                    height={30}
+                    color="primary.main"
+                />
+            </IconButton>
+        </Stack>
+    );
+};
+
+const getCOLUMNS = (
+    onEditClick: (id: number) => void,
+    onDeleteClick: (id: number) => void,
+): GridColDef<IProduct>[] => [
     {
         field: "name",
+        flex: 1,
         headerName: "Name",
+        align: "left",
+        headerAlign: "left",
+        renderCell: RenderMainCell,
+    },
+    {
+        field: "type",
+        headerName: "",
         align: "center",
-        headerAlign: "center",
+        renderCell: (params) => (
+            <RenderButtonsCell
+                params={params}
+                onEditClick={onEditClick}
+                onDeleteClick={onDeleteClick}
+            />
+        ),
     },
 ];
 
@@ -32,7 +130,8 @@ const PAGE_SIZE = 5;
 
 // ---------------------------------------------------------------------------------------
 
-const useGetStock = () => {
+const useStock = () => {
+    const { remove } = useApiContext();
     const { data, isLoading, mutate } = useSWR<IProduct[]>("/api/stock");
 
     const { all, almostOutOfStock } = useMemo(
@@ -45,13 +144,18 @@ const useGetStock = () => {
         [data],
     );
 
-    return { all, almostOutOfStock, isLoading, mutate };
+    const removeItem = useCallback(
+        (id: number) => remove(`/api/stock?id=${id}`).then(mutate),
+        [],
+    );
+
+    return { all, almostOutOfStock, isLoading, removeItem, mutate };
 };
 
 // ---------------------------------------------------------------------------------------
 
 const Logistics = () => {
-    const { all, almostOutOfStock, isLoading, mutate } = useGetStock();
+    const { all, almostOutOfStock, isLoading, removeItem, mutate } = useStock();
 
     const [search, setSearch] = useState("");
 
@@ -61,7 +165,20 @@ const Logistics = () => {
         [],
     );
 
-    const [isDialogOpen, openDialog, closeDialog] = useDialog();
+    // -2: nothing
+    // -1: create
+    // >=0: row id
+    const [editedRow, setEditedRow] = useState(-2);
+    const openDialog = useCallback(() => setEditedRow(-1), []);
+    const closeDialog = useCallback(() => setEditedRow(-2), []);
+
+    const productById = useMemo(
+        () =>
+            editedRow >= 0 ? all.find(({ id }) => id === editedRow) : undefined,
+        [all, editedRow],
+    );
+
+    const COLUMNS = useMemo(() => getCOLUMNS(setEditedRow, removeItem), []);
 
     return (
         <>
@@ -143,11 +260,12 @@ const Logistics = () => {
                 )}
             </Stack>
 
-            {isDialogOpen ? (
+            {editedRow !== -2 ? (
                 <AddOrEditDialog
-                    open={isDialogOpen}
+                    open={editedRow !== -2}
                     onClose={closeDialog}
                     onMutate={mutate}
+                    product={productById}
                 />
             ) : null}
         </>

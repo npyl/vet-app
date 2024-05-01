@@ -3,6 +3,10 @@ import DataGrid from "@/components/DataGrid";
 import { SpaceBetween } from "@/components/styled";
 import { IProduct } from "@/types/products";
 import {
+    Box,
+    Button,
+    Container,
+    Drawer,
     Fab,
     IconButton,
     Skeleton,
@@ -22,6 +26,7 @@ import AddOrEditDialog from "./AddOrEdit";
 import Iconify from "@/components/iconify";
 import { ProductType } from "@prisma/client";
 import useApiContext from "@/contexts/api";
+import useDialog from "@/hooks/useDialog";
 
 const ICONS: Record<ProductType, string> = {
     ANIMAL_FEED: "fluent:food-fish-24-regular",
@@ -99,7 +104,7 @@ const getCOLUMNS = (
     {
         field: "name",
         flex: 1,
-        headerName: "Name",
+        headerName: "",
         align: "left",
         headerAlign: "left",
         renderCell: RenderMainCell,
@@ -172,6 +177,8 @@ const Logistics = () => {
     const openDialog = useCallback(() => setEditedRow(-1), []);
     const closeDialog = useCallback(() => setEditedRow(-2), []);
 
+    const [isDrawerOpen, openDrawer, closeDrawer] = useDialog();
+
     const productById = useMemo(
         () =>
             editedRow >= 0 ? all.find(({ id }) => id === editedRow) : undefined,
@@ -191,9 +198,19 @@ const Logistics = () => {
                     />
                 </Stack>
 
-                <Fab color="primary" onClick={openDialog}>
-                    <AddIcon />
-                </Fab>
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <Button
+                        variant="outlined"
+                        color="warning"
+                        onClick={openDrawer}
+                    >
+                        Almost out of stock ({almostOutOfStock.length})
+                    </Button>
+
+                    <Fab color="primary" onClick={openDialog}>
+                        <AddIcon />
+                    </Fab>
+                </Stack>
             </SpaceBetween>
 
             <Stack spacing={1}>
@@ -227,37 +244,31 @@ const Logistics = () => {
                     />
                 )}
 
-                <Typography variant="h6">Almost out of stock:</Typography>
-
-                {isLoading ? (
-                    <DataGrid
-                        columns={COLUMNS.map((c) => ({
-                            ...c,
-                            renderCell: renderSkeletonCell,
-                        }))}
-                        rows={skeletonRows}
-                        // ...
-                        page={0}
-                        pageSize={10}
-                        sortingBy=""
-                        sortingOrder=""
-                    />
-                ) : (
-                    <DataGrid
-                        rows={almostOutOfStock}
-                        columns={COLUMNS}
-                        // ...
-                        paginationMode="client"
-                        page={page}
-                        pageSize={PAGE_SIZE}
-                        totalRows={almostOutOfStock.length ?? 0}
-                        sortingBy=""
-                        sortingOrder=""
-                        onPaginationModelChange={handlePaginationChange}
-                        // ...
-                        resource="logistics"
-                    />
-                )}
+                <Drawer
+                    open={isDrawerOpen}
+                    onClose={closeDrawer}
+                    role="presentation"
+                    anchor="right"
+                >
+                    <Box width={700} p={2}>
+                        {isDrawerOpen ? (
+                            <DataGrid
+                                rows={almostOutOfStock}
+                                columns={COLUMNS}
+                                // ...
+                                paginationMode="client"
+                                page={page}
+                                pageSize={PAGE_SIZE}
+                                totalRows={almostOutOfStock.length ?? 0}
+                                sortingBy=""
+                                sortingOrder=""
+                                onPaginationModelChange={handlePaginationChange}
+                                // ...
+                                resource="logistics"
+                            />
+                        ) : null}
+                    </Box>
+                </Drawer>
             </Stack>
 
             {editedRow !== -2 ? (

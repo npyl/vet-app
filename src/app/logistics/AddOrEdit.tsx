@@ -99,7 +99,7 @@ const AddOrEditDialog = ({ product, onMutate, ...props }: Props) => {
                     </Typography>
                 }
                 content={
-                    <Stack mt={2} spacing={1} alignItems="center" width={1}>
+                    <Stack mt={2} spacing={1} width={1}>
                         <Stack spacing={1} direction="row">
                             <RHFTextField label="Name" name="name" />
                             <RHFSelect
@@ -113,11 +113,14 @@ const AddOrEditDialog = ({ product, onMutate, ...props }: Props) => {
                                 <MenuItem value="MEDICINE">Medicine</MenuItem>
                                 <MenuItem value="TOY">Toy</MenuItem>
                             </RHFSelect>
-                            <RHFOnlyNumbers label="Cost" name="cost" />
                         </Stack>
                         <Stack spacing={1} direction="row">
                             <RHFTextField label="Barcode" name="barcode" />
                             <RHFTextField label="Code" name="code" />
+                        </Stack>
+                        <Stack spacing={1} direction="row">
+                            <RHFOnlyNumbers label="Cost" name="cost" />
+                            <RHFOnlyNumbers label="Stock" name="stock" />
                         </Stack>
                     </Stack>
                 }

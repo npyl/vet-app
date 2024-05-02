@@ -6,7 +6,11 @@ import Grid from "@mui/material/Grid";
 import { Divider, Skeleton } from "@mui/material";
 import { List, ListSkeletonItem } from "@/components/List";
 
-const ProfileSkeleton = () => (
+interface ProfileSkeletonProps {
+    avatar?: boolean;
+}
+
+const ProfileSkeleton = ({ avatar = true }: ProfileSkeletonProps) => (
     <Container maxWidth="md">
         <Paper
             elevation={20}
@@ -17,16 +21,18 @@ const ProfileSkeleton = () => (
             }}
         >
             <Stack p={2} alignItems="center">
-                <Box position="relative">
-                    <Skeleton
-                        variant="circular"
-                        animation="wave"
-                        sx={{
-                            height: "150px",
-                            width: "150px",
-                        }}
-                    />
-                </Box>
+                {avatar ? (
+                    <Box position="relative">
+                        <Skeleton
+                            variant="circular"
+                            animation="wave"
+                            sx={{
+                                height: "150px",
+                                width: "150px",
+                            }}
+                        />
+                    </Box>
+                ) : null}
 
                 <Skeleton
                     variant="text"

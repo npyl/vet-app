@@ -69,16 +69,22 @@ const AddOrEditDialog = ({ product, onMutate, ...props }: Props) => {
 
     const handleSubmit = useCallback(
         (d: IProductPOST) => {
+            setIsLoading(true);
+
             if (product) {
                 // update
                 put(`/api/stock`, {
                     body: JSON.stringify(d),
-                }).then(handleMutate);
+                })
+                    .then(handleMutate)
+                    .finally(() => setIsLoading(false));
             } else {
                 // create
                 post(`/api/stock`, {
                     body: JSON.stringify(d),
-                }).then(handleMutate);
+                })
+                    .then(handleMutate)
+                    .finally(() => setIsLoading(false));
             }
         },
         [product, workplaceId],

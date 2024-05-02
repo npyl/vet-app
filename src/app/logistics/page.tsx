@@ -5,7 +5,6 @@ import { IProduct } from "@/types/products";
 import {
     Box,
     Button,
-    Container,
     Drawer,
     Fab,
     IconButton,
@@ -24,15 +23,9 @@ import useSWR from "swr";
 import AddIcon from "@mui/icons-material/Add";
 import AddOrEditDialog from "./AddOrEdit";
 import Iconify from "@/components/iconify";
-import { ProductType } from "@prisma/client";
 import useApiContext from "@/contexts/api";
 import useDialog from "@/hooks/useDialog";
-
-const ICONS: Record<ProductType, string> = {
-    ANIMAL_FEED: "fluent:food-fish-24-regular",
-    MEDICINE: "game-icons:medicines",
-    TOY: "game-icons:medicines",
-};
+import { ICONS } from "./constants";
 
 const RenderMainCell = ({ row }: GridCellParams<IProduct>) => (
     <Stack
@@ -43,7 +36,12 @@ const RenderMainCell = ({ row }: GridCellParams<IProduct>) => (
         height={1}
         spacing={1}
     >
-        <Iconify icon={ICONS[row.type]} width={30} height={30} />
+        <Iconify
+            icon={ICONS[row.type]}
+            width={30}
+            height={30}
+            color="primary.main"
+        />
         <Typography>{row?.name}</Typography>
     </Stack>
 );

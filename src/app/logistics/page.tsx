@@ -30,6 +30,7 @@ import useApiContext from "@/contexts/api";
 import useDialog from "@/hooks/useDialog";
 import { ICONS } from "./constants";
 import { ProductType } from "@prisma/client";
+import { SectionHeader } from "@/components/Section";
 
 const RenderMainCell = ({ row }: GridCellParams<IProduct>) => (
     <Stack
@@ -300,7 +301,15 @@ const Logistics = () => {
                     onClose={closeDrawer}
                     role="presentation"
                     anchor="right"
+                    slotProps={{
+                        backdrop: { invisible: true },
+                    }}
                 >
+                    <SectionHeader
+                        title="Almost out of stock"
+                        icon=""
+                        color="warning"
+                    />
                     <Box width={700} p={2}>
                         {isDrawerOpen ? (
                             <DataGrid

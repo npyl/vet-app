@@ -1,4 +1,26 @@
-import { alpha } from "@mui/material/styles";
+import { Theme, alpha } from "@mui/material/styles";
+
+export const paper = (color: string) => ({
+    ...bgBlur({
+        blur: 20,
+        opacity: 0.9,
+        color,
+        // ...(!!bgcolor && {
+        //     color: bgcolor,
+        // }),
+    }),
+    backgroundImage: "url(/assets/cyan-blur.png), url(/assets/red-blur.png)",
+    backgroundRepeat: "no-repeat, no-repeat",
+    backgroundPosition: "top right, left bottom",
+    backgroundSize: "50%, 50%",
+    // ...(dropdown && {
+    //     padding: theme.spacing(0.5),
+    //     boxShadow: theme.shadows[15],
+    //     borderRadius: theme.shape.borderRadius * 1.25,
+    // }),
+});
+
+// ----------------------------------------------------------------------
 
 type BgBlurProps = {
     blur?: number;

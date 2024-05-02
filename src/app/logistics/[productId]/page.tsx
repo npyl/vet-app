@@ -78,7 +78,7 @@ const ProductPage = () => {
                         borderRadius="10px"
                         bgcolor={(theme) =>
                             alpha(
-                                product?.stock && product?.stock >= 20
+                                product?.stock && product?.stock > 20
                                     ? theme.palette.primary.main
                                     : theme.palette.warning.main,
                                 0.1,
@@ -90,7 +90,7 @@ const ProductPage = () => {
                             width={30}
                             height={30}
                             color={
-                                product?.stock && product?.stock >= 20
+                                product?.stock && product?.stock > 20
                                     ? "primary.main"
                                     : "warning.main"
                             }
@@ -98,7 +98,7 @@ const ProductPage = () => {
                         <Typography
                             variant="subtitle2"
                             color={
-                                product?.stock && product?.stock >= 20
+                                product?.stock && product?.stock > 20
                                     ? "primary.main"
                                     : "warning.main"
                             }

@@ -1,5 +1,5 @@
 import { DrawerProps, ThemeOptions, alpha, drawerClasses } from "@mui/material";
-import { bgBlur, paper } from "./css";
+import { paper } from "./css";
 
 // Colors
 

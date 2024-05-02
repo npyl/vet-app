@@ -1,5 +1,4 @@
 "use client";
-
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -8,11 +7,10 @@ import { List, ListItem } from "@/components/List";
 import useSWR from "swr";
 import { ProfileSkeleton } from "@/components/Skeleton";
 import { IProduct } from "@/types/products";
-import { Box, Divider, Stack, Typography, alpha } from "@mui/material";
+import { Divider, Stack, Typography, alpha } from "@mui/material";
 import { SpaceBetween } from "@/components/styled";
 import Iconify from "@/components/iconify";
 import { ICONS } from "../constants";
-import { styled } from "@mui/material/styles";
 
 // ------------------------------------------------------------
 

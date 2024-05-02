@@ -8,6 +8,9 @@ import {
     Drawer,
     Fab,
     IconButton,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
     Skeleton,
     Stack,
     TextField,
@@ -26,6 +29,7 @@ import Iconify from "@/components/iconify";
 import useApiContext from "@/contexts/api";
 import useDialog from "@/hooks/useDialog";
 import { ICONS } from "./constants";
+import { ProductType } from "@prisma/client";
 
 const RenderMainCell = ({ row }: GridCellParams<IProduct>) => (
     <Stack
@@ -135,7 +139,24 @@ const PAGE_SIZE = 5;
 
 const useStock = () => {
     const { remove } = useApiContext();
-    const { data, isLoading, mutate } = useSWR<IProduct[]>("/api/stock");
+
+    const [search, setSearch] = useState("");
+    const [selectedType, setSelectedType] = useState<ProductType | "ALL">(
+        "ALL",
+    );
+
+    const urlParams = useMemo(
+        () =>
+            new URLSearchParams({
+                search,
+                selectedType,
+            }),
+        [search, selectedType],
+    );
+
+    const { data, isLoading, mutate } = useSWR<IProduct[]>(
+        `/api/stock?${urlParams.toString()}`,
+    );
 
     const { all, almostOutOfStock } = useMemo(
         () => ({
@@ -152,15 +173,41 @@ const useStock = () => {
         [],
     );
 
-    return { all, almostOutOfStock, isLoading, removeItem, mutate };
+    return {
+        all,
+        almostOutOfStock,
+        isLoading,
+        removeItem,
+        mutate,
+        // ...
+        search,
+        setSearch,
+        selectedType,
+        setSelectedType,
+    };
 };
 
 // ---------------------------------------------------------------------------------------
 
 const Logistics = () => {
-    const { all, almostOutOfStock, isLoading, removeItem, mutate } = useStock();
+    const {
+        all,
+        almostOutOfStock,
+        isLoading,
+        removeItem,
+        mutate,
+        // ...
+        search,
+        setSearch,
+        selectedType,
+        setSelectedType,
+    } = useStock();
 
-    const [search, setSearch] = useState("");
+    const handleSelect = useCallback(
+        (e: SelectChangeEvent<ProductType>) =>
+            setSelectedType(e.target.value as ProductType),
+        [],
+    );
 
     const [page, setPage] = useState(0);
     const handlePaginationChange = useCallback(
@@ -188,12 +235,18 @@ const Logistics = () => {
     return (
         <>
             <SpaceBetween alignItems="center" py={2}>
-                <Stack>
+                <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography variant="h4">Stock</Typography>
                     <TextField
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
+                    <Select value={selectedType as any} onChange={handleSelect}>
+                        <MenuItem value="ALL">All</MenuItem>
+                        <MenuItem value="TOY">Toys</MenuItem>
+                        <MenuItem value="MEDICINE">Medicine</MenuItem>
+                        <MenuItem value="ANIMAL_FEED">Animal Feed</MenuItem>
+                    </Select>
                 </Stack>
 
                 <Stack direction="row" spacing={1} alignItems="center">

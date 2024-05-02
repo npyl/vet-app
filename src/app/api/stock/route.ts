@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../_util/db";
 import { IProductPOST } from "@/types/products";
+import { ProductType } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,12 @@ export async function GET(req: NextRequest) {
         if (!authorization) throw "Did not receive authorization token";
         const token = authorization.split(" ")[1];
         if (!token) throw "Did not receive token";
+
+        const url = new URL(req.url);
+        const search = url.searchParams.get("search") ?? "";
+        const type = (url.searchParams.get("selectedType") ?? "ALL") as
+            | ProductType
+            | "ALL";
 
         // First, get the user or userWorkplace ID from the User table
         const user = await prisma.user.findUnique({
@@ -26,6 +33,17 @@ export async function GET(req: NextRequest) {
                 workplaceId: {
                     equals: user.workplace.id,
                 },
+                name: {
+                    contains: search,
+                },
+                // Filter by type (if different than ALL)
+                ...(type === "ALL"
+                    ? {}
+                    : {
+                          type: {
+                              equals: type as ProductType,
+                          },
+                      }),
             },
         });
 

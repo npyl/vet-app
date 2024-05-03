@@ -132,7 +132,7 @@ const ExaminationDialog = ({
                 submit
                 onSubmit={methods.handleSubmit(handleSubmit)}
                 // ...
-                maxWidth="lg"
+                maxWidth="md"
                 title={
                     <Stack spacing={1} alignItems="center">
                         <Typography variant="h6">{`${appointment?.pet?.name}'s Examination`}</Typography>

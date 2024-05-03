@@ -1,17 +1,14 @@
-import { Controller, useFormContext } from "react-hook-form";
-import { TextFieldProps } from "@mui/material";
-import ErrorTooltip from "./ErrorTooltip";
 import MultilineTextField from "@/components/TextField/Multiline";
+import ErrorTooltip from "@/components/hook-form/ErrorTooltip";
+import { RHFMultilineTextFieldProps } from "@/components/hook-form/RHFMultiline";
+import { Controller, useFormContext } from "react-hook-form";
 
-export interface RHFMultilineTextFieldProps
-    extends Omit<TextFieldProps, "name"> {
-    name: string;
-}
+interface RHFMedicationMultilineProps extends RHFMultilineTextFieldProps {}
 
-const RHFMultilineTextField = ({
+const RHFMedicationMultiline = ({
     name,
     ...props
-}: RHFMultilineTextFieldProps) => {
+}: RHFMedicationMultilineProps) => {
     const { control } = useFormContext();
 
     return (
@@ -27,4 +24,4 @@ const RHFMultilineTextField = ({
     );
 };
 
-export default RHFMultilineTextField;
+export default RHFMedicationMultiline;

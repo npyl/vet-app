@@ -1,75 +1,112 @@
-import { RHFOnlyNumbers, RHFTextField } from "@/components/hook-form";
-import RHFMultilineTextField from "@/components/hook-form/RHFMultiline";
-import Stack from "@mui/material/Stack";
-import Grid from "@mui/material/Grid";
+import { RHFOnlyNumbers } from "@/components/hook-form";
+import RHFMultilineTextField, {
+    RHFMultilineTextFieldProps,
+} from "@/components/hook-form/RHFMultiline";
+import { Grid, Tab } from "@mui/material";
+import Tabs from "@mui/material/Tabs";
+import React, { SyntheticEvent, useCallback, useState } from "react";
+import TabPanel from "./TabPanel";
+import RHFMedicationMultiline from "./RHFMedicationMultiline";
 
-const Content = () => (
-    <Grid container py={1} spacing={1}>
-        <Grid item xs={6}>
-            <Stack spacing={1} width="50%">
+interface ITab {
+    label: string;
+    name: string;
+    Component: React.FC<RHFMultilineTextFieldProps>;
+}
+
+const FIELDS = [
+    { label: "C.R.T.", name: "CRT" },
+    { label: "Tummy", name: "tummy" },
+    { label: "Thorax", name: "thorax" },
+    { label: "Ears / Eyes / Mouth", name: "ears_eyes_mouth" },
+    { label: "Lymph Nodes", name: "lymphNodes" },
+    { label: "Penis / Vulva / Breast", name: "penis_vulva_breast" },
+];
+
+const TABS: ITab[] = [
+    {
+        label: "Findings",
+        name: "findings",
+        Component: RHFMultilineTextField,
+    },
+    {
+        label: "Diagnosis",
+        name: "diagnosis",
+        Component: RHFMultilineTextField,
+    },
+    {
+        label: "Procedure",
+        name: "procedure",
+        Component: RHFMultilineTextField,
+    },
+    {
+        label: "Therapy",
+        name: "therapy",
+        Component: RHFMedicationMultiline,
+    },
+    {
+        label: "Notes",
+        name: "notes",
+        Component: RHFMultilineTextField,
+    },
+];
+
+const Content = () => {
+    const [tab, setTab] = useState(0);
+
+    const handleTabChange = useCallback(
+        (_: SyntheticEvent, t: number) => setTab(t),
+        [],
+    );
+
+    return (
+        <Grid container py={1} spacing={1}>
+            {/* Basic Details */}
+            <Grid item xs={12} sm={4}>
                 <RHFOnlyNumbers label="Weight" name="weight" />
+            </Grid>
+            <Grid item xs={12} sm={4}>
                 <RHFOnlyNumbers label="Temperature" name="temperature" />
+            </Grid>
+            <Grid item xs={12} sm={4}>
                 <RHFOnlyNumbers label="Heart Rate" name="heartrate" />
-            </Stack>
-        </Grid>
+            </Grid>
 
-        <Grid item xs={6}>
-            <Stack spacing={1} direction="row">
-                <RHFTextField label="C.R.T." name="CRT" />
-                <RHFTextField label="Tummy" name="tummy" />
-                <RHFTextField label="Thorax" name="thorax" />
-            </Stack>
+            {/* Examination Specific */}
+            {FIELDS.map(({ label, name }, i) => (
+                <Grid item xs={12} md={6} lg={4} key={i}>
+                    <RHFMultilineTextField
+                        label={label}
+                        name={name}
+                        multiline
+                        fullWidth
+                        rows={5}
+                    />
+                </Grid>
+            ))}
 
-            <Stack spacing={1} direction="row" mt={1}>
-                <RHFTextField
-                    label="Ears / Eyes / Mouth"
-                    name="ears_eyes_mouth"
-                />
-                <RHFTextField label="Lymph Nodes" name="lymphNodes" />
-                <RHFTextField
-                    label="Penis / Vulva / Breast"
-                    name="penis_vulva_breast"
-                />
-            </Stack>
-        </Grid>
+            {/* Note-related tabs */}
+            <Grid item xs={12}>
+                <Tabs value={tab} onChange={handleTabChange}>
+                    {TABS.map(({ label }, i) => (
+                        <Tab label={label} key={i} />
+                    ))}
+                </Tabs>
 
-        <Grid item xs={12}>
-            <Stack gap={1} direction="row" flexWrap="wrap">
-                <RHFMultilineTextField
-                    multiline
-                    rows={5}
-                    label="Findings"
-                    name="findings"
-                />
-                <RHFMultilineTextField
-                    multiline
-                    rows={5}
-                    label="Diagnosis"
-                    name="diagnosis"
-                />
-                <RHFMultilineTextField
-                    multiline
-                    rows={5}
-                    label="Procedure"
-                    name="procedure"
-                />
-            </Stack>
-            <Stack gap={1} direction="row" flexWrap="wrap" mt={1}>
-                <RHFMultilineTextField
-                    multiline
-                    rows={5}
-                    label="Therapy"
-                    name="therapy"
-                />
-                <RHFMultilineTextField
-                    multiline
-                    rows={5}
-                    label="Notes"
-                    name="notes"
-                />
-            </Stack>
+                {TABS.map(({ label, name, Component }, i) => (
+                    <TabPanel value={tab} index={i} key={i} mt={1}>
+                        <Component
+                            multiline
+                            rows={10}
+                            label={label}
+                            name={name}
+                            fullWidth
+                        />
+                    </TabPanel>
+                ))}
+            </Grid>
         </Grid>
-    </Grid>
-);
+    );
+};
 
 export default Content;

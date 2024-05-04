@@ -13,7 +13,8 @@ export async function POST(req: Request | NextRequest) {
             };
 
         // Get Body
-        const body = (await req.json()) as IExaminationHistoryPOST;
+        const { medication, ...body } =
+            (await req.json()) as IExaminationHistoryPOST;
         if (!body) throw { errorMessage: "Bad body!" };
 
         // Create
@@ -31,6 +32,24 @@ export async function POST(req: Request | NextRequest) {
         if (!res)
             throw {
                 errorMessage: "Could not create-assign doctorExamination",
+            };
+        if (!res.examinationId)
+            throw {
+                errorMessage: "Bad examinationId",
+            };
+
+        // Create medication and bind to product & examination
+        const res2 = await prisma.medication.createMany({
+            data: medication.map((m) => ({
+                ...m,
+                doctorExaminationId: res.examinationId!,
+            })),
+            skipDuplicates: true, // INFO: there shouldn't be any though
+        });
+
+        if (!res2)
+            throw {
+                errorMessage: "Could not create-assign medications",
             };
 
         return new NextResponse(JSON.stringify(res), {

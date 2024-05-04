@@ -27,5 +27,5 @@ export const Medication2MedicationPOST = ({
     ...m
 }: IMedication): IMedicationPOST => ({
     ...m,
-    medicineId: medicine.id,
+    medicineId: medicine.id ?? -1,
 });

@@ -100,7 +100,7 @@ model DoctorExamination {
 
   appointment         Appointment? @relation
 
-  medications         Medication[]
+  medication          Medication[]
 }
 
 model Medication {
@@ -115,8 +115,8 @@ model Medication {
   doctorExamination   DoctorExamination @relation(fields: [doctorExaminationId], references: [id])
 
   // NOTE: Each Medication corresponds to exactly one medicine Product
-  productId           Int      @unique
-  product             Product  @relation(fields: [productId], references: [id])
+  medicineId          Int      @unique
+  medicine            Product  @relation(fields: [medicineId], references: [id])
 }
 
 // --------------------------------------------------------

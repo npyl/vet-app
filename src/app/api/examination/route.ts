@@ -81,6 +81,12 @@ const updateMedication = (m: IMedicationPOST) =>
         },
         data: m,
     });
+const deleteMedication = (id: number) =>
+    prisma.medication.delete({
+        where: {
+            id,
+        },
+    });
 
 export async function PUT(req: Request | NextRequest) {
     try {
@@ -96,6 +102,9 @@ export async function PUT(req: Request | NextRequest) {
                 id,
             },
             data: body,
+            include: {
+                medication: true,
+            },
         });
         if (!res)
             throw {
@@ -109,6 +118,16 @@ export async function PUT(req: Request | NextRequest) {
                 ...m,
                 doctorExaminationId: res.id,
             })) as IExtendedMedicationPOST[];
+
+        // Every medication that exists in old (res.medication) but does not in new (medication)
+        const medicationToDelete = res.medication
+            ?.filter(
+                ({ medicineId: oldId }) =>
+                    !medication?.find(
+                        ({ medicineId: newId }) => oldId === newId,
+                    ),
+            )
+            .map(({ id }) => id);
 
         // Create-assign new medication
         const createRes = await Promise.all(
@@ -130,6 +149,13 @@ export async function PUT(req: Request | NextRequest) {
             };
 
         // TODO: delete
+        const deleteRes = await Promise.all(
+            medicationToDelete.map(deleteMedication),
+        );
+        if (!deleteRes)
+            throw {
+                errorMessage: "Failed to delete removed",
+            };
 
         return new NextResponse(JSON.stringify(res), {
             status: 200,

@@ -1,5 +1,5 @@
 "use client";
-import DataGrid from "@/components/DataGrid";
+
 import { SpaceBetween } from "@/components/styled";
 import { IProduct } from "@/types/products";
 import {
@@ -7,132 +7,23 @@ import {
     Button,
     Drawer,
     Fab,
-    IconButton,
     MenuItem,
     Select,
     SelectChangeEvent,
-    Skeleton,
     Stack,
     TextField,
     Typography,
 } from "@mui/material";
-import {
-    GridCellParams,
-    GridColDef,
-    GridPaginationModel,
-} from "@mui/x-data-grid";
-import { MouseEvent, useCallback, useMemo, useState } from "react";
+import { GridPaginationModel } from "@mui/x-data-grid";
+import { useCallback, useMemo, useState } from "react";
 import useSWR from "swr";
 import AddIcon from "@mui/icons-material/Add";
 import AddOrEditDialog from "./AddOrEdit";
-import Iconify from "@/components/iconify";
 import useApiContext from "@/contexts/api";
 import useDialog from "@/hooks/useDialog";
-import { ICONS } from "./constants";
 import { ProductType } from "@prisma/client";
 import { SectionHeader } from "@/components/Section";
-
-const RenderMainCell = ({ row }: GridCellParams<IProduct>) => (
-    <Stack
-        direction="row"
-        justifyContent="left"
-        alignItems="center"
-        width={1}
-        height={1}
-        spacing={1}
-    >
-        <Iconify
-            icon={ICONS[row.type]}
-            width={30}
-            height={30}
-            color="primary.main"
-        />
-        <Typography>{row?.name}</Typography>
-    </Stack>
-);
-
-interface RenderButtonsCellProps {
-    params: GridCellParams<IProduct>;
-    onEditClick: (id: number) => void;
-    onDeleteClick: (id: number) => void;
-}
-
-const RenderButtonsCell = ({
-    params,
-    onEditClick,
-    onDeleteClick,
-}: RenderButtonsCellProps) => {
-    const handleEditClick = useCallback((e: MouseEvent) => {
-        e.stopPropagation();
-        onEditClick(params.row.id);
-    }, []);
-    const handleDeleteClick = useCallback((e: MouseEvent) => {
-        e.stopPropagation();
-        onDeleteClick(params.row.id);
-    }, []);
-
-    return (
-        <Stack
-            direction="row"
-            spacing={1}
-            justifyContent="center"
-            alignItems="center"
-            width={1}
-            height={1}
-        >
-            <IconButton onClick={handleDeleteClick}>
-                <Iconify
-                    icon="material-symbols-light:delete"
-                    width={30}
-                    height={30}
-                    color="error.main"
-                />
-            </IconButton>
-            <IconButton onClick={handleEditClick}>
-                <Iconify
-                    icon="material-symbols:edit-outline"
-                    width={30}
-                    height={30}
-                    color="primary.main"
-                />
-            </IconButton>
-        </Stack>
-    );
-};
-
-const getCOLUMNS = (
-    onEditClick: (id: number) => void,
-    onDeleteClick: (id: number) => void,
-): GridColDef<IProduct>[] => [
-    {
-        field: "name",
-        flex: 1,
-        headerName: "",
-        align: "left",
-        headerAlign: "left",
-        renderCell: RenderMainCell,
-    },
-    {
-        field: "type",
-        headerName: "",
-        align: "center",
-        renderCell: (params) => (
-            <RenderButtonsCell
-                params={params}
-                onEditClick={onEditClick}
-                onDeleteClick={onDeleteClick}
-            />
-        ),
-    },
-];
-
-//
-//  Skeletons
-//
-const renderSkeletonCell = () => <Skeleton width={150} animation="wave" />;
-const skeletonRows = Array.from({ length: 2 }, (_, index) => ({
-    id: index + 1,
-}));
+import StockDataGrid from "@/components/DataGrid/Stock";
 
 const PAGE_SIZE = 5;
 
@@ -231,8 +122,6 @@ const Logistics = () => {
         [all, editedRow],
     );
 
-    const COLUMNS = useMemo(() => getCOLUMNS(setEditedRow, removeItem), []);
-
     return (
         <>
             <SpaceBetween alignItems="center" py={2}>
@@ -266,35 +155,16 @@ const Logistics = () => {
             </SpaceBetween>
 
             <Stack spacing={1}>
-                {isLoading ? (
-                    <DataGrid
-                        columns={COLUMNS.map((c) => ({
-                            ...c,
-                            renderCell: renderSkeletonCell,
-                        }))}
-                        rows={skeletonRows}
-                        // ...
-                        page={0}
-                        pageSize={10}
-                        sortingBy=""
-                        sortingOrder=""
-                    />
-                ) : (
-                    <DataGrid
-                        rows={all}
-                        columns={COLUMNS}
-                        // ...
-                        paginationMode="client"
-                        page={page}
-                        pageSize={PAGE_SIZE}
-                        totalRows={all.length ?? 0}
-                        sortingBy=""
-                        sortingOrder=""
-                        onPaginationModelChange={handlePaginationChange}
-                        // ...
-                        resource="logistics"
-                    />
-                )}
+                <StockDataGrid
+                    loading={isLoading}
+                    rows={all}
+                    page={page}
+                    pageSize={PAGE_SIZE}
+                    totalRows={all.length ?? 0}
+                    onPaginationModelChange={handlePaginationChange}
+                    onEditClick={setEditedRow}
+                    onDeleteClick={removeItem}
+                />
 
                 <Drawer
                     open={isDrawerOpen}
@@ -312,19 +182,14 @@ const Logistics = () => {
                     />
                     <Box width={700} p={2}>
                         {isDrawerOpen ? (
-                            <DataGrid
+                            <StockDataGrid
                                 rows={almostOutOfStock}
-                                columns={COLUMNS}
-                                // ...
-                                paginationMode="client"
                                 page={page}
                                 pageSize={PAGE_SIZE}
                                 totalRows={almostOutOfStock.length ?? 0}
-                                sortingBy=""
-                                sortingOrder=""
                                 onPaginationModelChange={handlePaginationChange}
-                                // ...
-                                resource="logistics"
+                                onEditClick={setEditedRow}
+                                onDeleteClick={removeItem}
                             />
                         ) : null}
                     </Box>

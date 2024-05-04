@@ -1,3 +1,12 @@
+"use client";
+
+import useAuth from "@/hooks/useAuth";
+
+import VetDashboard from "./VetDashboard";
+import UserDashboard from "./UserDashboard";
+
 export default function Home() {
-    return <>Welcome!</>;
+    const { user } = useAuth();
+
+    return user?.type === "VET" ? <VetDashboard /> : <UserDashboard />;
 }

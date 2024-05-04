@@ -1,17 +1,14 @@
 import { RHFOnlyNumbers } from "@/components/hook-form";
-import RHFMultilineTextField, {
-    RHFMultilineTextFieldProps,
-} from "@/components/hook-form/RHFMultiline";
+import RHFMultilineTextField from "@/components/hook-form/RHFMultiline";
 import { Grid, Tab } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
-import React, { SyntheticEvent, useCallback, useState } from "react";
+import { SyntheticEvent, useCallback, useState } from "react";
 import TabPanel from "./TabPanel";
 import RHFMedicationMultiline from "./RHFMedicationMultiline";
 
 interface ITab {
     label: string;
     name: string;
-    Component: React.FC<RHFMultilineTextFieldProps>;
 }
 
 const FIELDS = [
@@ -27,27 +24,18 @@ const TABS: ITab[] = [
     {
         label: "Findings",
         name: "findings",
-        Component: RHFMultilineTextField,
     },
     {
         label: "Diagnosis",
         name: "diagnosis",
-        Component: RHFMultilineTextField,
     },
     {
         label: "Procedure",
         name: "procedure",
-        Component: RHFMultilineTextField,
-    },
-    {
-        label: "Therapy",
-        name: "therapy",
-        Component: RHFMedicationMultiline,
     },
     {
         label: "Notes",
         name: "notes",
-        Component: RHFMultilineTextField,
     },
 ];
 
@@ -91,11 +79,12 @@ const Content = () => {
                     {TABS.map(({ label }, i) => (
                         <Tab label={label} key={i} />
                     ))}
+                    <Tab label="Therapy" />
                 </Tabs>
 
-                {TABS.map(({ label, name, Component }, i) => (
+                {TABS.map(({ label, name }, i) => (
                     <TabPanel value={tab} index={i} key={i} mt={1}>
-                        <Component
+                        <RHFMultilineTextField
                             multiline
                             rows={10}
                             label={label}
@@ -104,6 +93,13 @@ const Content = () => {
                         />
                     </TabPanel>
                 ))}
+                <TabPanel value={tab} index={TABS.length} mt={1}>
+                    <RHFMedicationMultiline
+                        label="Therapy"
+                        name="therapy"
+                        fullWidth
+                    />
+                </TabPanel>
             </Grid>
         </Grid>
     );

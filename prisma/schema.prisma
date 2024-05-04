@@ -168,7 +168,7 @@ model Product {
   code           String
   barcode        String
   type           ProductType
-  name           String
+  name           String         @unique
   cost           Int
   tax            TaxType
   

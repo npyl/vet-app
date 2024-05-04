@@ -10,6 +10,7 @@ import Dialog from "@/components/Dialog";
 import { LoadingButton } from "@mui/lab";
 import useApiContext from "@/contexts/api";
 import { useGetAppointments } from "./hook";
+import { Medication2MedicationPOST } from "@/types/medication";
 
 // ----------------------------------------------------------------
 
@@ -87,6 +88,9 @@ const ExaminationDialog = ({
             ears_eyes_mouth: examination?.ears_eyes_mouth || "",
             lymphNodes: examination?.lymphNodes || "",
             penis_vulva_breast: examination?.penis_vulva_breast || "",
+
+            medication:
+                examination?.medication?.map(Medication2MedicationPOST) || [],
         },
     });
 

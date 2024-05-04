@@ -1,6 +1,8 @@
 import { ICONS } from "@/app/logistics/constants";
 import Iconify from "@/components/iconify";
 import { SpaceBetween } from "@/components/styled";
+import useTextField from "@/hooks/useTextField";
+import { IMedicationPOST, TMedicationFrequency } from "@/types/medication";
 import { IProduct } from "@/types/products";
 import { Close, Done } from "@mui/icons-material";
 import { Autocomplete, IconButton, Stack, TextField } from "@mui/material";
@@ -28,7 +30,7 @@ const useGetMedicine = () => {
 // ---------------------------------------------------------------------------
 
 interface MedicationCreateItemProps {
-    onAdd: (id: number) => void;
+    onAdd: (m: IMedicationPOST) => void;
     onCancel: VoidFunction;
 }
 
@@ -36,15 +38,29 @@ const MedicationCreateItem = ({
     onAdd,
     onCancel,
 }: MedicationCreateItemProps) => {
-    const [value, setValue] = useState("");
-
     const { medicine, medicineOptions } = useGetMedicine();
 
+    const [medicineName, setMedicineName] = useState("");
+    const [duration, setDuration] = useTextField("");
+    const [frequency, setFrequency] = useTextField("");
+    const [quantity, setQuantity] = useTextField("");
+
+    const complete = medicineName && duration && frequency && quantity;
+
     const handleAdd = useCallback(() => {
-        const id = medicine?.find(({ name }) => name === value)?.id;
-        if (!id) return;
-        onAdd(id);
-    }, [value, medicine]);
+        const medicineId = medicine?.find(
+            ({ name }) => name === medicineName,
+        )?.id;
+
+        if (!medicineId) return;
+
+        onAdd({
+            medicineId,
+            duration,
+            quantity,
+            frequency: frequency as TMedicationFrequency,
+        });
+    }, [medicineName, medicine, duration, quantity, frequency]);
 
     return (
         <SpaceBetween p={1} direction="row" alignItems="center">
@@ -53,13 +69,28 @@ const MedicationCreateItem = ({
                 <Autocomplete
                     sx={{ width: "300px" }}
                     disablePortal
-                    value={value}
-                    onChange={(_, v) => setValue(v || "")}
+                    value={medicineName}
+                    onChange={(_, v) => v && setMedicineName(v)}
                     clearIcon={<></>}
                     options={medicineOptions}
                     renderInput={(params) => (
                         <TextField {...params} placeholder="Search Medicine" />
                     )}
+                />
+                <TextField
+                    label="Duration"
+                    value={duration}
+                    onChange={setDuration}
+                />
+                <TextField
+                    label="Frequency"
+                    value={frequency}
+                    onChange={setFrequency}
+                />
+                <TextField
+                    label="Quantity"
+                    value={quantity}
+                    onChange={setQuantity}
                 />
             </Stack>
 
@@ -68,7 +99,7 @@ const MedicationCreateItem = ({
                     <Close />
                 </IconButton>
 
-                {value ? (
+                {complete ? (
                     <IconButton onClick={handleAdd}>
                         <Done />
                     </IconButton>

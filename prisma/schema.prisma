@@ -99,6 +99,24 @@ model DoctorExamination {
   penis_vulva_breast  String
 
   appointment         Appointment? @relation
+
+  medications         Medication[]
+}
+
+model Medication {
+  id Int @id @default(autoincrement())
+
+  duration            String
+  frequency           String
+  quantity            String
+
+  // NOTE: A medication is prescribed only during a DoctorExamination
+  doctorExaminationId Int
+  doctorExamination   DoctorExamination @relation(fields: [doctorExaminationId], references: [id])
+
+  // NOTE: Each Medication corresponds to exactly one medicine Product
+  productId           Int      @unique
+  product             Product  @relation(fields: [productId], references: [id])
 }
 
 // --------------------------------------------------------
@@ -174,7 +192,10 @@ model Product {
   
   stock          Int // quantity in stock
 
-  // A product corresponds to a workplace
+  // A product corresponds to a workplace (this workplace is the stock)
   workplaceId  Int?
   workplace    UserWorkplace? @relation(fields: [workplaceId], references: [id])
+
+  // NOTE: if this product is a medicine, it may appear in a pet's medication
+  medication     Medication? @relation
 }

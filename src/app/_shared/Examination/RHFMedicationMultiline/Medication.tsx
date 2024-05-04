@@ -23,7 +23,7 @@ const Medication = (props: StackProps) => {
         const idExists = old.find(
             ({ medicineId }) => medicineId === m.medicineId,
         );
-        if (!!idExists) {
+        if (idExists) {
             toast.error("Already exists!");
             return;
         }

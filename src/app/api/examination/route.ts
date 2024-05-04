@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../_util/db";
 import { IExaminationHistoryPOST } from "@/types/examination";
+import { IMedicationPOST } from "@/types/medication";
+
+interface IExtendedMedicationPOST extends IMedicationPOST {
+    doctorExaminationId: number;
+}
 
 export async function POST(req: Request | NextRequest) {
     try {
@@ -65,14 +70,27 @@ export async function POST(req: Request | NextRequest) {
     }
 }
 
+const createMedication = (m: IExtendedMedicationPOST) =>
+    prisma.medication.create({
+        data: m,
+    });
+const updateMedication = (m: IMedicationPOST) =>
+    prisma.medication.update({
+        where: {
+            id: m.id,
+        },
+        data: m,
+    });
+
 export async function PUT(req: Request | NextRequest) {
     try {
         // Get Body
-        const { id, ...body } = (await req.json()) as IExaminationHistoryPOST;
+        const { id, medication, ...body } =
+            (await req.json()) as IExaminationHistoryPOST;
         if (!id) throw { errorMessage: "Bad id!" };
         if (!body) throw { errorMessage: "Bad body!" };
 
-        // Create
+        // Update Examination
         const res = await prisma.doctorExamination.update({
             where: {
                 id,
@@ -83,6 +101,35 @@ export async function PUT(req: Request | NextRequest) {
             throw {
                 errorMessage: "Could not update doctorExamination",
             };
+
+        const medicationToUpdate = medication.filter(({ id }) => !!id);
+        const medicationToCreate = medication
+            .filter(({ id }) => !id)
+            .map((m) => ({
+                ...m,
+                doctorExaminationId: res.id,
+            })) as IExtendedMedicationPOST[];
+
+        // Create-assign new medication
+        const createRes = await Promise.all(
+            medicationToCreate.map(createMedication),
+        );
+        if (!createRes)
+            throw {
+                errorMessage: "Failed to create-assign new medications",
+            };
+
+        // Update assigned Medication
+        // TODO: test this!
+        const updateRes = await Promise.all(
+            medicationToUpdate.map(updateMedication),
+        );
+        if (!updateRes)
+            throw {
+                errorMessage: "Could not update assigned medication",
+            };
+
+        // TODO: delete
 
         return new NextResponse(JSON.stringify(res), {
             status: 200,

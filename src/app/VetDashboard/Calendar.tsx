@@ -1,75 +1,18 @@
 "use client";
 import FullCalendar from "@fullcalendar/react"; // EventInput, // EventDropArg, // DateSelectArg, // => request placed at the top
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { useState, useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
 // @mui
-import {
-    Avatar,
-    Button,
-    Stack,
-    Tooltip,
-    Typography,
-    alpha,
-} from "@mui/material";
+import { alpha } from "@mui/material";
 
 // sections
-import { StyledCalendar, CalendarToolbar } from "@/components/Calendar";
+import { StyledCalendar } from "@/components/Calendar";
 
-import { EventClickArg, EventContentArg } from "@fullcalendar/common";
+import { EventClickArg } from "@fullcalendar/common";
 import { useTheme } from "@mui/material";
-import Iconify from "@/components/iconify";
-
-// ----------------------------------------------------------------------
-
-const RenderEvent = (e: EventContentArg) => {
-    const { avatar, completed, petId } = e?.event?.extendedProps || {};
-
-    return (
-        <Tooltip
-            title={
-                <Stack>
-                    <Typography>Want to see this pet?</Typography>
-                    <Button variant="contained" href={`/pets/${petId}`}>
-                        Go
-                    </Button>
-                </Stack>
-            }
-        >
-            <Stack
-                direction="row"
-                spacing={1}
-                py={0.2}
-                position="relative"
-                sx={{
-                    cursor: "pointer",
-                }}
-            >
-                <Avatar
-                    src={avatar || ""}
-                    sx={{
-                        width: 35,
-                        height: 35,
-                    }}
-                />
-
-                <Typography fontWeight="bold" overflow="hidden">
-                    {e?.event?.title}
-                </Typography>
-
-                {completed ? (
-                    <Iconify
-                        icon="carbon:task-complete"
-                        height={30}
-                        width={30}
-                        position="absolute"
-                        top={-8}
-                        right={-2}
-                    />
-                ) : null}
-            </Stack>
-        </Tooltip>
-    );
-};
+import ICalendarEvent2EventSourceInput from "./constants";
+import useGetTodaysAppointments from "./hook";
+import RenderEvent from "./Event";
 
 // ----------------------------------------------------------------------
 
@@ -88,27 +31,15 @@ interface CalendarProps {
 export default function Calendar({ onEventClick }: CalendarProps) {
     const calendarRef = useRef<FullCalendar>(null);
 
-    const [date, setDate] = useState(new Date());
+    const { appointments } = useGetTodaysAppointments();
 
-    const events: any[] = [];
-
-    const handleClickDatePrev = () => {
-        const calendarEl = calendarRef.current;
-        if (calendarEl) {
-            const calendarApi = calendarEl.getApi();
-            calendarApi.prev();
-            setDate(calendarApi.getDate());
-        }
-    };
-
-    const handleClickDateNext = () => {
-        const calendarEl = calendarRef.current;
-        if (calendarEl) {
-            const calendarApi = calendarEl.getApi();
-            calendarApi.next();
-            setDate(calendarApi.getDate());
-        }
-    };
+    const events = useMemo(
+        () =>
+            Array.isArray(appointments)
+                ? appointments.map(ICalendarEvent2EventSourceInput)
+                : [],
+        [appointments],
+    );
 
     const handleEventClick = useCallback(
         (e: EventClickArg) => onEventClick(+e.event.id),
@@ -119,31 +50,17 @@ export default function Calendar({ onEventClick }: CalendarProps) {
 
     return (
         <>
-            <StyledCalendar
-                sx={{
-                    position: "relative",
-                }}
-            >
-                <CalendarToolbar
-                    position="absolute"
-                    left={2}
-                    top={2}
-                    zIndex={10}
-                    onNextDate={handleClickDateNext}
-                    onPrevDate={handleClickDatePrev}
-                />
-
+            <StyledCalendar>
                 <FullCalendar
                     // ---
                     height="auto"
                     allDaySlot={false}
-                    weekends={false}
+                    // weekends={false}
                     editable={false}
                     droppable={false}
                     selectable
                     // ---
                     ref={calendarRef}
-                    initialDate={date}
                     initialView={view}
                     dayMaxEventRows={3}
                     headerToolbar={false}

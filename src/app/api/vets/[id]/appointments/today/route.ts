@@ -9,7 +9,7 @@ interface Props {
 }
 
 //
-//  Receive a vet's appointments for today
+//  Receive a vet's appointments for tomorrow
 //
 export async function GET(req: Request | NextRequest, { params }: Props) {
     try {
@@ -33,8 +33,11 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
                 errorMessage: "Not a vet!",
             };
 
-        const todayStart = dayjs().startOf("day").toISOString();
-        const todayEnd = dayjs().endOf("day").toISOString();
+        const tomorrowStart = dayjs()
+            .add(1, "day")
+            .startOf("day")
+            .toISOString(); // Start of tomorrow
+        const tomorrowEnd = dayjs().add(1, "day").endOf("day").toISOString(); // End of tomorrow
 
         const appointments = await prisma.appointment.findMany({
             where: {
@@ -42,8 +45,8 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
                     equals: +id,
                 },
                 date: {
-                    gte: todayStart,
-                    lte: todayEnd,
+                    gte: tomorrowStart,
+                    lte: tomorrowEnd,
                 },
             },
             include: {
@@ -60,8 +63,6 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
                 },
             },
         });
-
-        console.log("app: ", appointments);
 
         if (!Array.isArray(appointments))
             throw "Could not find this appointments record!";

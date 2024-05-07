@@ -4,8 +4,7 @@ import dayjs from "dayjs";
 
 export const dynamic = "force-dynamic";
 
-const todayStart = dayjs().startOf("day").toISOString(); // Start today
-const todayEnd = dayjs().endOf("day").toISOString(); // End today
+const todayStart = dayjs().startOf("day").toISOString();
 
 interface Props {
     params: { id: string };
@@ -19,50 +18,51 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
         const { id } = params || {};
         if (!id) throw "Did not pass an id!";
 
-        const users = await prisma.user.findMany({
+        const user = await prisma.user.findUnique({
             where: {
-                id: {
-                    equals: +id,
-                },
+                id: +id,
+            },
+            include: {
+                pets: true,
             },
         });
-
-        if (!Array.isArray(users) || users.length === 0)
+        if (!user)
             throw {
                 errorMessage: "Could not find this user!",
             };
-        if (users[0].type !== "VET")
-            throw {
-                errorMessage: "Not a vet!",
-            };
 
-        const appointments = await prisma.appointment.findMany({
+        // This user's pets
+        const pets = await prisma.pets.findMany({
             where: {
-                vetId: {
+                ownerId: {
                     equals: +id,
-                },
-                date: {
-                    gte: todayStart,
-                    lte: todayEnd,
                 },
             },
             include: {
-                vet: true,
-                pet: true,
-                examination: {
-                    include: {
-                        medication: {
-                            include: {
-                                medicine: true,
-                            },
+                appointments: {
+                    where: {
+                        // Today and future
+                        date: {
+                            gte: todayStart,
                         },
+                    },
+                    include: {
+                        pet: true,
+                        vet: true,
                     },
                 },
             },
         });
+        if (!Array.isArray(pets))
+            throw {
+                errorMessage: "Pets is not an array",
+            };
 
-        if (!Array.isArray(appointments))
-            throw "Could not find this appointments record!";
+        // Get appointments
+        const appointments = pets
+            .map(({ appointments }) => appointments)
+            .flat();
+        if (!Array.isArray(appointments)) throw "Could not find appointments!";
 
         return new NextResponse(JSON.stringify(appointments), {
             status: 200,

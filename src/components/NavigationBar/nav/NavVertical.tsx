@@ -2,7 +2,7 @@ import { useEffect } from "react";
 // next
 import { usePathname } from "next/navigation";
 // @mui
-import { Box, Drawer, Stack } from "@mui/material";
+import { Box, Drawer, Stack, Tooltip } from "@mui/material";
 // hooks
 import useResponsive from "@/hooks/useResponsive";
 // config
@@ -36,14 +36,19 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
     const renderContent = (
         <>
             <Stack justifyContent="center" alignItems="center">
-                <Link href="/">
-                    <Image
-                        alt="Bobos logo"
-                        src={BobosLogo.src}
-                        width={200}
-                        height={200}
-                    />
-                </Link>
+                <Tooltip title="Home">
+                    <Link href="/">
+                        <Image
+                            alt="Bobos logo"
+                            src={BobosLogo.src}
+                            width={200}
+                            height={200}
+                            style={{
+                                borderRadius: "15px",
+                            }}
+                        />
+                    </Link>
+                </Tooltip>
             </Stack>
 
             <NavSectionVertical data={navConfig} />

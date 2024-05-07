@@ -6,7 +6,7 @@ import { SectionHeader } from "@/components/Section";
 const VetDashboard = () => (
     <Grid container spacing={5}>
         <Grid item xs={12} lg={6} gap={1}>
-            <Typography variant="h5">Today's Appointments</Typography>
+            <Typography variant="h5">Today&apos;s Appointments</Typography>
             <AppointmentsList />
         </Grid>
         <Grid item xs={12} lg={6}>

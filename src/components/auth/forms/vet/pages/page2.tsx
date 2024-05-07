@@ -1,6 +1,7 @@
 // Map
 
 import { RHFTextField } from "@/components/hook-form";
+import { Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 const Page2 = () => (
@@ -17,7 +18,10 @@ const Page2 = () => (
         <RHFTextField fullWidth label="Region" name="region" />
         <RHFTextField fullWidth label="City" name="city" />
         <RHFTextField fullWidth label="Neighbourhood" name="complex" />
-        <RHFTextField fullWidth label="Telephone" name="telephone" />
+        <Stack direction="row" spacing={1}>
+            <RHFTextField fullWidth label="Telephone" name="telephone" />
+            <RHFTextField fullWidth label="AFM" name="afm" />
+        </Stack>
     </>
 );
 

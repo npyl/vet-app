@@ -43,9 +43,18 @@ export async function GET(req: Request | NextRequest, { params }: Props) {
                 },
             },
             include: {
+                // TODO: this is too much information; see if we can break it down a bit.
                 vet: true,
                 pet: true,
-                examination: true,
+                examination: {
+                    include: {
+                        medication: {
+                            include: {
+                                medicine: true,
+                            },
+                        },
+                    },
+                },
             },
         });
 

@@ -1,9 +1,6 @@
-import useAuth from "@/hooks/useAuth";
-import { IAppointment } from "@/types/appointment";
 import Stack from "@mui/material/Stack";
 import { useCallback, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import useSWR from "swr";
 import Content from "./Content";
 import { IExaminationHistoryPOST } from "@/types/examination";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,6 +9,8 @@ import { CircularProgress, Typography } from "@mui/material";
 import Dialog from "@/components/Dialog";
 import { LoadingButton } from "@mui/lab";
 import useApiContext from "@/contexts/api";
+import { useGetAppointments } from "./hook";
+import { Medication2MedicationPOST } from "@/types/medication";
 
 // ----------------------------------------------------------------
 
@@ -39,17 +38,8 @@ const Schema = yup.object<IExaminationHistoryPOST>().shape({
 
 // ----------------------------------------------------------------
 
-const useGetAppointment = (eventId: number) => {
-    const { user } = useAuth();
-
-    const { data, isLoading } = useSWR<IAppointment[]>(
-        user?.id ? `/api/vets/${user.id}/appointments` : null,
-    );
-
-    const appointments = useMemo(
-        () => (Array.isArray(data) ? data : []),
-        [data],
-    );
+const useGetAppointmentById = (eventId: number) => {
+    const { appointments, isLoading } = useGetAppointments();
 
     const appointment = useMemo(
         () => appointments.find(({ id }) => id === eventId),
@@ -75,7 +65,7 @@ const ExaminationDialog = ({
 }: ExaminationDialogProps) => {
     const { post, put } = useApiContext();
 
-    const { appointment, isLoading } = useGetAppointment(appointmentId);
+    const { appointment, isLoading } = useGetAppointmentById(appointmentId);
     const { examination } = appointment || {};
 
     const methods = useForm<IExaminationHistoryPOST>({
@@ -98,27 +88,33 @@ const ExaminationDialog = ({
             ears_eyes_mouth: examination?.ears_eyes_mouth || "",
             lymphNodes: examination?.lymphNodes || "",
             penis_vulva_breast: examination?.penis_vulva_breast || "",
+
+            medication:
+                examination?.medication?.map(Medication2MedicationPOST) || [],
         },
     });
 
     const handleSubmit = useCallback(
-        (d: IExaminationHistoryPOST) => {
+        async (d: IExaminationHistoryPOST) => {
             if (examination) {
                 // update
-                put(`/api/examination`, {
+                await put(`/api/examination`, {
                     body: JSON.stringify({ ...d, id: examination?.id }),
                 }).then(onMutate);
             } else {
                 // create
-                post(`/api/examination?appointmentId=${appointment?.id}`, {
-                    body: JSON.stringify(d),
-                }).then(onMutate);
+                await post(
+                    `/api/examination?appointmentId=${appointment?.id}`,
+                    {
+                        body: JSON.stringify(d),
+                    },
+                ).then(onMutate);
             }
+
+            props.onClose();
         },
         [appointment?.id, examination],
     );
-
-    console.log("errors: ", methods.formState.errors);
 
     if (isLoading) {
         return (
@@ -140,7 +136,7 @@ const ExaminationDialog = ({
                 submit
                 onSubmit={methods.handleSubmit(handleSubmit)}
                 // ...
-                maxWidth="lg"
+                maxWidth="md"
                 title={
                     <Stack spacing={1} alignItems="center">
                         <Typography variant="h6">{`${appointment?.pet?.name}'s Examination`}</Typography>

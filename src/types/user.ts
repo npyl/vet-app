@@ -22,6 +22,7 @@ export type IUserWorkplace = {
     complex: string;
 
     telephone: string;
+    afm: string;
 
     user: IUser;
 };

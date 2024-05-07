@@ -1,4 +1,5 @@
 import Grid from "@mui/material/Grid";
+import Image from "next/image";
 import { styled } from "@mui/material/styles";
 
 const IMGS = [
@@ -30,7 +31,8 @@ const Hero = () => (
     <Grid container position="absolute" width={1} height={1}>
         {IMGS.map((_, i) => (
             <GridItem item xs={6} key={i}>
-                <img
+                <Image
+                    alt="img"
                     src={IMGS[i]}
                     width={60}
                     height={60}
@@ -38,7 +40,8 @@ const Hero = () => (
                         marginBottom: "50px",
                     }}
                 />
-                <img
+                <Image
+                    alt="img"
                     src={IMGS2[i]}
                     width={50}
                     height={50}

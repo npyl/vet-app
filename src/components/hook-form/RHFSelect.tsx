@@ -5,9 +5,15 @@ import ErrorTooltip from "./ErrorTooltip";
 interface Props extends Omit<SelectProps, "name"> {
     name: string;
     label: string;
+    labelPlacement?: "end" | "start" | "top" | "bottom";
 }
 
-const RHFSelect = ({ name, label, ...props }: Props) => {
+const RHFSelect = ({
+    name,
+    label,
+    labelPlacement = "top",
+    ...props
+}: Props) => {
     const { control } = useFormContext();
 
     return (
@@ -27,7 +33,7 @@ const RHFSelect = ({ name, label, ...props }: Props) => {
                         </ErrorTooltip>
                     }
                     label={label}
-                    labelPlacement="top"
+                    labelPlacement={labelPlacement}
                 />
             )}
         />

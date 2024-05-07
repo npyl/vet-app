@@ -17,18 +17,25 @@ const Office = ({ d }: OfficeProps) => (
             endNode={
                 <Stack
                     direction="row"
-                    spacing={1}
+                    spacing={2}
                     alignItems="center"
                     color="primary.main"
                 >
-                    <Iconify
-                        icon="mdi:telephone-outline"
-                        width={23}
-                        height={23}
-                    />
-                    <Typography fontWeight={550}>
-                        (+30) {d?.telephone}
-                    </Typography>
+                    <Stack direction="row" spacing={1}>
+                        <Typography fontWeight={700}>ΑΦΜ:</Typography>
+                        <Typography fontWeight={550}>{d?.afm}</Typography>
+                    </Stack>
+
+                    <Stack direction="row" spacing={1}>
+                        <Iconify
+                            icon="mdi:telephone-outline"
+                            width={23}
+                            height={23}
+                        />
+                        <Typography fontWeight={550}>
+                            (+30) {d?.telephone}
+                        </Typography>
+                    </Stack>
                 </Stack>
             }
         />

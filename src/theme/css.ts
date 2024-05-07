@@ -1,5 +1,19 @@
 import { alpha } from "@mui/material/styles";
 
+export const paper = (color: string) => ({
+    ...bgBlur({
+        blur: 20,
+        opacity: 0.9,
+        color,
+    }),
+    backgroundImage: "url(/assets/cyan-blur.png), url(/assets/red-blur.png)",
+    backgroundRepeat: "no-repeat, no-repeat",
+    backgroundPosition: "top right, left bottom",
+    backgroundSize: "50%, 50%",
+});
+
+// ----------------------------------------------------------------------
+
 type BgBlurProps = {
     blur?: number;
     opacity?: number;

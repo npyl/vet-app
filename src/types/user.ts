@@ -6,6 +6,10 @@ export type UserType = "VET" | "USER";
 type IUser = {
     id: number;
     email: string;
+
+    firstName: string;
+    lastName: string;
+
     avatar: string;
     type: UserType;
 

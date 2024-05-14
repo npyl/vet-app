@@ -32,6 +32,10 @@ model User {
   id              Int      @id @default(autoincrement())
   email           String   @unique
   password        String
+
+  firstName       String
+  lastName        String
+
   type            UserType @default(USER)
   avatar          String?
 

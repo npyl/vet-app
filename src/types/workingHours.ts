@@ -1,17 +1,5 @@
 import IUser from "./user";
 
-export interface IVetWorkingHoursPOST {
-    id?: number;
-
-    monday: [number, number];
-    tuesday: [number, number];
-    wednesday: [number, number];
-    thursday: [number, number];
-    friday: [number, number];
-
-    vetId: number;
-}
-
 export interface IVetWorkingHours {
     id: number;
 
@@ -22,4 +10,10 @@ export interface IVetWorkingHours {
     friday: [number, number];
 
     vet: IUser;
+}
+
+export interface IVetWorkingHoursPOST
+    extends Omit<IVetWorkingHours, "id" | "vet"> {
+    id?: number;
+    vetId: number;
 }

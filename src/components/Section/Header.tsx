@@ -16,6 +16,7 @@ const SectionHeader = ({
     icon,
     endNode,
     color = "primary",
+    sx,
     ...props
 }: SectionHeaderProps) => (
     <SpaceBetween
@@ -23,6 +24,7 @@ const SectionHeader = ({
         alignItems="center"
         sx={{
             backgroundColor: (theme) => alpha(theme.palette[color].main, 0.1),
+            ...sx,
         }}
         {...props}
     >

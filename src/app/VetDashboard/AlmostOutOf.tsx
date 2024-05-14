@@ -5,6 +5,7 @@ import StockDataGrid from "@/components/DataGrid/Stock";
 import { IProduct } from "@/types/products";
 import { GridPaginationModel } from "@mui/x-data-grid";
 import useSWR from "swr";
+import Placeholder from "./Placeholder";
 
 const PAGE_SIZE = 5;
 
@@ -16,6 +17,7 @@ const AlmostOutOfStock = () => {
     );
 
     const { data, isLoading } = useSWR<IProduct[]>(`/api/stock`);
+
     const almostOutOfStock = useMemo(
         () =>
             Array.isArray(data)
@@ -24,9 +26,15 @@ const AlmostOutOfStock = () => {
         [data],
     );
 
+    if (!isLoading && almostOutOfStock.length === 0) return <Placeholder />;
+
     return (
         <StockDataGrid
+            columnHeaderHeight={0} // hide
             loading={isLoading}
+            sx={{
+                borderRadius: "0 0 10px 10px",
+            }}
             // ...
             rows={almostOutOfStock}
             page={page}

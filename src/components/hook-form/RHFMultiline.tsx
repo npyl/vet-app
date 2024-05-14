@@ -1,24 +1,17 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { TextFieldProps, TextField } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { TextFieldProps } from "@mui/material";
 import ErrorTooltip from "./ErrorTooltip";
+import MultilineTextField from "@/components/TextField/Multiline";
 
-export const MultilineTextField = styled(TextField)(({ theme }) => ({
-    "& .MuiInputBase-root": {
-        height: "auto!important",
-    },
-    "& .MuiInputBase-input.MuiOutlinedInput-input": {
-        padding: theme.spacing(1),
-        paddingLeft: "13px",
-        paddingRight: "13px",
-    },
-}));
-
-interface Props extends Omit<TextFieldProps, "name"> {
+export interface RHFMultilineTextFieldProps
+    extends Omit<TextFieldProps, "name"> {
     name: string;
 }
 
-const RHFMultilineTextField = ({ name, ...props }: Props) => {
+const RHFMultilineTextField = ({
+    name,
+    ...props
+}: RHFMultilineTextFieldProps) => {
     const { control } = useFormContext();
 
     return (

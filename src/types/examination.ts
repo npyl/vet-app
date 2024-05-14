@@ -1,4 +1,5 @@
 import { IAppointment } from "./appointment";
+import { IMedication, IMedicationPOST } from "./medication";
 
 export interface IExaminationHistory {
     id: number;
@@ -23,9 +24,11 @@ export interface IExaminationHistory {
     penis_vulva_breast: string;
 
     appointment: IAppointment;
+    medication: IMedication[];
 }
 
 export interface IExaminationHistoryPOST
-    extends Omit<IExaminationHistory, "id" | "appointment"> {
+    extends Omit<IExaminationHistory, "id" | "appointment" | "medication"> {
     id?: number;
+    medication: IMedicationPOST[];
 }

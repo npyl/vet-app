@@ -9,11 +9,9 @@ export async function POST(req: Request | NextRequest) {
 
         const { email, password } = body;
 
-        const user = await prisma.user.findMany({
+        const user = await prisma.user.findUnique({
             where: {
-                email: {
-                    equals: email,
-                },
+                email,
                 AND: {
                     password: {
                         equals: password,
@@ -21,8 +19,7 @@ export async function POST(req: Request | NextRequest) {
                 },
             },
         });
-
-        if (!user || user.length === 0) {
+        if (!user) {
             throw {
                 errorMessage: "Could not find user with these credentials!",
             };
@@ -34,7 +31,7 @@ export async function POST(req: Request | NextRequest) {
         // Update user token
         await prisma.user.update({
             where: {
-                id: user[0].id,
+                id: user.id,
             },
             data: {
                 token,

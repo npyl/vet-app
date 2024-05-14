@@ -11,6 +11,7 @@ export async function POST(req: Request | NextRequest) {
             city,
             complex,
             telephone,
+            afm,
             ...body
         } = (await req.json()) as IRegisterReq;
 
@@ -38,6 +39,7 @@ export async function POST(req: Request | NextRequest) {
                                   city: city || "",
                                   complex: complex || "",
                                   telephone: telephone || "",
+                                  afm: afm || "",
                               },
                           },
                       }

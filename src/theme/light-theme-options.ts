@@ -1,4 +1,5 @@
-import { ThemeOptions, alpha } from "@mui/material";
+import { DrawerProps, ThemeOptions, alpha, drawerClasses } from "@mui/material";
+import { paper } from "./css";
 
 // Colors
 
@@ -73,6 +74,19 @@ const text = {
 
 export const lightThemeOptions: ThemeOptions = {
     components: {
+        MuiDrawer: {
+            styleOverrides: {
+                // Cool transparency effect from Minimals.cc
+                root: ({ ownerState }: { ownerState: DrawerProps }) => ({
+                    ...(ownerState.variant === "temporary" && {
+                        [`& .${drawerClasses.paper}`]: {
+                            ...paper(background.paper),
+                        },
+                    }),
+                }),
+            },
+        },
+
         MuiAvatar: {
             styleOverrides: {
                 root: {

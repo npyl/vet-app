@@ -4,14 +4,13 @@ import {
     RHFSelect,
     RHFTimePicker,
 } from "@/components/hook-form";
-import { SpaceBetween } from "@/components/styled";
 import useApiContext from "@/contexts/api";
 import IBookAppointment from "@/types/book";
 import IUser from "@/types/user";
 import { IVetWorkingHours } from "@/types/workingHours";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton, Skeleton } from "@mui/lab";
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import dayjs from "dayjs";
 import { useCallback, useMemo, useState } from "react";
@@ -77,7 +76,7 @@ const DateSelect = () => {
     const date = watch("date");
 
     const { data: workingHours, isLoading } = useSWR<IVetWorkingHours>(
-        vetId ? `/api/vets/${vetId}/workingHours` : null,
+        vetId && vetId > -1 ? `/api/vets/${vetId}/workingHours` : null,
     );
 
     const [minDate, maxDate] = useMemo(() => {
@@ -160,6 +159,11 @@ const AddOrEditAppointmentDialog = ({
         },
     });
 
+    // Make sure we have everything filled in (TODO: date is not checked correct)
+    const vetId = methods.watch("vetId");
+    const date = methods.watch("date");
+    const haveAllFields = vetId && vetId > -1 && date;
+
     const ok = useCallback(() => {
         toast.success("Success!");
         mutate(`/api/pets/${petId}/appointments`);
@@ -191,7 +195,7 @@ const AddOrEditAppointmentDialog = ({
                 submit
                 onSubmit={methods.handleSubmit(handleSubmit)}
                 // ...
-                maxWidth="md"
+                maxWidth="xs"
                 title={
                     <Typography>
                         {appointment
@@ -200,18 +204,19 @@ const AddOrEditAppointmentDialog = ({
                     </Typography>
                 }
                 content={
-                    <SpaceBetween mt={2} alignItems="center" width={1}>
+                    <Stack mt={2} alignItems="center" width={1}>
                         <SelectVet />
                         <DateSelect />
 
                         <Toaster />
-                    </SpaceBetween>
+                    </Stack>
                 }
                 actions={
                     <LoadingButton
                         type="submit"
                         loading={isSubmitting}
                         variant="contained"
+                        disabled={isSubmitting || !haveAllFields}
                     >
                         Book
                     </LoadingButton>

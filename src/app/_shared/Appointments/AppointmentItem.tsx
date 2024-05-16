@@ -9,9 +9,14 @@ import { UserType } from "@/types/user";
 interface AppointmentItemProps {
     a: IAppointment;
     variant: UserType;
+    noPet?: boolean;
 }
 
-const AppointmentItem = ({ a, variant }: AppointmentItemProps) => (
+const AppointmentItem = ({
+    a,
+    variant,
+    noPet = false,
+}: AppointmentItemProps) => (
     <SpaceBetween
         p={1}
         px={2.5}
@@ -70,32 +75,34 @@ const AppointmentItem = ({ a, variant }: AppointmentItemProps) => (
             1 hour
         </IconTypography>
 
-        <MuiLink
-            component={Link}
-            href={`/pets/${a?.pet?.id}`}
-            sx={{
-                "&:hover": {
-                    backgroundColor: (theme) =>
-                        alpha(theme.palette.primary.main, 0.3),
-                    cursor: "pointer",
-                },
-            }}
-            p={1}
-            borderRadius="15px"
-        >
-            <Stack direction="row" spacing={1} alignItems="center">
-                <Avatar
-                    src={a?.pet?.photo || ""}
-                    sx={{
-                        width: 50,
-                        height: 50,
-                    }}
-                />
-                <Typography variant="subtitle2">
-                    {a?.pet?.name || ""}
-                </Typography>
-            </Stack>
-        </MuiLink>
+        {noPet ? null : (
+            <MuiLink
+                component={Link}
+                href={`/pets/${a?.pet?.id}`}
+                sx={{
+                    "&:hover": {
+                        backgroundColor: (theme) =>
+                            alpha(theme.palette.primary.main, 0.3),
+                        cursor: "pointer",
+                    },
+                }}
+                p={1}
+                borderRadius="15px"
+            >
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <Avatar
+                        src={a?.pet?.photo || ""}
+                        sx={{
+                            width: 50,
+                            height: 50,
+                        }}
+                    />
+                    <Typography variant="subtitle2">
+                        {a?.pet?.name || ""}
+                    </Typography>
+                </Stack>
+            </MuiLink>
+        )}
 
         {variant === "USER" ? (
             <MuiLink

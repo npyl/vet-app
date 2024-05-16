@@ -1,24 +1,17 @@
 import Dialog from "@/components/Dialog";
 import { Box, Button, CircularProgress, Stack } from "@mui/material";
+import MuiPagination from "@mui/material/Pagination";
 import Typography from "@mui/material/Typography";
 import { useCallback, useState } from "react";
 import { useAppointments } from "./hook";
-import { List, ListItem } from "@/components/List";
+import { List } from "@/components/List";
 import { styled, alpha } from "@mui/material/styles";
 import useDialog from "@/hooks/useDialog";
 import AddOrEditDialog from "./AppointmentDialog";
 import { IAppointment } from "@/types/appointment";
+import { AppointmentItem } from "@/app/_shared/Appointments";
 
 // ----------------------------------------------------------------
-
-const StyledListItem = styled(ListItem)(({ theme }) => ({
-    borderRadius: "15px",
-    "&:hover": {
-        backgroundColor: alpha(theme.palette.primary.main, 0.1),
-        color: theme.palette.primary.main,
-        cursor: "pointer",
-    },
-}));
 
 const StyledList = styled(List)(({ theme }) => ({
     borderRadius: "15px",
@@ -26,7 +19,16 @@ const StyledList = styled(List)(({ theme }) => ({
     borderColor: alpha(theme.palette.primary.main, 0.4),
 }));
 
+const Pagination = styled(MuiPagination)(({ theme }) => ({
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: theme.spacing(2),
+}));
+
 // ----------------------------------------------------------------
+
+const PAGE_SIZE = 5;
 
 interface AppointmentsListProp {
     petId: number;
@@ -37,6 +39,10 @@ const AppointmentsList = ({ petId }: AppointmentsListProp) => {
 
     const [clickedItem, setClickedItem] = useState<IAppointment>();
     const closeDialog = useCallback(() => setClickedItem(undefined), []);
+
+    const [page, setPage] = useState(0);
+    const pageCount = appointments.length / PAGE_SIZE;
+    const handlePageChange = useCallback(() => {}, []);
 
     if (isLoading) {
         return (
@@ -59,15 +65,17 @@ const AppointmentsList = ({ petId }: AppointmentsListProp) => {
             <Box mt={4} />
 
             <StyledList>
-                {appointments.map((a, i) => (
-                    <StyledListItem
-                        key={i}
-                        label={`${i + 1}.`}
-                        value={new Date(a.date).toDateString()}
-                        onClick={() => setClickedItem(a)}
-                    />
+                {appointments.map((a) => (
+                    <AppointmentItem key={a.id} a={a} noPet variant="USER" />
                 ))}
             </StyledList>
+
+            <Pagination
+                count={pageCount}
+                variant="outlined"
+                color="primary"
+                onChange={handlePageChange}
+            />
 
             {clickedItem ? (
                 <AddOrEditDialog
@@ -104,11 +112,10 @@ const BookDialog = ({ petId, ...props }: Props) => {
                         <Button
                             variant="contained"
                             sx={{
-                                // TODO: all these are hardcoded...
                                 position: "absolute",
-                                mr: 10,
-                                top: 15,
-                                right: 0,
+                                transform: "translateY(-50%)",
+                                top: "50%",
+                                right: 10,
                             }}
                             onClick={openAdd}
                         >

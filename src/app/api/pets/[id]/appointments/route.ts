@@ -18,6 +18,10 @@ export async function GET(
                     equals: +id,
                 },
             },
+            include: {
+                vet: true,
+                pet: true,
+            },
         });
 
         if (!Array.isArray(res)) throw "Could not find any appointments!";

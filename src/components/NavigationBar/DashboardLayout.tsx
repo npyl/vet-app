@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }: Props) {
         >
             <NavVertical openNav={open} onCloseNav={handleClose} />
 
-            <Main my={2} onOpenSidebar={handleOpen}>
+            <Main mb={2} onOpenSidebar={handleOpen}>
                 {children}
             </Main>
         </Box>

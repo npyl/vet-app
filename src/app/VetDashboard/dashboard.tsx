@@ -1,14 +1,18 @@
-import { Grid, Typography } from "@mui/material";
-import AppointmentsList from "../_shared/Appointments/Appointments";
+import Grid from "@mui/material/Grid";
+import AppointmentsList from "../_shared/Appointments";
 import AlmostOutOfStock from "./AlmostOutOf";
 import { SectionHeader } from "@/components/Section";
 
 const VetDashboard = () => (
     <Grid container spacing={5}>
         <Grid item xs={12} lg={6} gap={1}>
-            <Typography variant="h6" mb={1}>
-                Today&apos;s Appointments
-            </Typography>
+            <SectionHeader
+                title="Today's Appointments"
+                icon=""
+                color="primary"
+                borderRadius="10px 10px 0 0"
+            />
+
             <AppointmentsList variant="VET" />
         </Grid>
         <Grid item xs={12} lg={6}>

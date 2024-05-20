@@ -6,6 +6,7 @@ import { UserType } from "@/types/user";
 import { Divider } from "@mui/material";
 import useGetAppointments from "./hook";
 import SkeletonItem from "./SkeletonItem";
+import NoAppointments from "./NoAppointments";
 
 interface AppointmentsListProps {
     variant: UserType;
@@ -13,6 +14,8 @@ interface AppointmentsListProps {
 
 export const AppointmentsList = ({ variant }: AppointmentsListProps) => {
     const { appointments, isLoading } = useGetAppointments();
+
+    if (!isLoading && appointments.length === 0) return <NoAppointments />;
 
     return (
         <Grid

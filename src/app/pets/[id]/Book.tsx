@@ -43,7 +43,7 @@ const AppointmentsList = ({ petId }: AppointmentsListProp) => {
         );
     }
 
-    if (appointments.length === 0) {
+    if (!isLoading && appointments.length === 0) {
         return (
             <Stack mt={4} alignItems="center">
                 <Typography>No appointments booked yet!</Typography>

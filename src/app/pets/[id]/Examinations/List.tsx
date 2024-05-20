@@ -4,14 +4,17 @@ import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import { useParams } from "next/navigation";
 import { useExaminations } from "@/hooks/pets";
 import useAuth from "@/hooks/useAuth";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ExaminationDialog from "../../../_shared/Examination";
 import ExaminationItem from "./Item";
 import ExaminationItemSkeleton from "./Skeleton";
-import { Button } from "@mui/material";
+import Pagination from "@/components/Pagination";
+
+const PAGE_SIZE = 3;
 
 interface ExaminationsListProps {
     onOpenDiagrams: VoidFunction;
@@ -25,11 +28,15 @@ const ExaminationsList = ({ onOpenDiagrams }: ExaminationsListProps) => {
     // INFO: comes from examination
     const [clickedAppointment, setClickedAppointment] = useState(-1);
 
+    const [page, setPage] = useState(1);
+    const handlePageChange = useCallback((_: any, p: number) => setPage(p), []);
+
     return (
         <>
             <Paper
                 sx={{
                     border: "1px solid #ddd",
+                    pb: 2,
                 }}
             >
                 <Stack p={2} direction="row" spacing={1} position="relative">
@@ -45,16 +52,21 @@ const ExaminationsList = ({ onOpenDiagrams }: ExaminationsListProps) => {
                 {isLoading ? <ExaminationItemSkeleton /> : null}
 
                 {/* Items */}
-                {examinations.map((e) =>
-                    e ? (
+                <Pagination
+                    page={page}
+                    pageSize={PAGE_SIZE}
+                    onChange={handlePageChange}
+                >
+                    {examinations.map((e, i) => (
                         <ExaminationItem
                             key={e?.id}
                             e={e}
                             isVet={user?.type === "VET"}
+                            expanded={i === 0}
                             onEditClick={setClickedAppointment}
                         />
-                    ) : null,
-                )}
+                    ))}
+                </Pagination>
             </Paper>
 
             {/* Examination Record */}

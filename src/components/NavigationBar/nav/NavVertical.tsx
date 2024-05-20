@@ -46,6 +46,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
                             width={200}
                             height={200}
                             style={{
+                                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
                                 borderRadius: "50px",
                             }}
                         />

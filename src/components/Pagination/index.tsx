@@ -4,21 +4,22 @@ import { ReactNode } from "react";
 import StyledPagination from "./styled";
 import Box from "@mui/material/Box";
 
-interface PaginationProps extends Omit<MuiPaginationProps, "page"> {
+interface PaginationProps<C extends React.ElementType>
+    extends Omit<MuiPaginationProps, "page"> {
     pageSize: number;
-    Container?: React.ElementType;
-    children: ReactNode;
-
-    // force non-falsy
     page: number;
+    children: ReactNode;
+    Container?: C;
+    ContainerProps?: React.ComponentProps<C>;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination = <C extends React.ElementType = "div">({
     children,
-    Container = "div",
+    Container,
     pageSize,
+    ContainerProps,
     ...props
-}) => {
+}: PaginationProps<C>) => {
     const totalItems = React.Children.count(children);
     const totalPages = Math.ceil(totalItems / pageSize);
 
@@ -33,7 +34,9 @@ const Pagination: React.FC<PaginationProps> = ({
 
     return (
         <>
-            <Box component={Container}>{displayItems}</Box>
+            <Box component={Container} {...ContainerProps}>
+                {displayItems}
+            </Box>
 
             <StyledPagination
                 {...props}

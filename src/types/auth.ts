@@ -10,6 +10,9 @@ export type ILoginReq = {
 export type IRegisterReq = {
     avatar?: string;
 
+    firstName: string;
+    lastName: string;
+
     // --- VET SPECIFIC ---
 
     region?: string;

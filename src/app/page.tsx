@@ -14,7 +14,7 @@ export default function Home() {
     return (
         <Box py={1}>
             <Typography variant="h4" my={4} color="primary.main">
-                Welcome {user?.email}
+                Welcome {`${user?.firstName} ${user?.lastName}`}
             </Typography>
 
             {user?.type === "VET" ? <VetDashboard /> : <UserDashboard />}

@@ -13,9 +13,10 @@ const VetDashboard = () => (
         </Grid>
         <Grid item xs={12} lg={6}>
             <SectionHeader
-                title="Almost out of stock:"
+                title="Almost out of stock"
                 icon=""
                 color="warning"
+                borderRadius="10px 10px 0 0"
             />
 
             <AlmostOutOfStock />

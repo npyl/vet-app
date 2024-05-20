@@ -1,5 +1,5 @@
 const TRIGGER_NAMES = [
-    ["email", "password"],
+    ["firstName", "lastName", "email", "password"],
     ["region", "city", "complex", "telephone"],
     [
         "workingHours.monday.0",

@@ -1,6 +1,6 @@
 import { RHFTextField } from "@/components/hook-form";
 import Iconify from "@/components/iconify";
-import { IconButton, InputAdornment, Typography } from "@mui/material";
+import { IconButton, InputAdornment, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 
 const Page1 = () => {
@@ -16,6 +16,11 @@ const Page1 = () => {
             >
                 Credentials
             </Typography>
+
+            <Stack direction="row" spacing={0.5}>
+                <RHFTextField fullWidth name="firstName" label="First Name" />
+                <RHFTextField fullWidth name="lastName" label="Last Name" />
+            </Stack>
 
             <RHFTextField fullWidth name="email" label="Email address" />
 

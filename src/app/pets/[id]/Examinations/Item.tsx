@@ -10,6 +10,7 @@ import Iconify from "@/components/iconify/iconify";
 import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import useToggle from "@/hooks/useToggle";
+import MedicationListItem from "./MedicationListItem";
 
 interface ExaminationItemProps {
     e: IExaminationHistory;
@@ -129,9 +130,17 @@ const ExaminationItem = ({
                             <ListItem label="Findings" value={e?.findings} />
                             <ListItem label="Diagnosis" value={e?.diagnosis} />
                             <ListItem label="Procedure" value={e?.procedure} />
-
-                            <ListItem label="Therapy" value={e?.therapy} />
                             <ListItem label="Notes" value={e?.notes} />
+                            <ListItem label="Therapy" value={e?.therapy} />
+                        </List>
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <List>
+                            <MedicationListItem
+                                label="Medication"
+                                medication={e?.medication}
+                            />
                         </List>
                     </Grid>
                 </Grid>

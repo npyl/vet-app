@@ -8,7 +8,7 @@ import MedicineName from "./MedicineName";
 
 interface MedicationItemProps {
     m: IMedicationPOST;
-    onRemove: (mId: number) => void;
+    onRemove?: (mId: number) => void;
 }
 
 const MedicationItem = ({ m, onRemove }: MedicationItemProps) => (
@@ -33,14 +33,16 @@ const MedicationItem = ({ m, onRemove }: MedicationItemProps) => (
             for: {m.duration}
         </IconTypography>
 
-        <IconButton onClick={() => onRemove(m.medicineId)}>
-            <Iconify
-                icon="clarity:remove-line"
-                width={20}
-                height={20}
-                color="error.main"
-            />
-        </IconButton>
+        {onRemove ? (
+            <IconButton onClick={() => onRemove(m.medicineId)}>
+                <Iconify
+                    icon="clarity:remove-line"
+                    width={20}
+                    height={20}
+                    color="error.main"
+                />
+            </IconButton>
+        ) : null}
     </SpaceBetween>
 );
 

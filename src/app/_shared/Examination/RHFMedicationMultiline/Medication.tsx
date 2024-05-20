@@ -2,7 +2,7 @@ import SectionHeader from "@/components/Section/Header";
 import IconButton from "@mui/material/IconButton";
 import Stack, { StackProps } from "@mui/material/Stack";
 import { Add as AddIcon } from "@mui/icons-material";
-import MedicationItem from "./MedicationItem";
+import MedicationItem from "../../MedicationItem";
 import { useFormContext } from "react-hook-form";
 import useDialog from "@/hooks/useDialog";
 import MedicationCreateItem from "./CreateItem";

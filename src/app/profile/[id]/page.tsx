@@ -11,9 +11,11 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import useSWR from "swr";
 import { useParams } from "next/navigation";
+import { ProfileSkeleton } from "@/components/Skeleton";
+// ...
 import Office from "./Office";
 import WorkingHours from "./WorkingHours";
-import { ProfileSkeleton } from "@/components/Skeleton";
+import PersonalInfo from "./Personal";
 
 const Profile = () => {
     const { id } = useParams();
@@ -55,6 +57,10 @@ const Profile = () => {
                         {user?.email}
                     </Typography>
                 </Stack>
+                <PersonalInfo
+                    firstName={user?.firstName || ""}
+                    lastName={user?.lastName || ""}
+                />
                 {user?.type === "VET" ? (
                     <>
                         <Divider />

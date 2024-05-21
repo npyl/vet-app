@@ -13,7 +13,7 @@ const Office = ({ d }: OfficeProps) => (
     <>
         <SectionHeader
             title="Workplace"
-            icon="material-symbols:work-outline"
+            icon="material-symbols-light:work-outline"
             endNode={
                 <Stack
                     direction="row"

@@ -1,16 +1,28 @@
-import { Grid, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import Medication from "./Medication";
-import { Appointments } from "../_shared/Appointments";
+import Appointments from "../_shared/Appointments";
+import SectionHeader from "@/components/Section/Header";
 
 const UserDashboard = () => (
     <Grid container spacing={5}>
         <Grid item xs={12} lg={6} gap={1}>
-            <Typography variant="h6" mb={1}>
-                Future Appointments
-            </Typography>
+            <SectionHeader
+                title="Today's Appointments"
+                icon=""
+                color="primary"
+                borderRadius="10px 10px 0 0"
+            />
+
             <Appointments variant="USER" />
         </Grid>
         <Grid item xs={12} lg={6}>
+            <SectionHeader
+                title="Current medication"
+                icon=""
+                color="primary"
+                borderRadius="10px 10px 0 0"
+            />
+
             <Medication />
         </Grid>
     </Grid>

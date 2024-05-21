@@ -16,7 +16,12 @@ const NavAccount = () => {
     );
 
     return (
-        <SpaceBetween alignItems="center" p={2} borderTop="1px solid #ddd">
+        <SpaceBetween
+            alignItems="center"
+            p={2}
+            borderTop="1px solid"
+            borderColor={(theme) => alpha(theme.palette.primary.main, 0.5)}
+        >
             <Stack
                 sx={{
                     borderRadius: "15px",

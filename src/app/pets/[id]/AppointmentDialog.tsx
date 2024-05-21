@@ -34,9 +34,9 @@ const SelectVet = () => {
         <Skeleton width={100} height={50} animation="pulse" />
     ) : (
         <RHFSelect label="Available vets" name="vetId">
-            {vets.map(({ email, id }, i) => (
+            {vets.map(({ firstName, lastName, id }, i) => (
                 <MenuItem key={i} value={id}>
-                    {email}
+                    {`${firstName || ""} ${lastName || ""}`}
                 </MenuItem>
             ))}
         </RHFSelect>

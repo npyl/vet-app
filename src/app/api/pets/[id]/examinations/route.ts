@@ -22,6 +22,11 @@ export async function GET(
             },
             include: {
                 appointment: true,
+                medication: {
+                    include: {
+                        medicine: true,
+                    },
+                },
             },
             orderBy: {
                 date: "desc",

@@ -127,7 +127,7 @@ const AppointmentItem = ({
                         }}
                     />
                     <Typography variant="subtitle2">
-                        {a?.vet?.email || ""}
+                        {`${a?.vet?.firstName || ""} ${a?.vet?.lastName || ""}`}
                     </Typography>
                 </Stack>
             </MuiLink>

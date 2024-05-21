@@ -16,6 +16,8 @@ import NavAccount from "./account";
 import Image from "next/image";
 import Link from "next/link";
 
+import { alpha } from "@mui/material/styles";
+
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -35,7 +37,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
 
     const renderContent = (
         <>
-            <Stack justifyContent="center" alignItems="center">
+            <Stack justifyContent="center" alignItems="center" p={5}>
                 <Tooltip title="Home">
                     <Link href="/">
                         <Image
@@ -44,7 +46,8 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
                             width={200}
                             height={200}
                             style={{
-                                borderRadius: "15px",
+                                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+                                borderRadius: "50px",
                             }}
                         />
                     </Link>
@@ -75,7 +78,8 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
                     PaperProps={{
                         sx: {
                             width: NAV.W_DASHBOARD,
-                            bgcolor: "transparent",
+                            bgcolor: (theme) =>
+                                alpha(theme.palette.primary.main, 0.3),
                         },
                     }}
                 >
@@ -92,6 +96,8 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
                         sx: {
                             paddingTop: 1,
                             width: NAV.W_DASHBOARD,
+                            bgcolor: (theme) =>
+                                alpha(theme.palette.primary.main, 0.3),
                         },
                     }}
                 >

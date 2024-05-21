@@ -7,21 +7,31 @@ import Typography from "@mui/material/Typography";
 import { IExaminationHistory } from "@/types/examination";
 import { alpha } from "@mui/material/styles";
 import Iconify from "@/components/iconify/iconify";
+import Collapse from "@mui/material/Collapse";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import useToggle from "@/hooks/useToggle";
+import MedicationListItem from "./MedicationListItem";
 
 interface ExaminationItemProps {
     e: IExaminationHistory;
     isVet: boolean;
+    expanded: boolean;
     onEditClick: (id: number) => void;
 }
 
-const ExaminationItem = ({ e, isVet, onEditClick }: ExaminationItemProps) => {
+const ExaminationItem = ({
+    e,
+    isVet,
+    expanded: initialExpanded,
+    onEditClick,
+}: ExaminationItemProps) => {
     const handleEditClick = () => onEditClick(e?.appointment?.id);
 
+    const [expanded, toggleExpanded] = useToggle(initialExpanded);
+
     return (
-        <Grid container>
-            <Grid
-                item
-                xs={12}
+        <>
+            <Stack
                 px={2}
                 py={2}
                 position="relative"
@@ -42,61 +52,100 @@ const ExaminationItem = ({ e, isVet, onEditClick }: ExaminationItemProps) => {
                     </Typography>
                 </Stack>
 
-                {/* Only for Vets: Edit Mode */}
-                {isVet ? (
+                <Stack
+                    direction="row"
+                    spacing={1}
+                    position="absolute"
+                    top="50%"
+                    right={0}
+                    px={2}
+                    sx={{
+                        transform: "translateY(-50%)",
+                    }}
+                >
+                    {/* Only for Vets: Edit Mode */}
+                    {isVet ? (
+                        <IconButton
+                            sx={{
+                                color: "primary.main",
+                            }}
+                            onClick={handleEditClick}
+                        >
+                            <Edit />
+                        </IconButton>
+                    ) : null}
+
                     <IconButton
+                        onClick={toggleExpanded}
                         sx={{
-                            position: "absolute",
-                            top: 2,
-                            right: 2,
-                            color: "primary.main",
+                            transform: expanded
+                                ? "rotate(180deg)"
+                                : "rotate(0deg)",
+                            transition: "transform 0.3s ease-in-out",
                         }}
-                        onClick={handleEditClick}
                     >
-                        <Edit />
+                        <ExpandMoreIcon />
                     </IconButton>
-                ) : null}
-            </Grid>
+                </Stack>
+            </Stack>
 
-            <Grid item xs={6}>
-                <List>
-                    <ListItem label="Weight" value={e?.weight} />
-                    <ListItem label="Temperature" value={e?.temperature} />
-                    <ListItem label="Heart Rate" value={e?.heartrate} />
-                </List>
-            </Grid>
-            <Grid item xs={6}>
-                <List>
-                    <ListItem label="C.R.T." value={e?.CRT} />
-                    <ListItem label="Tummy" value={e?.tummy} />
-                    <ListItem label="Thorax" value={e?.thorax} />
-                </List>
-            </Grid>
-            <Grid item xs={6}>
-                <List>
-                    <ListItem
-                        label="Ears / Eyes / Mouth"
-                        value={e?.ears_eyes_mouth}
-                    />
-                    <ListItem label="Lymph Nodes" value={e?.lymphNodes} />
-                    <ListItem
-                        label="Penis / Vulva / Breast"
-                        value={e?.penis_vulva_breast}
-                    />
-                </List>
-            </Grid>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Grid container>
+                    <Grid item xs={6}>
+                        <List>
+                            <ListItem label="Weight" value={e?.weight} />
+                            <ListItem
+                                label="Temperature"
+                                value={e?.temperature}
+                            />
+                            <ListItem label="Heart Rate" value={e?.heartrate} />
+                        </List>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <List>
+                            <ListItem label="C.R.T." value={e?.CRT} />
+                            <ListItem label="Tummy" value={e?.tummy} />
+                            <ListItem label="Thorax" value={e?.thorax} />
+                        </List>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <List>
+                            <ListItem
+                                label="Ears / Eyes / Mouth"
+                                value={e?.ears_eyes_mouth}
+                            />
+                            <ListItem
+                                label="Lymph Nodes"
+                                value={e?.lymphNodes}
+                            />
+                            <ListItem
+                                label="Penis / Vulva / Breast"
+                                value={e?.penis_vulva_breast}
+                            />
+                        </List>
+                    </Grid>
 
-            <Grid item xs={6}>
-                <List>
-                    <ListItem label="Findings" value={e?.findings} />
-                    <ListItem label="Diagnosis" value={e?.diagnosis} />
-                    <ListItem label="Procedure" value={e?.procedure} />
+                    <Grid item xs={6}>
+                        <List>
+                            <ListItem label="Findings" value={e?.findings} />
+                            <ListItem label="Diagnosis" value={e?.diagnosis} />
+                            <ListItem label="Procedure" value={e?.procedure} />
+                            <ListItem label="Notes" value={e?.notes} />
+                            <ListItem label="Therapy" value={e?.therapy} />
+                        </List>
+                    </Grid>
 
-                    <ListItem label="Therapy" value={e?.therapy} />
-                    <ListItem label="Notes" value={e?.notes} />
-                </List>
-            </Grid>
-        </Grid>
+                    <Grid item xs={6}>
+                        <List>
+                            <MedicationListItem
+                                label="Medication"
+                                medication={e?.medication}
+                            />
+                        </List>
+                    </Grid>
+                </Grid>
+            </Collapse>
+        </>
     );
 };
 

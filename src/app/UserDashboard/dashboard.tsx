@@ -16,6 +16,13 @@ const UserDashboard = () => (
             <Appointments variant="USER" />
         </Grid>
         <Grid item xs={12} lg={6}>
+            <SectionHeader
+                title="Current medication"
+                icon=""
+                color="primary"
+                borderRadius="10px 10px 0 0"
+            />
+
             <Medication />
         </Grid>
     </Grid>

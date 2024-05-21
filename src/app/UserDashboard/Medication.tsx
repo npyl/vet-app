@@ -3,6 +3,8 @@ import { IMedication } from "@/types/medication";
 import { useMemo } from "react";
 import useSWR from "swr";
 import MedicationItem from "../_shared/MedicationItem";
+import SkeletonItem from "../_shared/Appointments/SkeletonItem";
+import NoMedication from "./NoMedication";
 
 const useCurrentMedication = () => {
     const { user } = useAuth();
@@ -20,11 +22,17 @@ const Medication = () => {
     const { medication, isLoading } = useCurrentMedication();
 
     if (isLoading) {
-        return null;
+        return (
+            <>
+                <SkeletonItem variant="VET" />
+                <SkeletonItem variant="VET" />
+                <SkeletonItem variant="VET" />
+            </>
+        );
     }
 
     if (!isLoading && medication.length === 0) {
-        return null;
+        return <NoMedication />;
     }
 
     return (

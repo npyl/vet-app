@@ -1,6 +1,36 @@
 import IUser from "./user";
 
 export type IPetGender = "MALE" | "FEMALE";
+export type IPetType = "Dog" | "Cat";
+
+export type IDogRace =
+    | "Pitbull"
+    | "Poodle"
+    | "Pug"
+    | "Maltese"
+    | "Rottweiler"
+    | "Schnauzer"
+    | "Shih tzu"
+    | "Siberian husky"
+    | "Whippet"
+    | "Yorkshire terrier"
+    | "Pomeranian"
+    | "Kangal";
+
+export type ICatRace =
+    | "Persian"
+    | "British Longhair"
+    | "Balinese"
+    | "Cymric"
+    | "Japanese Bobtail Longhair"
+    | "American Curl Longhair"
+    | "Mastiff"
+    | "Mastino Napoletano"
+    | "Miniature Pinscher"
+    | "Mudi";
+
+export type IDogBloodType = "DEA 1.1 +" | "DEA 1.1 -" | "DEA 1.2";
+export type ICatBloodType = "A" | "B" | "AB";
 
 export interface IPet {
     id: number;
@@ -9,7 +39,7 @@ export interface IPet {
     age: number;
     weight: number;
     gender: IPetGender;
-    type: string;
+    type: IPetType;
     race: string;
     birthday: string;
     color: string;

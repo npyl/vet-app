@@ -1,5 +1,5 @@
 import Dialog from "@/components/Dialog";
-import { IPet, IPetGender, IPetPOST } from "@/types/pet";
+import { IPet, IPetGender, IPetPOST, IPetType } from "@/types/pet";
 import {
     Box,
     Checkbox,
@@ -19,10 +19,18 @@ import {
     RHFUploadPhoto,
     RHFSelect,
 } from "@/components/hook-form";
+import Select from "@/components/hook-form/Select";
 import useApiContext from "@/contexts/api";
 import dayjs from "dayjs";
 import { LoadingButton } from "@mui/lab";
 import useAuth from "@/hooks/useAuth";
+import {
+    CAT_RACE_OPTIONS,
+    DOG_RACE_OPTIONS,
+    PET_TYPE_OPTIONS,
+    DOG_BLOOD_OPTIONS,
+    CAT_BLOOD_OPTIONS,
+} from "@/types/options";
 
 interface Props {
     open: boolean;
@@ -38,7 +46,7 @@ interface IPetPOSTYup extends Partial<IPetPOST> {
     age: number;
     weight: number;
     gender: IPetGender;
-    type: string;
+    type: IPetType;
     race: string;
     color: string;
     blood_type: string;
@@ -53,7 +61,10 @@ const Schema = yup
         age: yup.number().required(),
         weight: yup.number().required(),
         gender: yup.string().oneOf<IPetGender>(["MALE", "FEMALE"]).required(),
-        type: yup.string().required("Please enter race"),
+        type: yup
+            .string()
+            .oneOf<IPetType>(["CAT", "DOG"])
+            .required("Please enter type"),
         race: yup.string().required("Please enter race"),
         color: yup.string().required("Please enter pet color"),
         blood_type: yup.string().required("Please enter pet blood type"),
@@ -90,7 +101,7 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
             age: pet?.age ?? 0,
             weight: pet?.weight ?? 0,
             gender: pet?.gender || "MALE",
-            type: pet?.type || "",
+            type: pet?.type || "DOG",
             race: pet?.race || "",
             birthday: pet?.birthday ? dayjs(pet.birthday).toISOString() : "",
             color: pet?.color || "",
@@ -108,6 +119,8 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
     });
 
     const [chipped, setChipped] = useState(!!pet?.microchip_date);
+
+    const type = methods.watch("type") || "DOG";
 
     const handleMutate = useCallback(() => {
         onMutate();
@@ -182,37 +195,42 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
                                 <MenuItem value="FEMALE">Female</MenuItem>
                                 <MenuItem value="MALE">Male</MenuItem>
                             </RHFSelect>
-                            <RHFSelect
+
+                            <Select
                                 sx={{
                                     width: "120px",
                                 }}
                                 fullWidth
                                 label="Type"
                                 name="type"
-                            >
-                                <MenuItem value="CAT">Cat</MenuItem>
-                                <MenuItem value="DOG">Dog</MenuItem>
-                            </RHFSelect>
-                            <RHFSelect
+                                options={PET_TYPE_OPTIONS}
+                            />
+
+                            <Select
                                 sx={{
                                     width: "120px",
                                 }}
                                 label="Race"
                                 name="race"
-                            >
-                                <MenuItem value="CAT">Half-Bred</MenuItem>
-                                <MenuItem value="DOG">Wtvr</MenuItem>
-                            </RHFSelect>
-                            <RHFSelect
+                                options={
+                                    type === "DOG"
+                                        ? DOG_RACE_OPTIONS
+                                        : CAT_RACE_OPTIONS
+                                }
+                            />
+
+                            <Select
                                 sx={{
                                     width: "120px",
                                 }}
                                 label="Blood Type"
                                 name="blood_type"
-                            >
-                                <MenuItem value="CAT">Cat</MenuItem>
-                                <MenuItem value="DOG">Dog</MenuItem>
-                            </RHFSelect>
+                                options={
+                                    type === "DOG"
+                                        ? DOG_BLOOD_OPTIONS
+                                        : CAT_BLOOD_OPTIONS
+                                }
+                            />
                         </Stack>
 
                         <Stack direction="row" spacing={1} width={1}>

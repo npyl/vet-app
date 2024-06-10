@@ -7,8 +7,8 @@ import {
 } from "./pet";
 
 export const PET_TYPE_OPTIONS: { key: IPetType; value: string }[] = [
-    { key: "DOG", value: "Dog" },
-    { key: "CAT", value: "Cat" },
+    { key: "Dog", value: "Dog" },
+    { key: "Cat", value: "Cat" },
 ];
 
 export const DOG_RACE_OPTIONS: { key: IDogRace; value: string }[] = [
@@ -27,16 +27,16 @@ export const DOG_RACE_OPTIONS: { key: IDogRace; value: string }[] = [
 ];
 
 export const CAT_RACE_OPTIONS: { key: ICatRace; value: string }[] = [
-    { key: "american curl longhair", value: "American Curl Longhair" },
-    { key: "balinese", value: "Balinese" },
-    { key: "british longhair", value: "British Longhair" },
+    { key: "American Curl Longhair", value: "American Curl Longhair" },
+    { key: "Balinese", value: "Balinese" },
+    { key: "British Longhair", value: "British Longhair" },
     { key: "Cymric", value: "Cymric" },
     { key: "Japanese Bobtail Longhair", value: "Japanese Bobtail Longhair" },
-    { key: "mastiff", value: "Mastiff" },
-    { key: "mastino napoletano", value: "Mastino Napoletano" },
-    { key: "miniature Pinscher", value: "Miniature Pinscher" },
+    { key: "Mastiff", value: "Mastiff" },
+    { key: "Mastino Napoletano", value: "Mastino Napoletano" },
+    { key: "Miniature Pinscher", value: "Miniature Pinscher" },
     { key: "Mudi", value: "Mudi" },
-    { key: "persian", value: "Persian" },
+    { key: "Persian", value: "Persian" },
 ];
 
 export const DOG_BLOOD_OPTIONS: { key: IDogBloodType; value: string }[] = [

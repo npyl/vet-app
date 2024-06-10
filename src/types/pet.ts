@@ -1,7 +1,7 @@
 import IUser from "./user";
 
 export type IPetGender = "MALE" | "FEMALE";
-export type IPetType = "CAT" | "DOG";
+export type IPetType = "Dog" | "Cat";
 
 export type IDogRace =
     | "Pitbull"
@@ -18,15 +18,15 @@ export type IDogRace =
     | "Kangal";
 
 export type ICatRace =
-    | "persian"
-    | "british longhair"
-    | "balinese"
+    | "Persian"
+    | "British Longhair"
+    | "Balinese"
     | "Cymric"
     | "Japanese Bobtail Longhair"
-    | "american curl longhair"
-    | "mastiff"
-    | "mastino napoletano"
-    | "miniature Pinscher"
+    | "American Curl Longhair"
+    | "Mastiff"
+    | "Mastino Napoletano"
+    | "Miniature Pinscher"
     | "Mudi";
 
 export type IDogBloodType = "DEA 1.1 +" | "DEA 1.1 -" | "DEA 1.2";

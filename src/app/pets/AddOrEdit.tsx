@@ -63,7 +63,7 @@ const Schema = yup
         gender: yup.string().oneOf<IPetGender>(["MALE", "FEMALE"]).required(),
         type: yup
             .string()
-            .oneOf<IPetType>(["CAT", "DOG"])
+            .oneOf<IPetType>(["Cat", "Dog"])
             .required("Please enter type"),
         race: yup.string().required("Please enter race"),
         color: yup.string().required("Please enter pet color"),
@@ -101,7 +101,7 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
             age: pet?.age ?? 0,
             weight: pet?.weight ?? 0,
             gender: pet?.gender || "MALE",
-            type: pet?.type || "DOG",
+            type: pet?.type || "Dog",
             race: pet?.race || "",
             birthday: pet?.birthday ? dayjs(pet.birthday).toISOString() : "",
             color: pet?.color || "",
@@ -213,7 +213,7 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
                                 label="Race"
                                 name="race"
                                 options={
-                                    type === "DOG"
+                                    type === "Dog"
                                         ? DOG_RACE_OPTIONS
                                         : CAT_RACE_OPTIONS
                                 }
@@ -226,7 +226,7 @@ const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
                                 label="Blood Type"
                                 name="blood_type"
                                 options={
-                                    type === "DOG"
+                                    type === "Dog"
                                         ? DOG_BLOOD_OPTIONS
                                         : CAT_BLOOD_OPTIONS
                                 }

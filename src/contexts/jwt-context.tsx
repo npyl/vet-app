@@ -1,5 +1,5 @@
-import { ILoginReq, IRegisterReq, IAuthRes } from "@/types/auth";
-import IUser, { UserType } from "@/types/user";
+import { IAuthRes, ILoginReq, IRegisterReq } from "@/types/auth";
+import IUser from "@/types/user";
 import type { FC, ReactNode } from "react";
 import {
     createContext,
@@ -7,9 +7,7 @@ import {
     useEffect,
     useMemo,
     useReducer,
-    useState,
 } from "react";
-import useApiContext from "./api";
 
 interface State {
     isInitialized: boolean;
@@ -18,13 +16,9 @@ interface State {
 }
 
 export interface AuthContextValue extends State {
-    signin: (
-        username: string,
-        password: string,
-        type: UserType,
-    ) => Promise<any>;
-    signup: (req: IRegisterReq) => Promise<any>;
+    signin: (body: ILoginReq) => Promise<any>;
     logout: () => Promise<void>;
+    signup: (body: IRegisterReq) => Promise<any>;
 }
 
 interface AuthProviderProps {
@@ -74,6 +68,8 @@ const initialState: State = {
     user: null,
 };
 
+const tokenKey = "accessToken";
+
 const handlers: Record<ActionType, Handler> = {
     INITIALIZE: (state: State, action: InitializeAction): State => {
         const { isAuthenticated, user } = action.payload;
@@ -105,7 +101,6 @@ const handlers: Record<ActionType, Handler> = {
 
         return {
             ...state,
-            isInitialized: true,
             isAuthenticated: true,
             user,
         };
@@ -123,47 +118,47 @@ export const AuthContext = createContext<AuthContextValue>({
 });
 
 const useMethods = () => {
-    const { get, post } = useApiContext();
+    const login = useCallback(
+        (body: ILoginReq) =>
+            fetch("/api/login", {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
+                body: JSON.stringify(body),
+            }),
+        [],
+    );
+    const register = useCallback(
+        (body: IRegisterReq) =>
+            fetch("/api/register", {
+                method: "POST",
+                body: JSON.stringify(body),
+            }),
+        [],
+    );
+    const getProfile = useCallback(
+        (): Promise<IUser> =>
+            fetch("/api/profile", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(tokenKey)}`,
+                },
+                method: "GET",
+            }).then((res) => res.json()),
+        [],
+    );
 
-    const [isSuccess, setIsSuccess] = useState(false);
-
-    const login = useCallback(async (body: ILoginReq) => {
-        // NOTE: emulate rtk's isSuccess
-        const res = await post<IAuthRes>("/api/login", {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        });
-        if ("token" in res) setIsSuccess(true);
-
-        return res;
-    }, []);
-    const register = useCallback(async (body: IRegisterReq) => {
-        // NOTE: emulate rtk's isSuccess
-        const res = await post<IAuthRes>("/api/register", {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        });
-        if ("token" in res) setIsSuccess(true);
-
-        return res;
-    }, []);
-    const getProfile = useCallback(() => get("/api/profile"), []);
-
-    return { login, register, getProfile, isSuccess };
+    return { login, register, getProfile };
 };
 
 export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const { login, register, getProfile, isSuccess } = useMethods();
+    const { login, register, getProfile } = useMethods();
 
     const initialize = async (): Promise<void> => {
         try {
-            if (globalThis?.localStorage?.getItem("accessToken")) {
+            if (globalThis?.localStorage?.getItem(tokenKey)) {
                 const user = await getProfile();
                 if (!user) {
                     throw "Failed to get profile!";
@@ -177,10 +172,11 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
                     },
                 });
             } else {
-                throw "Token does not exist!";
+                throw "Token doesn't exist!";
             }
         } catch (error) {
-            globalThis?.localStorage.removeItem("accessToken");
+            globalThis?.localStorage?.removeItem(tokenKey);
+
             dispatch({
                 type: ActionType.INITIALIZE,
                 payload: {
@@ -193,20 +189,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
 
     useEffect(() => {
         initialize();
-    }, [isSuccess]);
+    }, []);
 
-    const signin = async (
-        email: string,
-        password: string,
-        type: UserType,
-    ): Promise<any> => {
-        const loginRes = await login({
-            email,
-            password,
-            type,
-        });
+    const signin = async (body: ILoginReq): Promise<any> => {
+        const loginRes = await login(body);
+        if (loginRes.status !== 200) throw "Failed to login!";
+        const json = (await loginRes.json()) as IAuthRes;
 
-        localStorage.setItem("accessToken", loginRes.token);
+        localStorage.setItem(tokenKey, json.token);
 
         const user = await getProfile();
         if (!user) {
@@ -224,14 +214,16 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     };
 
     const logout = async (): Promise<void> => {
-        localStorage.removeItem("accessToken");
+        localStorage.removeItem(tokenKey);
         dispatch({ type: ActionType.LOGOUT });
     };
 
-    const signup = async (req: IRegisterReq): Promise<any> => {
-        const registerRes = await register(req);
+    const signup = async (body: IRegisterReq): Promise<any> => {
+        const regRes = await register(body);
+        if (regRes.status !== 200) throw "Failed to login!";
+        const json = (await regRes.json()) as IAuthRes;
 
-        localStorage.setItem("accessToken", registerRes.token);
+        localStorage.setItem(tokenKey, json.token);
 
         const user = await getProfile();
         if (!user) {
@@ -239,15 +231,14 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
         }
 
         dispatch({
-            type: ActionType.LOGIN,
+            type: ActionType.REGISTER,
             payload: {
                 user,
             },
         });
 
-        return registerRes;
+        return regRes;
     };
-
     const providerValues = useMemo(
         () => ({
             ...state,

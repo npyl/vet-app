@@ -7,7 +7,7 @@ const UserDashboard = () => (
     <Grid container spacing={5}>
         <Grid item xs={12} lg={6} gap={1}>
             <SectionHeader
-                title="Today's Appointments"
+                title="Upcoming Appointments"
                 icon=""
                 color="primary"
                 borderRadius="10px 10px 0 0"

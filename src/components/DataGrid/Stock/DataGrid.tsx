@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import DataGrid from "../DataGrid";
 import GridProps from "../types";
 import getCOLUMNS from "./columns";
+import { usePathname } from "next/navigation";
 
 interface StockDataGridProps
     extends Omit<
@@ -19,7 +20,12 @@ const StockDataGrid = ({
     onDeleteClick,
     ...props
 }: StockDataGridProps) => {
-    const COLUMNS = useMemo(() => getCOLUMNS(onEditClick, onDeleteClick), []);
+    const isLogistics = usePathname() === "/logistics";
+
+    const COLUMNS = useMemo(
+        () => getCOLUMNS(isLogistics, onEditClick, onDeleteClick),
+        [isLogistics],
+    );
 
     return (
         <DataGrid

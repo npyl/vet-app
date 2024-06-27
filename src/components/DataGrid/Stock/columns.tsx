@@ -77,29 +77,54 @@ const RenderButtonsCell = ({
 };
 
 const getCOLUMNS = (
+    withPrice: boolean,
     onEditClick: (id: number) => void,
     onDeleteClick: (id: number) => void,
-): GridColDef<IProduct>[] => [
-    {
-        field: "name",
-        flex: 1,
-        headerName: "",
-        align: "left",
-        headerAlign: "left",
-        renderCell: RenderMainCell,
-    },
-    {
-        field: "type",
-        headerName: "",
-        align: "center",
-        renderCell: (params) => (
-            <RenderButtonsCell
-                params={params}
-                onEditClick={onEditClick}
-                onDeleteClick={onDeleteClick}
-            />
-        ),
-    },
-];
+): GridColDef<IProduct>[] => {
+    const baseColumns: GridColDef<IProduct>[] = [
+        {
+            field: "name",
+            flex: 1,
+            headerName: "",
+            align: "left",
+            headerAlign: "left",
+            renderCell: RenderMainCell,
+        },
+        {
+            field: "stock",
+            flex: 1,
+            headerName: "",
+            align: "center",
+            headerAlign: "left",
+            renderCell: (e) => `${e.value} in stock`,
+        },
+        {
+            field: "type",
+            headerName: "",
+            align: "center",
+            renderCell: (params) => (
+                <RenderButtonsCell
+                    params={params}
+                    onEditClick={onEditClick}
+                    onDeleteClick={onDeleteClick}
+                />
+            ),
+        },
+    ];
+
+    if (withPrice) {
+        baseColumns.splice(2, 0, {
+            field: "cost",
+            flex: 1,
+            headerName: "",
+            align: "right",
+            headerAlign: "right",
+            renderCell: (params) =>
+                `${(params.value * params.row.stock).toFixed(2)} €`,
+        });
+    }
+
+    return baseColumns;
+};
 
 export default getCOLUMNS;

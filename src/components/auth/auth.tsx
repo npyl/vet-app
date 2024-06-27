@@ -15,6 +15,8 @@ import { useCallback, useState } from "react";
 import { LoginForm, RegisterForm } from "./forms";
 import { UserType } from "@prisma/client";
 import Hero from "./Hero";
+import MuiLink from "@mui/material/Link";
+import NextLink from "next/link";
 
 // ----------------------------------------------------------------------
 
@@ -47,11 +49,11 @@ const UserTypeSelect = ({ type, setType, ...props }: Props) => {
 
 // ----------------------------------------------------------------------
 
-export default function AuthPage() {
-    const [mode, setMode] = useState<"login" | "register">("login");
-    const setLogin = useCallback(() => setMode("login"), []);
-    const setRegister = useCallback(() => setMode("register"), []);
+interface AuthPageProps {
+    mode: "login" | "register";
+}
 
+export default function AuthPage({ mode = "login" }: AuthPageProps) {
     const [type, setType] = useState<UserType>("USER");
 
     return (
@@ -79,7 +81,8 @@ export default function AuthPage() {
                                             New user?
                                         </Typography>
 
-                                        <Typography
+                                        <MuiLink
+                                            component={NextLink}
                                             variant="subtitle2"
                                             sx={{
                                                 "&:hover": {
@@ -88,10 +91,10 @@ export default function AuthPage() {
                                                 },
                                             }}
                                             color="primary.main"
-                                            onClick={setRegister}
+                                            href="/register"
                                         >
                                             Create an account
-                                        </Typography>
+                                        </MuiLink>
                                     </Stack>
                                 </Stack>
                                 <LoginForm type={type} />
@@ -118,7 +121,8 @@ export default function AuthPage() {
                                             Already have an account?
                                         </Typography>
 
-                                        <Typography
+                                        <MuiLink
+                                            component={NextLink}
                                             variant="subtitle2"
                                             sx={{
                                                 "&:hover": {
@@ -127,10 +131,10 @@ export default function AuthPage() {
                                                 },
                                             }}
                                             color="primary.main"
-                                            onClick={setLogin}
+                                            href="/login"
                                         >
                                             Sign in
-                                        </Typography>
+                                        </MuiLink>
                                     </Stack>
                                 </Stack>
                                 <RegisterForm type={type} />

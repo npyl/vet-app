@@ -2,12 +2,11 @@ import Providers from "@/hooks/providers";
 import type { Metadata } from "next";
 import "./global.css";
 
-import DashboardLayout from "@/components/NavigationBar";
 import { AuthGuard } from "@/guards/is-authenticated";
-import AuthPage from "@/components/auth";
 
 export const metadata: Metadata = {
-    title: "Bobos App",
+    title: "V0.93",
+    description: "V0.93!",
 };
 
 export default function RootLayout({
@@ -17,13 +16,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body>
+            <body style={{ backgroundColor: "#F5F5F5" }}>
                 <Providers>
-                    <AuthGuard alternative={<AuthPage />}>
-                        {/* <CorrectEntryUrl> */}
-                        <DashboardLayout>{children}</DashboardLayout>
-                        {/* </CorrectEntryUrl> */}
-                    </AuthGuard>
+                    <AuthGuard>{children}</AuthGuard>
                 </Providers>
             </body>
         </html>

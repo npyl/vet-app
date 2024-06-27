@@ -24,7 +24,7 @@ export default function LoginForm({ type }: Props) {
 
     const router = useRouter();
     const searchParams = useSearchParams();
-    const returnTo = searchParams.get("returnTo");
+    const returnTo = searchParams.get("returnTo") || "/";
 
     const [error, setError] = useState("");
 
@@ -45,7 +45,11 @@ export default function LoginForm({ type }: Props) {
 
             const form = e.target as HTMLFormElement;
 
-            signin(form.email.value, form.password.value, type)
+            signin({
+                email: form.email.value,
+                password: form.password.value,
+                type,
+            })
                 .then(() => returnTo && router.replace(returnTo))
                 .catch(handleError)
                 .finally(() => setIsSubmitting(false));

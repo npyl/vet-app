@@ -27,10 +27,12 @@ const MedicationItem = ({ m, onRemove }: MedicationItemProps) => (
             {m.quantity}
         </IconTypography>
 
-        <IconTypography icon="ph:clock">every: {m.frequency}</IconTypography>
+        <IconTypography icon="ph:clock">
+            every: {m.frequency} hour(s)
+        </IconTypography>
 
         <IconTypography icon="system-uicons:calendar-days">
-            for: {m.duration}
+            for: {m.duration} day(s)
         </IconTypography>
 
         {onRemove ? (

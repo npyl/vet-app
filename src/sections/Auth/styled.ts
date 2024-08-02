@@ -13,7 +13,7 @@ export const Background = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledPaper = styled(Paper)(({ theme }) => ({
-    p: theme.spacing(5),
+    padding: theme.spacing(5),
     borderRadius: "15px",
     position: "relative",
 }));

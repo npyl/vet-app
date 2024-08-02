@@ -2,23 +2,15 @@ import Grid from "@mui/material/Grid";
 import Image from "next/image";
 import { GridItem } from "./styled";
 
-const IMGS = [
-    "/images/hero/cat.png",
-    "/images/hero/dog.png",
-    "/images/hero/cat2.png",
-    "/images/hero/munchkin.png",
-    "/images/hero/paw.png",
-    "/images/hero/mouse.png",
-];
+import Cat from "../../../public/images/hero/cat.png";
+import Cat2 from "../../../public/images/hero/cat2.png";
+import Dog from "../../../public/images/hero/dog.png";
+import Munchkin from "../../../public/images/hero/munchkin.png";
+import Paw from "../../../public/images/hero/paw.png";
+import Mouse from "../../../public/images/hero/mouse.png";
 
-const IMGS2 = [
-    "/images/hero/dog.png",
-    "/images/hero/cat.png",
-    "/images/hero/munchkin.png",
-    "/images/hero/cat2.png",
-    "/images/hero/mouse.png",
-    "/images/hero/paw.png",
-];
+const IMGS = [Cat, Dog, Cat2, Munchkin, Paw, Mouse];
+const IMGS2 = [Dog, Cat, Munchkin, Cat2, Mouse, Paw];
 
 const Hero = () => (
     <Grid container position="absolute" width={1} height={1}>

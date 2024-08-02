@@ -6,7 +6,7 @@ import Iconify from "@/components/iconify";
 
 import { GridColDef } from "@mui/x-data-grid";
 
-import { ICONS } from "@/app/logistics/constants";
+import { ICONS } from "@/constants/logistics";
 
 const RenderMainCell = ({ row }: GridCellParams<IProduct>) => (
     <Stack

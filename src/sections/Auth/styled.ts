@@ -1,4 +1,6 @@
-import { Box, Paper, alpha } from "@mui/material";
+"use client";
+
+import { Box, Grid, Paper, alpha } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const Background = styled(Box)(({ theme }) => ({
@@ -15,3 +17,10 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
     borderRadius: "15px",
     position: "relative",
 }));
+
+export const GridItem = styled(Grid)({
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+});

@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 import Image from "next/image";
-import { styled } from "@mui/material/styles";
+import { GridItem } from "./styled";
 
 const IMGS = [
     "/images/hero/cat.png",
@@ -19,13 +19,6 @@ const IMGS2 = [
     "/images/hero/mouse.png",
     "/images/hero/paw.png",
 ];
-
-const GridItem = styled(Grid)({
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-});
 
 const Hero = () => (
     <Grid container position="absolute" width={1} height={1}>

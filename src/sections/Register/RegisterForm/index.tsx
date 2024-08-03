@@ -1,9 +1,6 @@
 "use client";
 // React
 import { useCallback, useState } from "react";
-// Hooks
-import useAuth from "@/hooks/useAuth";
-import { useRouter, useSearchParams } from "next/navigation";
 // React-Hook-Form
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -14,9 +11,9 @@ import VetForm from "./vet";
 import { UserType } from "@/types/user";
 import { IRegisterReq } from "@/types/auth";
 import { IVetWorkingHoursPOST } from "@/types/workingHours";
-import { SoftAlert } from "@/components/styled";
 import UserForm from "./user";
 import UserTypeSelect from "./UserTypeSelect";
+import register from "@/app/actions/register";
 
 // ----------------------------------------------------------
 
@@ -91,12 +88,6 @@ const VetSchema = yup.object<IRegisterReq>().shape({
 // ----------------------------------------------------------
 
 export default function RegisterForm() {
-    const { signup } = useAuth();
-
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const returnTo = searchParams.get("returnTo") || "/";
-
     const [type, setType] = useState<UserType>("USER");
 
     // ---------------------------------------------------------------
@@ -133,21 +124,13 @@ export default function RegisterForm() {
         },
     });
 
-    const [error, setError] = useState("");
-    const handleError = useCallback(
-        (e: any) => setError(e.errorMessage || "An error has occured"),
-        [],
-    );
-
     const handleSubmit = useCallback(
         (d: IRegisterReq) => {
             console.log("d: ", d);
 
-            signup(d)
-                .then(() => returnTo && router.push(returnTo))
-                .catch(handleError);
+            register(d);
         },
-        [type, returnTo],
+        [type],
     );
 
     return (
@@ -163,7 +146,7 @@ export default function RegisterForm() {
             />
 
             <form onSubmit={methods.handleSubmit(handleSubmit)}>
-                {error ? <SoftAlert severity="error">{error}</SoftAlert> : null}
+                {/* {error ? <SoftAlert severity="error">{error}</SoftAlert> : null} */}
 
                 {type === "USER" ? (
                     <UserForm isSubmitting={methods.formState.isSubmitting} />

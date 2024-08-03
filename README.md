@@ -12,6 +12,8 @@ Concept veterinary app, where a client can register his pet, book appointments, 
 
 -   App Router
 
+[NextAuth 5](https://next-auth.js.org/)
+
 [SWR](https://swr.vercel.app/)
 
 [Prisma ORM](https://www.prisma.io/)

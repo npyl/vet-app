@@ -5,10 +5,11 @@ import { Logout } from "@mui/icons-material";
 import { Avatar, IconButton, Stack, Typography, alpha } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import { signOut } from "next-auth/react";
 
 const NavAccount = () => {
     const router = useRouter();
-    const { logout, user } = useAuth();
+    const { user } = useAuth();
 
     const gotoProfile = useCallback(
         () => router.push(`/profile/${user?.id}`),
@@ -42,7 +43,7 @@ const NavAccount = () => {
                 <Typography variant="button">{user?.email}</Typography>
             </Stack>
 
-            <IconButton onClick={logout}>
+            <IconButton onClick={() => signOut()}>
                 <Logout />
             </IconButton>
         </SpaceBetween>

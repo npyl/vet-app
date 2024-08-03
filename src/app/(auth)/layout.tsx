@@ -6,7 +6,7 @@ import React, { PropsWithChildren } from "react";
 
 // ----------------------------------------------------------------------
 
-const AuthPage: React.FC<PropsWithChildren> = ({ children }) => (
+const AuthLayout: React.FC<PropsWithChildren> = ({ children }) => (
     <main>
         <Background>
             <Hero />
@@ -18,4 +18,4 @@ const AuthPage: React.FC<PropsWithChildren> = ({ children }) => (
     </main>
 );
 
-export default AuthPage;
+export default AuthLayout;

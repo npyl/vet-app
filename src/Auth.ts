@@ -1,18 +1,9 @@
 import { randomUUID } from "crypto";
-import { AuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/util/db";
 
-// Define a type that matches NextAuth's User interface
-type NextAuthUser = {
-    id: string;
-    email: string;
-    name?: string;
-    image?: string;
-    // Add other fields as needed
-};
-
-const authOptions: AuthOptions = {
+export const { auth, handlers, signIn, signOut } = NextAuth({
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -26,8 +17,8 @@ const authOptions: AuthOptions = {
             async authorize(credentials, req) {
                 req; // eslint
 
-                const email = credentials?.["email"];
-                const password = credentials?.["password"];
+                const email = credentials.email as string;
+                const password = credentials.password as string;
                 if (!email || !password) return null;
 
                 const user = await prisma.user.findUnique({
@@ -57,7 +48,7 @@ const authOptions: AuthOptions = {
                 });
 
                 // Convert to NextAuthUser
-                const nextAuthUser: NextAuthUser = {
+                const nextAuthUser = {
                     id: user.id.toString(), // Convert id to string
                     email: user.email,
                     name: `${user.firstName} ${user.lastName}`,
@@ -84,6 +75,4 @@ const authOptions: AuthOptions = {
     session: {
         strategy: "jwt",
     },
-};
-
-export default authOptions;
+});

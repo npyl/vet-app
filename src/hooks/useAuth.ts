@@ -1,6 +1,9 @@
-import { useContext } from "react";
-import { AuthContext } from "@/contexts/jwt-context";
+import { useSession } from "next-auth/react";
 
-const useAuth = () => useContext(AuthContext);
+const useAuth = () => {
+    const { data } = useSession();
+    const { user } = data || {};
+    return { user };
+};
 
 export default useAuth;

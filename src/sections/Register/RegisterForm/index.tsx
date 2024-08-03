@@ -16,7 +16,7 @@ import { IRegisterReq } from "@/types/auth";
 import { IVetWorkingHoursPOST } from "@/types/workingHours";
 import { SoftAlert } from "@/components/styled";
 import UserForm from "./user";
-import UserTypeSelect from "../UserTypeSelect";
+import UserTypeSelect from "./UserTypeSelect";
 
 // ----------------------------------------------------------
 

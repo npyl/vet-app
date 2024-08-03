@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../../../_util/db";
+import prisma from "@/util/db";
 import dayjs from "dayjs";
 
 export const dynamic = "force-dynamic";

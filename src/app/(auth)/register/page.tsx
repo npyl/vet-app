@@ -1,5 +1,10 @@
+import AuthPage from "@/sections/Auth";
 import RegisterContent from "@/sections/Auth";
 
-const RegisterPage = () => <RegisterContent mode="register" />;
+const RegisterPage = () => (
+    <AuthPage>
+        <RegisterContent />
+    </AuthPage>
+);
 
 export default RegisterPage;

@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "../../_util/db";
+import prisma from "@/util/db";
 
 // Define a type that matches NextAuth's User interface
 type NextAuthUser = {

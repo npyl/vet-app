@@ -1,7 +1,7 @@
 import { ILoginReq } from "@/types/auth";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../_util/db";
+import prisma from "@/util/db";
 
 export async function POST(req: Request | NextRequest) {
     try {

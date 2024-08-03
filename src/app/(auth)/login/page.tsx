@@ -1,5 +1,10 @@
+import AuthPage from "@/sections/Auth";
 import LoginContent from "@/sections/Auth";
 
-const LoginPage = () => <LoginContent mode="login" />;
+const LoginPage = () => (
+    <AuthPage>
+        <LoginContent />
+    </AuthPage>
+);
 
 export default LoginPage;

@@ -1,16 +1,13 @@
 import { Button, TextField } from "@mui/material";
 import Stack from "@mui/material/Stack";
-import Form from "./Form";
 import PasswordTextField from "./PasswordTextField";
+import Form from "./Form";
 
 const LoginForm = () => (
     <Form>
         <Stack spacing={0.5}>
             <TextField name="email" label="Email address" />
-
             <PasswordTextField />
-
-            {/* {error ? <SoftAlert severity="error">{error}</SoftAlert> : null} */}
         </Stack>
 
         <Button

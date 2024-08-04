@@ -1,22 +1,16 @@
-// @mui
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
-// config
-import { NAV } from "../config";
-import NavSectionVertical from "../nav-section";
-//
+import NavSectionVertical from "./nav-section";
 import navConfig from "./config";
-
 import BobosLogo from "public/images/bobos_logo.jpg";
 import NavAccount from "./account";
 import Image from "next/image";
 import Link from "next/link";
-import Drawer from "@mui/material/Drawer";
-import { StyledPaperProps } from "./styled";
+import { SidebarContentStack } from "./styled";
 
 const SidebarContent = () => (
-    <>
+    <SidebarContentStack>
         <Stack justifyContent="center" alignItems="center" p={5}>
             <Tooltip title="Home">
                 <Link href="/">
@@ -40,23 +34,7 @@ const SidebarContent = () => (
         <Box sx={{ flexGrow: 1 }} />
 
         <NavAccount />
-    </>
+    </SidebarContentStack>
 );
 
-// ----------------------------------------------------------------------
-
-export default function NavVertical() {
-    return (
-        <Box
-            component="nav"
-            sx={{
-                flexShrink: { lg: 0 },
-                width: { lg: NAV.W_DASHBOARD },
-            }}
-        >
-            <Drawer open variant="permanent" PaperProps={StyledPaperProps}>
-                <SidebarContent />
-            </Drawer>
-        </Box>
-    );
-}
+export default SidebarContent;

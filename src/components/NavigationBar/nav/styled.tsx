@@ -1,19 +1,22 @@
 "use client";
 
 import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
-import { NAV } from "../config";
+import { NAV } from "./config";
 import { alpha, styled } from "@mui/material/styles";
 import { SpaceBetween } from "@/components/styled";
-import { PaperProps } from "@mui/material";
+import { PaperProps, Stack } from "@mui/material";
+
+const SidebarContentStack = styled(Stack)(({ theme }) => ({
+    height: "100%",
+    width: "100%",
+    backgroundColor: alpha(theme.palette.primary.main, 0.3),
+}));
 
 const StyledPaperProps: PaperProps = {
+    className: "SidebarDrawer",
     sx: {
-        display: {
-            xs: "none",
-            lg: "flex",
-        },
         width: NAV.W_DASHBOARD,
-        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.3),
+        display: { xs: "none", lg: "flex" },
     },
 };
 
@@ -40,4 +43,9 @@ const ProfileButton: React.FC<MuiLinkProps> = (props) => (
     />
 );
 
-export { StyledPaperProps, AccountContainer, ProfileButton };
+export {
+    SidebarContentStack,
+    StyledPaperProps,
+    AccountContainer,
+    ProfileButton,
+};

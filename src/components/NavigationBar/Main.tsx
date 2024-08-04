@@ -2,7 +2,6 @@ import Box, { BoxProps } from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import BreadCrumbs from "./Breadcrumbs";
-import MenuButton from "./MenuButton";
 
 export default function Main({ children, sx, ...other }: BoxProps) {
     return (
@@ -24,12 +23,14 @@ export default function Main({ children, sx, ...other }: BoxProps) {
                     xs: "center",
                     lg: "initial",
                 }}
-                p={2}
                 borderBottom="1px solid #ddd"
                 spacing={1}
+                p={2}
+                pl={{
+                    xs: 6, // Make up space for MenuButton on mobile
+                    lg: 2,
+                }}
             >
-                <MenuButton />
-
                 <BreadCrumbs />
             </Stack>
 

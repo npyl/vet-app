@@ -2,7 +2,8 @@
 import { Box } from "@mui/material";
 // auth
 import Main from "./Main";
-import NavVertical from "./nav/NavVertical";
+import NavDesktop from "./Nav";
+import NavMobile from "./NavMobile";
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -17,7 +18,8 @@ export default function DashboardLayout({ children }: Props) {
                 minHeight: { lg: 1 },
             }}
         >
-            <NavVertical />
+            <NavDesktop />
+            <NavMobile />
 
             <Main mb={2}>{children}</Main>
         </Box>

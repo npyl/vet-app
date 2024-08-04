@@ -3,91 +3,61 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Link, ListItemText, Tooltip } from "@mui/material";
 //
 import { NavItemProps } from "./types";
-import { StyledDotIcon, StyledIcon, StyledItem } from "./styles";
+import { StyledItem } from "./styles";
 import Iconify from "@/components/iconify";
+import ActiveIndicator from "./ActiveIndicator";
 
-// ----------------------------------------------------------------------
-
-export default function NavItem({
-    item,
-    depth,
-    open,
-    active,
-    isExternalLink,
-    ...other
-}: NavItemProps) {
+export default function NavItem({ item, depth, open, ...other }: NavItemProps) {
     const { title, path, icon, info, children, disabled, caption } = item;
-    const subItem = depth !== 1;
-    const renderContent = (
-        <StyledItem
-            depth={depth}
-            active={active}
-            disabled={disabled}
-            caption={!!caption}
-            {...other}
-        >
-            {icon ? (
-                <Iconify icon={icon} width={20} height={20} marginRight={1} />
-            ) : null}
 
-            {subItem && (
-                <StyledIcon>
-                    <StyledDotIcon active={active && subItem} />
-                </StyledIcon>
-            )}
+    // Default
+    return (
+        <Link href={path}>
+            <StyledItem
+                depth={depth}
+                disabled={disabled}
+                caption={!!caption}
+                {...other}
+            >
+                {icon ? (
+                    <Iconify
+                        icon={icon}
+                        width={20}
+                        height={20}
+                        marginRight={1}
+                    />
+                ) : null}
 
-            <ListItemText
-                primary={title}
-                secondary={
-                    caption && (
-                        <Tooltip title={caption} placement="top-start">
-                            <span>{caption}</span>
-                        </Tooltip>
-                    )
-                }
-                primaryTypographyProps={{
-                    noWrap: true,
-                    component: "span",
-                    variant: active ? "subtitle2" : "body2",
-                }}
-                secondaryTypographyProps={{
-                    noWrap: true,
-                    variant: "caption",
-                }}
-            />
+                <ListItemText
+                    primary={title}
+                    secondary={
+                        caption && (
+                            <Tooltip title={caption} placement="top-start">
+                                <span>{caption}</span>
+                            </Tooltip>
+                        )
+                    }
+                    primaryTypographyProps={{
+                        noWrap: true,
+                        component: "span",
+                    }}
+                    secondaryTypographyProps={{
+                        noWrap: true,
+                        variant: "caption",
+                    }}
+                />
 
-            {info && (
-                <Box component="span" sx={{ lineHeight: 0 }}>
-                    {info}
-                </Box>
-            )}
+                {info && (
+                    <Box component="span" sx={{ lineHeight: 0 }}>
+                        {info}
+                    </Box>
+                )}
 
-            {!!children && (!open ? <ExpandMoreIcon /> : <ExpandLessIcon />)}
-        </StyledItem>
+                <ActiveIndicator path={path} />
+
+                {!!children &&
+                    (!open ? <ExpandMoreIcon /> : <ExpandLessIcon />)}
+            </StyledItem>
+        </Link>
     );
-
-    const renderItem = () => {
-        // ExternalLink
-        if (isExternalLink)
-            return (
-                <Link
-                    href={path}
-                    target="_blank"
-                    rel="noopener"
-                    underline="none"
-                >
-                    {renderContent}
-                </Link>
-            );
-
-        // Has child
-        if (children) {
-            return renderContent;
-        }
-
-        // Default
-        return <Link href={path}>{renderContent}</Link>;
-    };
-
-    return renderItem();
 }

@@ -7,7 +7,6 @@ export type INavItem = {
     depth: number;
     open?: boolean;
     active?: boolean;
-    isExternalLink?: boolean;
 };
 
 export type NavItemProps = INavItem & ListItemButtonProps;

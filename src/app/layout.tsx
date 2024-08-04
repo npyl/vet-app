@@ -5,8 +5,8 @@ import { getServerSession } from "next-auth";
 import "./global.css";
 
 export const metadata: Metadata = {
-    title: "V0.93",
-    description: "V0.93!",
+    title: "V0.94",
+    description: "V0.94!",
 };
 
 const RootLayout: React.FC<PropsWithChildren> = async ({ children }) => {

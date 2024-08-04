@@ -2,12 +2,12 @@ import Grid from "@mui/material/Grid";
 import Image from "next/image";
 import { GridItem } from "./styled";
 
-import Cat from "../../../public/images/hero/cat.png";
-import Cat2 from "../../../public/images/hero/cat2.png";
-import Dog from "../../../public/images/hero/dog.png";
-import Munchkin from "../../../public/images/hero/munchkin.png";
-import Paw from "../../../public/images/hero/paw.png";
-import Mouse from "../../../public/images/hero/mouse.png";
+import Cat from "/public/images/hero/cat.png";
+import Cat2 from "/public/images/hero/cat2.png";
+import Dog from "/public/images/hero/dog.png";
+import Munchkin from "/public/images/hero/munchkin.png";
+import Paw from "/public/images/hero/paw.png";
+import Mouse from "/public/images/hero/mouse.png";
 
 const IMGS = [Cat, Dog, Cat2, Munchkin, Paw, Mouse];
 const IMGS2 = [Dog, Cat, Munchkin, Cat2, Mouse, Paw];

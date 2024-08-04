@@ -1,20 +1,16 @@
-"use client";
-
-import useAuth from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
+import { getProfile } from "@/Auth";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
 interface OnlyVetGuardProps {
     children: ReactNode;
 }
 
-const OnlyVetGuard = ({ children }: OnlyVetGuardProps) => {
-    const auth = useAuth();
-    const router = useRouter();
+const OnlyVetGuard = async ({ children }: OnlyVetGuardProps) => {
+    const profile = await getProfile();
 
-    if (auth.user?.type !== "VET") {
-        router.push("/pets");
-        return null;
+    if (profile?.type !== "VET") {
+        redirect("/pets");
     }
 
     return <>{children}</>;

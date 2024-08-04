@@ -1,15 +1,12 @@
-"use client";
-
-import useAuth from "@/hooks/useAuth";
-
 import VetDashboard from "@/sections/VetDashboard";
 import UserDashboard from "@/sections/UserDashboard";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { getProfile } from "@/Auth";
 
-export default function Home() {
-    const { user } = useAuth();
+export default async function Home() {
+    const user = await getProfile();
 
     return (
         <Box py={1}>

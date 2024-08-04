@@ -1,3 +1,5 @@
+"use client";
+
 import Grid from "@mui/material/Grid";
 import AppointmentsList from "@/components/Appointments";
 import AlmostOutOfStock from "./AlmostOutOf";

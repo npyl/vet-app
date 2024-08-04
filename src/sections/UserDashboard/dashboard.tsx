@@ -1,3 +1,5 @@
+"use client";
+
 import Grid from "@mui/material/Grid";
 import Medication from "./Medication";
 import Appointments from "@/components/Appointments";

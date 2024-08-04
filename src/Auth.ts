@@ -1,9 +1,9 @@
 import { randomUUID } from "crypto";
-import NextAuth from "next-auth";
+import NextAuth, { getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/util/db";
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
+export const handlers = NextAuth({
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -17,8 +17,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             async authorize(credentials, req) {
                 req; // eslint
 
-                const email = credentials.email as string;
-                const password = credentials.password as string;
+                const email = credentials?.email as string;
+                const password = credentials?.password as string;
                 if (!email || !password) return null;
 
                 const user = await prisma.user.findUnique({
@@ -60,9 +60,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }),
     ],
     callbacks: {
-        authorized: async ({ auth }) => {
-            // Logged in users are authenticated, otherwise redirect to login page
-            return !!auth;
+        // NOTE: called whenever a token is created (signIn) or updated (update from session)
+        async jwt({ token, user }) {
+            return { ...token, ...user };
+        },
+        async session({ session, token }) {
+            return { ...session, user: token };
         },
     },
     secret: process.env.NEXTAUTH_SECRET,
@@ -74,3 +77,19 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         strategy: "jwt",
     },
 });
+
+export const getProfile = async () => {
+    const session = await getServerSession();
+    const { user: sessionUser } = session || {};
+    const { email } = sessionUser || {};
+
+    if (!email) throw "Could not logged-in user's id!";
+
+    const user = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+    });
+
+    return user;
+};

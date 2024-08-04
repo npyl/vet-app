@@ -1,8 +1,8 @@
 import Iconify from "@/components/iconify";
-import { SpaceBetween } from "@/components/styled";
-import { Stack, StackProps, Typography } from "@mui/material";
-import { alpha } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import Stack, { StackProps } from "@mui/material/Stack";
 import { ReactNode } from "react";
+import StyledSpaceBetween from "./styled";
 
 interface SectionHeaderProps extends StackProps {
     title: string;
@@ -16,29 +16,17 @@ const SectionHeader = ({
     icon,
     endNode,
     color = "primary",
-    sx,
     ...props
 }: SectionHeaderProps) => (
-    <SpaceBetween
-        p={2}
-        alignItems="center"
-        sx={{
-            backgroundColor: (theme) => alpha(theme.palette[color].main, 0.1),
-            ...sx,
-        }}
-        {...props}
-    >
+    <StyledSpaceBetween {...props} color={color}>
         <Stack direction="row" alignItems="center" spacing={1}>
             <Iconify icon={icon} width={30} height={30} color="primary.main" />
-            <Typography
-                color={(theme) => theme.palette[color].main}
-                variant="h6"
-            >
+            <Typography color={color} variant="h6">
                 {title}
             </Typography>
         </Stack>
         {endNode}
-    </SpaceBetween>
+    </StyledSpaceBetween>
 );
 
 export default SectionHeader;

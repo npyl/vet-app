@@ -1,7 +1,10 @@
 "use client";
 
-import { styled } from "@mui/material/styles";
 import { ListItem as MuiListItem } from "@mui/material";
+import type { ListItemTextProps } from "@mui/material";
+import { ListItemText } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { Direction } from "./types";
 
 const StyledListItem = styled(MuiListItem)(({ theme }) => ({
     flex: 1,
@@ -19,4 +22,20 @@ const StyledListItem = styled(MuiListItem)(({ theme }) => ({
     },
 }));
 
-export default StyledListItem;
+interface CustomProps extends ListItemTextProps {
+    align?: Direction;
+}
+
+const CustomListItemText = styled(ListItemText)<CustomProps>(({ align }) => ({
+    display: "flex",
+    // horizontal vs. vertical mode
+    ...(align === "horizontal"
+        ? {
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+          }
+        : {}),
+}));
+
+export { StyledListItem, CustomListItemText };

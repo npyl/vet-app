@@ -1,7 +1,4 @@
-"use client";
-
-import { VetBadge } from "@/components/Badge";
-import IUser from "@/types/user";
+import VetBadge from "@/components/VetBadge";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -9,24 +6,28 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import useSWR from "swr";
-import { useParams } from "next/navigation";
-import { ProfileSkeleton } from "@/components/Skeleton";
+import prisma from "@/util/db";
+import IUser from "@/types/user";
+import NextPageProps from "@/types/NextPageProps";
 // ...
 import Office from "./Office";
 import WorkingHours from "./WorkingHours";
 import PersonalInfo from "./Personal";
 
-const Profile = () => {
-    const { id } = useParams();
+const getUserById = async (id: number) => {
+    const user = await prisma.user.findUnique({
+        where: {
+            id,
+        },
+    });
 
-    const { data: user, isLoading } = useSWR<IUser>(
-        id ? `/api/user/${id}` : null,
-    );
+    return user as IUser;
+};
 
-    if (isLoading) {
-        return <ProfileSkeleton />;
-    }
+const Profile: React.FC<NextPageProps> = async ({ params }) => {
+    const { id } = params;
+
+    const user = await getUserById(+id);
 
     return (
         <Container maxWidth="md">

@@ -1,3 +1,5 @@
+"use client";
+
 import { SectionHeader } from "@/components/Section";
 import Chart, { useChart } from "@/components/chart";
 import { IVetWorkingHours } from "@/types/workingHours";

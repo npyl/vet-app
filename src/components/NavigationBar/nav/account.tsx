@@ -1,4 +1,4 @@
-import VetBadge from "@/components/Badge/Vet";
+import VetBadge from "@/components/VetBadge";
 import { SpaceBetween } from "@/components/styled";
 import useAuth from "@/hooks/useAuth";
 import { Logout } from "@mui/icons-material";

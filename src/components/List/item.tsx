@@ -1,27 +1,7 @@
-"use client";
-
-import type { ListItemTextProps } from "@mui/material";
-import { ListItemText, Typography } from "@mui/material";
-import StyledListItem from "./styled";
-import { styled } from "@mui/material/styles";
+import { Typography } from "@mui/material";
+import { StyledListItem, CustomListItemText } from "./styled";
 import type { FC } from "react";
-import ListItemProps, { Direction } from "./types";
-
-interface CustomProps extends ListItemTextProps {
-    align?: Direction;
-}
-
-const CustomListItemText = styled(ListItemText)<CustomProps>(({ align }) => ({
-    display: "flex",
-    // horizontal vs. vertical mode
-    ...(align === "horizontal"
-        ? {
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-          }
-        : {}),
-}));
+import ListItemProps from "./types";
 
 // --------------------------------------------------------------------------------
 

@@ -1,11 +1,10 @@
-// @mui
-import { MenuOutlined } from "@mui/icons-material";
-import { Box, BoxProps, Container, IconButton, Stack } from "@mui/material";
+import Box, { BoxProps } from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Container from "@mui/material/Container";
 import BreadCrumbs from "./Breadcrumbs";
+import MenuButton from "./MenuButton";
 
 export default function Main({ children, sx, ...other }: BoxProps) {
-    // const isDesktop = useResponsive("up", "lg");
-
     return (
         <Box
             component="main"
@@ -29,9 +28,7 @@ export default function Main({ children, sx, ...other }: BoxProps) {
                 borderBottom="1px solid #ddd"
                 spacing={1}
             >
-                <IconButton>
-                    <MenuOutlined />
-                </IconButton>
+                <MenuButton />
 
                 <BreadCrumbs />
             </Stack>

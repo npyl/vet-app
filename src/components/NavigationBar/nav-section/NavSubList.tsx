@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { NavListProps } from "../types";
+import { NavListProps } from "./types";
 import NavList from "./NavList";
 
 type NavListSubProps = {

@@ -2,7 +2,7 @@
 import List from "@mui/material/List";
 import Stack from "@mui/material/Stack";
 //
-import { NavSectionProps } from "../types";
+import { NavSectionProps } from "./types";
 import NavList from "./NavList";
 import { StyledSubheader } from "./styles";
 

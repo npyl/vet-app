@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 // config
 import { NAV } from "../config";
-import { NavSectionVertical } from "../nav-section";
+import NavSectionVertical from "../nav-section";
 //
 import navConfig from "./config";
 
@@ -46,8 +46,6 @@ const SidebarContent = () => (
 // ----------------------------------------------------------------------
 
 export default function NavVertical() {
-    // const isDesktop = useResponsive("up", "lg");
-
     return (
         <Box
             component="nav"
@@ -56,21 +54,9 @@ export default function NavVertical() {
                 width: { lg: NAV.W_DASHBOARD },
             }}
         >
-            {/* {isDesktop ? ( */}
             <Drawer open variant="permanent" PaperProps={StyledPaperProps}>
                 <SidebarContent />
             </Drawer>
-
-            {/* ) : (
-                <Drawer
-                    ModalProps={{
-                        keepMounted: true,
-                    }}
-                    PaperProps={StyledPaperProps}
-                >
-                    <SidebarContent />
-                </Drawer>
-            )} */}
         </Box>
     );
 }

@@ -2,7 +2,7 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Link, ListItemText, Tooltip } from "@mui/material";
 //
-import { NavItemProps } from "../types";
+import { NavItemProps } from "./types";
 import { StyledDotIcon, StyledIcon, StyledItem } from "./styles";
 import Iconify from "@/components/iconify";
 

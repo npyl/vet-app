@@ -1,4 +1,5 @@
 "use client";
+
 import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
 import { NAV } from "../config";
 import { alpha, styled } from "@mui/material/styles";
@@ -7,6 +8,10 @@ import { PaperProps } from "@mui/material";
 
 const StyledPaperProps: PaperProps = {
     sx: {
+        display: {
+            xs: "none",
+            lg: "flex",
+        },
         width: NAV.W_DASHBOARD,
         bgcolor: (theme) => alpha(theme.palette.primary.main, 0.3),
     },

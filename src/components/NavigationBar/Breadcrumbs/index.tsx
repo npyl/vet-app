@@ -1,27 +1,13 @@
+"use client";
+
 import MuiBreadcrumbs from "@mui/material/Breadcrumbs";
-import { alpha, styled } from "@mui/material/styles";
 import HomeIcon from "@mui/icons-material/Home";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { usePathname } from "next/navigation";
-import Stack, { StackProps } from "@mui/material/Stack";
+import { StackProps } from "@mui/material/Stack";
 import { ReactNode } from "react";
 import { Typography } from "@mui/material";
-
-const BreadcrumbStack = styled(Stack)(({ theme }) => ({
-    flexDirection: "row",
-    alignItems: "center",
-    gap: theme.spacing(1),
-    width: "max-content",
-    // ...
-    backgroundColor: alpha(theme.palette.primary.main, 0.2),
-    color: theme.palette.primary.main,
-    borderRadius: "15px",
-    // ...
-    paddingTop: theme.spacing(0.5),
-    paddingBottom: theme.spacing(0.5),
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-}));
+import BreadcrumbStack from "./styled";
 
 interface BreadcrumbPros extends StackProps {
     label: string;

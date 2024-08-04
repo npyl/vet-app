@@ -1,20 +1,10 @@
 // @mui
 import { MenuOutlined } from "@mui/icons-material";
 import { Box, BoxProps, Container, IconButton, Stack } from "@mui/material";
-import BreadCrumbs from "./BreadCrumbs";
-import useResponsive from "@/hooks/useResponsive";
+import BreadCrumbs from "./Breadcrumbs";
 
-interface MainProps extends BoxProps {
-    onOpenSidebar: VoidFunction;
-}
-
-export default function Main({
-    onOpenSidebar,
-    children,
-    sx,
-    ...other
-}: MainProps) {
-    const isDesktop = useResponsive("up", "lg");
+export default function Main({ children, sx, ...other }: BoxProps) {
+    // const isDesktop = useResponsive("up", "lg");
 
     return (
         <Box
@@ -39,11 +29,9 @@ export default function Main({
                 borderBottom="1px solid #ddd"
                 spacing={1}
             >
-                {isDesktop ? null : (
-                    <IconButton onClick={onOpenSidebar}>
-                        <MenuOutlined />
-                    </IconButton>
-                )}
+                <IconButton>
+                    <MenuOutlined />
+                </IconButton>
 
                 <BreadCrumbs />
             </Stack>

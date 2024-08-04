@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 // next
 import { usePathname } from "next/navigation";
@@ -9,6 +11,7 @@ import useActiveLink from "@/hooks/useActiveLink";
 import { NavListProps } from "../types";
 import NavItem from "./NavItem";
 import useAuth from "@/hooks/useAuth";
+import NavSubList from "./NavSubList";
 
 // ----------------------------------------------------------------------
 
@@ -62,28 +65,6 @@ export default function NavList({ data, depth, hasChild }: NavListRootProps) {
                     <NavSubList data={data.children} depth={depth} />
                 </Collapse>
             )}
-        </>
-    );
-}
-
-// ----------------------------------------------------------------------
-
-type NavListSubProps = {
-    data: NavListProps[];
-    depth: number;
-};
-
-function NavSubList({ data, depth }: NavListSubProps) {
-    return (
-        <>
-            {data.map((list) => (
-                <NavList
-                    key={list.title + list.path}
-                    data={list}
-                    depth={depth + 1}
-                    hasChild={!!list.children}
-                />
-            ))}
         </>
     );
 }

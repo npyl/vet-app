@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-// next
-import { usePathname } from "next/navigation";
 // @mui
-import { Box, Drawer, Stack, Tooltip } from "@mui/material";
-// hooks
-import useResponsive from "@/hooks/useResponsive";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 // config
 import { NAV } from "../config";
 import { NavSectionVertical } from "../nav-section";
@@ -15,53 +12,41 @@ import BobosLogo from "public/images/bobos_logo.jpg";
 import NavAccount from "./account";
 import Image from "next/image";
 import Link from "next/link";
+import Drawer from "@mui/material/Drawer";
+import { StyledPaperProps } from "./styled";
 
-import { alpha } from "@mui/material/styles";
+const SidebarContent = () => (
+    <>
+        <Stack justifyContent="center" alignItems="center" p={5}>
+            <Tooltip title="Home">
+                <Link href="/">
+                    <Image
+                        alt="Bobos logo"
+                        src={BobosLogo.src}
+                        width={200}
+                        height={200}
+                        style={{
+                            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
+                            borderRadius: "50px",
+                        }}
+                    />
+                </Link>
+            </Tooltip>
+        </Stack>
+
+        <NavSectionVertical data={navConfig} />
+
+        {/* Vertical Space */}
+        <Box sx={{ flexGrow: 1 }} />
+
+        <NavAccount />
+    </>
+);
 
 // ----------------------------------------------------------------------
 
-type Props = {
-    openNav: boolean;
-    onCloseNav: VoidFunction;
-};
-
-export default function NavVertical({ openNav, onCloseNav }: Props) {
-    const pathname = usePathname();
-    const isDesktop = useResponsive("up", "lg");
-
-    useEffect(() => {
-        if (openNav) {
-            onCloseNav();
-        }
-    }, [pathname]);
-
-    const renderContent = (
-        <>
-            <Stack justifyContent="center" alignItems="center" p={5}>
-                <Tooltip title="Home">
-                    <Link href="/">
-                        <Image
-                            alt="Bobos logo"
-                            src={BobosLogo.src}
-                            width={200}
-                            height={200}
-                            style={{
-                                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.3)",
-                                borderRadius: "50px",
-                            }}
-                        />
-                    </Link>
-                </Tooltip>
-            </Stack>
-
-            <NavSectionVertical data={navConfig} />
-
-            {/* Vertical Space */}
-            <Box sx={{ flexGrow: 1 }} />
-
-            <NavAccount />
-        </>
-    );
+export default function NavVertical() {
+    // const isDesktop = useResponsive("up", "lg");
 
     return (
         <Box
@@ -71,39 +56,21 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
                 width: { lg: NAV.W_DASHBOARD },
             }}
         >
-            {isDesktop ? (
+            {/* {isDesktop ? ( */}
+            <Drawer open variant="permanent" PaperProps={StyledPaperProps}>
+                <SidebarContent />
+            </Drawer>
+
+            {/* ) : (
                 <Drawer
-                    open
-                    variant="permanent"
-                    PaperProps={{
-                        sx: {
-                            width: NAV.W_DASHBOARD,
-                            bgcolor: (theme) =>
-                                alpha(theme.palette.primary.main, 0.3),
-                        },
-                    }}
-                >
-                    {renderContent}
-                </Drawer>
-            ) : (
-                <Drawer
-                    open={openNav}
-                    onClose={onCloseNav}
                     ModalProps={{
                         keepMounted: true,
                     }}
-                    PaperProps={{
-                        sx: {
-                            paddingTop: 1,
-                            width: NAV.W_DASHBOARD,
-                            bgcolor: (theme) =>
-                                alpha(theme.palette.primary.main, 0.3),
-                        },
-                    }}
+                    PaperProps={StyledPaperProps}
                 >
-                    {renderContent}
+                    <SidebarContent />
                 </Drawer>
-            )}
+            )} */}
         </Box>
     );
 }

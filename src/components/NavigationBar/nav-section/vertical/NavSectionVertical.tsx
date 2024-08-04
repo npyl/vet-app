@@ -1,6 +1,6 @@
 // @mui
-import { List, Stack } from "@mui/material";
-
+import List from "@mui/material/List";
+import Stack from "@mui/material/Stack";
 //
 import { NavSectionProps } from "../types";
 import NavList from "./NavList";

@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 // @mui
 import { Box } from "@mui/material";
 // auth
@@ -13,10 +10,6 @@ type Props = {
 };
 
 export default function DashboardLayout({ children }: Props) {
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
     return (
         <Box
             sx={{
@@ -24,11 +17,9 @@ export default function DashboardLayout({ children }: Props) {
                 minHeight: { lg: 1 },
             }}
         >
-            <NavVertical openNav={open} onCloseNav={handleClose} />
+            <NavVertical />
 
-            <Main mb={2} onOpenSidebar={handleOpen}>
-                {children}
-            </Main>
+            <Main mb={2}>{children}</Main>
         </Box>
     );
 }

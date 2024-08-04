@@ -1,52 +1,30 @@
 import VetBadge from "@/components/VetBadge";
-import { SpaceBetween } from "@/components/styled";
-import useAuth from "@/hooks/useAuth";
-import { Logout } from "@mui/icons-material";
-import { Avatar, IconButton, Stack, Typography, alpha } from "@mui/material";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
-import { signOut } from "next-auth/react";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { getProfile } from "@/Auth";
+import SignOutButton from "./SignOutButton";
+import NextLink from "next/link";
+import { AccountContainer, ProfileButton } from "./styled";
 
-const NavAccount = () => {
-    const router = useRouter();
-    const { user } = useAuth();
-
-    const gotoProfile = useCallback(
-        () => router.push(`/profile/${user?.id}`),
-        [],
-    );
+const NavAccount = async () => {
+    const user = await getProfile();
 
     return (
-        <SpaceBetween
-            alignItems="center"
-            p={2}
-            borderTop="1px solid"
-            borderColor={(theme) => alpha(theme.palette.primary.main, 0.5)}
-        >
-            <Stack
-                sx={{
-                    borderRadius: "15px",
-                    "&:hover": {
-                        cursor: "pointer",
-                        backgroundColor: (theme) =>
-                            alpha(theme.palette.primary.main, 0.3),
-                        color: "primary.main",
-                    },
-                    p: 1,
-                }}
-                onClick={gotoProfile}
+        <AccountContainer>
+            <ProfileButton
+                component={NextLink}
+                href={`/profile/${user?.id || -1}`}
             >
                 <Stack direction="row" alignItems="center" spacing={1}>
                     <Avatar src={user?.avatar || ""} />
                     {user?.type === "VET" ? <VetBadge /> : null}
                 </Stack>
                 <Typography variant="button">{user?.email}</Typography>
-            </Stack>
+            </ProfileButton>
 
-            <IconButton onClick={() => signOut()}>
-                <Logout />
-            </IconButton>
-        </SpaceBetween>
+            <SignOutButton />
+        </AccountContainer>
     );
 };
 

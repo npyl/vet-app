@@ -1,3 +1,5 @@
+"use client";
+
 import { ApiProvider } from "@/contexts/api";
 import { SWRProvider } from "@/app/providers/swr";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

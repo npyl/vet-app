@@ -32,8 +32,6 @@ const StockDataGrid = ({
             // ...
             columns={COLUMNS}
             paginationMode="client"
-            sortingBy=""
-            sortingOrder="desc"
             // ...
             resource="logistics"
             {...props}

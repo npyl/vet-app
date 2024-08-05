@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { getProfile } from "@/Auth";
 
 export default async function Home() {
-    const user = await getProfile();
+    const user = await getProfile({});
 
     return (
         <Box py={1}>

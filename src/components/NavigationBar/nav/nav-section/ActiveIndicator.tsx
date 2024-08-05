@@ -11,6 +11,8 @@ const ActiveIndicator: React.FC<Props> = ({ path }) => {
     const pathname = usePathname();
     const active = path === pathname;
 
+    if (!active) return null;
+
     return (
         <StyledIcon>
             <StyledDotIcon active={active} />

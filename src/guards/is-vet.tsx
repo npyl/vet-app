@@ -7,7 +7,7 @@ interface OnlyVetGuardProps {
 }
 
 const OnlyVetGuard = async ({ children }: OnlyVetGuardProps) => {
-    const profile = await getProfile();
+    const profile = await getProfile({});
 
     if (profile?.type !== "VET") {
         redirect("/pets");

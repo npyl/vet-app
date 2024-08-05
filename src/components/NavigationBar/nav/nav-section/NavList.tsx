@@ -11,7 +11,7 @@ type NavListRootProps = {
 };
 
 export default async function NavList({ data, depth }: NavListRootProps) {
-    const user = await getProfile();
+    const user = await getProfile({});
 
     const hasChildren = !!data.children;
 

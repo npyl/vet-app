@@ -11,9 +11,6 @@ type GridProps = {
     rows: GridRowsProp;
     columns: GridColDef[];
 
-    sortingBy: string | null;
-    sortingOrder: string | null;
-
     page: number;
     pageSize: number;
     totalRows?: number;
@@ -25,7 +22,7 @@ type GridProps = {
     onBulkDelete?: (selectedRows: GridRowSelectionModel) => void;
     onBulkEdit?: (selectedRows: GridRowSelectionModel) => void;
 
-    resource?: string;
-} & Omit<DataGridProps, "sortingOrder">;
+    resource: string;
+} & DataGridProps;
 
 export default GridProps;

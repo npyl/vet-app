@@ -86,8 +86,7 @@ export default function PetsTable({ rows, isLoading }: PetsTableProps) {
                     // ...
                     page={0}
                     pageSize={10}
-                    sortingBy=""
-                    sortingOrder=""
+                    resource="pets"
                 />
             ) : (
                 <DataGrid
@@ -98,8 +97,6 @@ export default function PetsTable({ rows, isLoading }: PetsTableProps) {
                     page={page}
                     pageSize={PAGE_SIZE}
                     totalRows={rows.length ?? 0}
-                    sortingBy=""
-                    sortingOrder=""
                     onPaginationModelChange={handlePaginationChange}
                     // ...
                     resource="pets"

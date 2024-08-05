@@ -19,9 +19,13 @@ const getUserById = async (id: number) => {
         where: {
             id,
         },
+        include: {
+            workplace: true,
+            workingHours: true,
+        },
     });
 
-    return user as IUser;
+    return user as unknown as IUser;
 };
 
 const Profile: React.FC<NextPageProps> = async ({ params }) => {

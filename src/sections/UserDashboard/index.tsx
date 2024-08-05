@@ -1,33 +1,31 @@
-"use client";
-
 import Grid from "@mui/material/Grid";
-import AppointmentsList from "@/components/Appointments";
-import AlmostOutOfStock from "./AlmostOutOf";
-import { SectionHeader } from "@/components/Section";
+import Medication from "./Medication";
+import Appointments from "@/components/Appointments";
+import SectionHeader from "@/components/Section/Header";
 
-const VetDashboard = () => (
+const UserDashboard = () => (
     <Grid container spacing={5}>
         <Grid item xs={12} lg={6} gap={1}>
             <SectionHeader
-                title="Today's Appointments"
+                title="Upcoming Appointments"
                 icon=""
                 color="primary"
                 borderRadius="10px 10px 0 0"
             />
 
-            <AppointmentsList variant="VET" />
+            <Appointments variant="USER" />
         </Grid>
         <Grid item xs={12} lg={6}>
             <SectionHeader
-                title="Almost out of stock"
+                title="Current medication"
                 icon=""
-                color="warning"
+                color="primary"
                 borderRadius="10px 10px 0 0"
             />
 
-            <AlmostOutOfStock />
+            <Medication />
         </Grid>
     </Grid>
 );
 
-export default VetDashboard;
+export default UserDashboard;

@@ -1,7 +1,7 @@
+"use client";
+
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import AppointmentItem from "./AppointmentItem";
-import { paper } from "@/theme/css";
 import { UserType } from "@/types/user";
 import { Divider } from "@mui/material";
 import useGetAppointments from "./hook";
@@ -9,6 +9,7 @@ import SkeletonItem from "./SkeletonItem";
 import NoAppointments from "./NoAppointments";
 import Pagination from "@/components/Pagination";
 import { useCallback, useState } from "react";
+import { StyledPaper } from "./styled";
 
 const PAGE_SIZE = 5;
 
@@ -25,13 +26,7 @@ export const AppointmentsList = ({ variant }: AppointmentsListProps) => {
     if (!isLoading && appointments.length === 0) return <NoAppointments />;
 
     return (
-        <Paper
-            sx={(theme) => ({
-                ...paper(theme.palette.background.paper),
-                pb: 2,
-            })}
-            elevation={15}
-        >
+        <StyledPaper elevation={15}>
             <Pagination
                 page={page}
                 pageSize={PAGE_SIZE}
@@ -52,7 +47,7 @@ export const AppointmentsList = ({ variant }: AppointmentsListProps) => {
                     </Grid>
                 ))}
             </Pagination>
-        </Paper>
+        </StyledPaper>
     );
 };
 

@@ -16,7 +16,6 @@ function NavSubList({ data, depth }: NavListSubProps) {
                     key={list.title + list.path}
                     data={list}
                     depth={depth + 1}
-                    hasChild={!!list.children}
                 />
             ))}
         </>

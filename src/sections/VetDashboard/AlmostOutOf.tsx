@@ -1,37 +1,33 @@
+"use client";
+
 // react
-import { useCallback, useMemo, useState } from "react";
+import React, { use, useCallback, useState } from "react";
 // misc
 import StockDataGrid from "@/components/DataGrid/Stock";
 import { IProduct } from "@/types/products";
 import { GridPaginationModel } from "@mui/x-data-grid";
-import useSWR from "swr";
 import Placeholder from "./Placeholder";
 
 const PAGE_SIZE = 5;
 
-const AlmostOutOfStock = () => {
+interface Props {
+    data: Promise<IProduct[]>;
+}
+
+const AlmostOutOfStock: React.FC<Props> = ({ data }) => {
     const [page, setPage] = useState(0);
     const handlePaginationChange = useCallback(
         ({ page }: GridPaginationModel) => setPage(page),
         [],
     );
 
-    const { data, isLoading } = useSWR<IProduct[]>(`/api/stock`);
+    const almostOutOfStock = use(data);
 
-    const almostOutOfStock = useMemo(
-        () =>
-            Array.isArray(data)
-                ? data.filter(({ stock }) => stock <= 20) // <= 20 items
-                : [],
-        [data],
-    );
-
-    if (!isLoading && almostOutOfStock.length === 0) return <Placeholder />;
+    if (almostOutOfStock.length === 0) return <Placeholder />;
 
     return (
         <StockDataGrid
             columnHeaderHeight={0} // hide
-            loading={isLoading}
             sx={{
                 borderRadius: "0 0 10px 10px",
             }}

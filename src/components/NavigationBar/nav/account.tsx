@@ -8,7 +8,7 @@ import NextLink from "next/link";
 import { AccountContainer, ProfileButton } from "./styled";
 
 const NavAccount = async () => {
-    const user = await getProfile();
+    const user = await getProfile({});
 
     return (
         <AccountContainer>

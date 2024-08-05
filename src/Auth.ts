@@ -78,7 +78,12 @@ export const handlers = NextAuth({
     },
 });
 
-export const getProfile = async () => {
+interface Options {
+    workingHours?: boolean;
+    workplace?: boolean;
+}
+
+export const getProfile = async ({ workingHours, workplace }: Options) => {
     const session = await getServerSession();
     const { user: sessionUser } = session || {};
     const { email } = sessionUser || {};
@@ -88,6 +93,10 @@ export const getProfile = async () => {
     const user = await prisma.user.findUnique({
         where: {
             email,
+        },
+        include: {
+            workingHours,
+            workplace,
         },
     });
 

@@ -1,37 +1,16 @@
-import useAuth from "@/hooks/useAuth";
 import { IMedication } from "@/types/medication";
-import { useMemo } from "react";
-import useSWR from "swr";
+import { use } from "react";
 import MedicationItem from "@/components/MedicationItem";
-import SkeletonItem from "@/components/Appointments/SkeletonItem";
 import NoMedication from "./NoMedication";
 
-const useCurrentMedication = () => {
-    const { user } = useAuth();
+interface Props {
+    data: Promise<IMedication[]>;
+}
 
-    const { data, isLoading } = useSWR<IMedication[]>(
-        user?.id ? `/api/user/${user.id}/medication` : null,
-    );
+const Medication: React.FC<Props> = ({ data }) => {
+    const medication = use(data);
 
-    const medication = useMemo(() => (Array.isArray(data) ? data : []), [data]);
-
-    return { medication, isLoading };
-};
-
-const Medication = () => {
-    const { medication, isLoading } = useCurrentMedication();
-
-    if (isLoading) {
-        return (
-            <>
-                <SkeletonItem variant="VET" />
-                <SkeletonItem variant="VET" />
-                <SkeletonItem variant="VET" />
-            </>
-        );
-    }
-
-    if (!isLoading && medication.length === 0) {
+    if (medication?.length === 0) {
         return <NoMedication />;
     }
 

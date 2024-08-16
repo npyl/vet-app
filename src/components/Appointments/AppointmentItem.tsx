@@ -1,3 +1,5 @@
+"use client";
+
 import IconTypography from "@/components/iconify/Typography";
 import { SpaceBetween } from "@/components/styled";
 import { IAppointment } from "@/types/appointment";

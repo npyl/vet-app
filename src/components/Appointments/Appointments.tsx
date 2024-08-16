@@ -4,26 +4,29 @@ import Grid from "@mui/material/Grid";
 import AppointmentItem from "./AppointmentItem";
 import { UserType } from "@/types/user";
 import { Divider } from "@mui/material";
-import useGetAppointments from "./hook";
-import SkeletonItem from "./SkeletonItem";
 import NoAppointments from "./NoAppointments";
 import Pagination from "@/components/Pagination";
-import { useCallback, useState } from "react";
+import { use, useCallback, useState } from "react";
 import { StyledPaper } from "./styled";
+import { IAppointment } from "@/types/appointment";
 
 const PAGE_SIZE = 5;
 
 interface AppointmentsListProps {
     variant: UserType;
+    appointmentsPromise: Promise<IAppointment[]>;
 }
 
-export const AppointmentsList = ({ variant }: AppointmentsListProps) => {
-    const { appointments, isLoading } = useGetAppointments();
+export const AppointmentsList = ({
+    appointmentsPromise,
+    variant,
+}: AppointmentsListProps) => {
+    const appointments = use(appointmentsPromise);
 
     const [page, setPage] = useState(1);
     const handlePageChange = useCallback((_: any, p: number) => setPage(p), []);
 
-    if (!isLoading && appointments.length === 0) return <NoAppointments />;
+    if (appointments.length === 0) return <NoAppointments />;
 
     return (
         <StyledPaper elevation={15}>
@@ -36,10 +39,6 @@ export const AppointmentsList = ({ variant }: AppointmentsListProps) => {
                     container: true,
                 }}
             >
-                {isLoading ? <SkeletonItem variant={variant} /> : null}
-                {isLoading ? <SkeletonItem variant={variant} /> : null}
-                {isLoading ? <SkeletonItem variant={variant} /> : null}
-
                 {appointments.map((a) => (
                     <Grid item key={a.id} width={1}>
                         <AppointmentItem a={a} variant={variant} />

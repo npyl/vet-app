@@ -1,3 +1,5 @@
+"use client";
+
 import { IProduct } from "@/types/products";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";

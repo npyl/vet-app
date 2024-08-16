@@ -2,51 +2,32 @@ import Grid from "@mui/material/Grid";
 import AppointmentsList from "@/components/Appointments";
 import AlmostOutOfStock from "./AlmostOutOf";
 import { SectionHeader } from "@/components/Section";
-import { getProfile } from "@/Auth";
-import { ProductType } from "@prisma/client";
-import prisma from "@/util/db";
 import { Suspense } from "react";
 import DataGridSkeleton from "@/components/DataGrid/Skeleton";
-
-const getAlmostOutOfStock = async () => {
-    const type = "ALL";
-
-    const user = await getProfile({ workplace: true });
-    if (!user) throw "User not found";
-
-    const products = await prisma.product.findMany({
-        where: {
-            workplaceId: {
-                equals: user?.workplace?.id,
-            },
-            // Filter by type (if different than ALL)
-            ...(type === "ALL"
-                ? {}
-                : {
-                      type: {
-                          equals: type as ProductType,
-                      },
-                  }),
-        },
-    });
-
-    return products;
-};
+import getAlmostOutOfStock from "./getAlmostOutOfStock";
+import getUpcomingAppointments from "@/components/Appointments/getUpcomingAppointments";
+import AppointmentsSkeleton from "@/components/Appointments/Skeleton";
 
 const VetDashboard = async () => {
     const almostOutOfStock = getAlmostOutOfStock();
+    const upcomingAppointments = getUpcomingAppointments();
 
     return (
         <Grid container spacing={5}>
             <Grid item xs={12} lg={6} gap={1}>
                 <SectionHeader
-                    title="Today's Appointments"
+                    title="Upcoming Appointments"
                     icon=""
                     color="primary"
                     borderRadius="10px 10px 0 0"
                 />
 
-                <AppointmentsList variant="VET" />
+                <Suspense fallback={<AppointmentsSkeleton />}>
+                    <AppointmentsList
+                        appointmentsPromise={upcomingAppointments}
+                        variant="VET"
+                    />
+                </Suspense>
             </Grid>
             <Grid item xs={12} lg={6}>
                 <SectionHeader

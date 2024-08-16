@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import { StyledDataGrid } from "./styles";
 import GridProps from "./types";

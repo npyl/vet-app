@@ -35,7 +35,6 @@ const AlmostOutOfStock: React.FC<Props> = ({ data }) => {
             rows={almostOutOfStock}
             page={page}
             pageSize={PAGE_SIZE}
-            totalRows={almostOutOfStock.length ?? 0}
             onPaginationModelChange={handlePaginationChange}
             // ...
             onEditClick={() => {}}

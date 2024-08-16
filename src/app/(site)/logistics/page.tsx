@@ -160,7 +160,6 @@ const Logistics = () => {
                     rows={all}
                     page={page}
                     pageSize={PAGE_SIZE}
-                    totalRows={all.length ?? 0}
                     onPaginationModelChange={handlePaginationChange}
                     onEditClick={setEditedRow}
                     onDeleteClick={removeItem}
@@ -186,7 +185,7 @@ const Logistics = () => {
                                 rows={almostOutOfStock}
                                 page={page}
                                 pageSize={PAGE_SIZE}
-                                totalRows={almostOutOfStock.length ?? 0}
+                                rowCount={almostOutOfStock.length ?? 0}
                                 onPaginationModelChange={handlePaginationChange}
                                 onEditClick={setEditedRow}
                                 onDeleteClick={removeItem}

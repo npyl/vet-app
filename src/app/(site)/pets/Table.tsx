@@ -96,7 +96,6 @@ export default function PetsTable({ rows, isLoading }: PetsTableProps) {
                     paginationMode="client"
                     page={page}
                     pageSize={PAGE_SIZE}
-                    totalRows={rows.length ?? 0}
                     onPaginationModelChange={handlePaginationChange}
                     // ...
                     resource="pets"

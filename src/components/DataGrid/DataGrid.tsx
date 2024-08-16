@@ -24,7 +24,6 @@ const DataGridTable: FC<GridProps> = ({
 
     page,
     pageSize,
-    totalRows,
 
     ...other
 }) => (
@@ -39,8 +38,7 @@ const DataGridTable: FC<GridProps> = ({
             },
         }}
         // --- pagination ---
-        paginationMode="server"
-        rowCount={totalRows}
+        paginationMode="client"
         paginationModel={{ page, pageSize }}
         // ------------------
         disableColumnFilter

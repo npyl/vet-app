@@ -1,14 +1,15 @@
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { Skeleton } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
 
 export default async function Home() {
     return (
-        <Box py={1}>
+        <Stack direction="row" alignItems="center" spacing={1} py={1}>
             <Typography variant="h4" my={4} color="primary.main">
-                Welcome <Skeleton width="150px" height="30px" />{" "}
-                <Skeleton width="150px" height="30px" />
+                Welcome
             </Typography>
-        </Box>
+            <Skeleton width="150px" height="30px" />{" "}
+            <Skeleton width="150px" height="30px" />
+        </Stack>
     );
 }

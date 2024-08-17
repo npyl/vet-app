@@ -1,20 +1,17 @@
 import { SpaceBetween } from "@/components/styled";
 import { Typography } from "@mui/material";
-import Table from "./Table";
 import AddPetDialog from "./AddOrEdit";
 import DialogFab from "@/components/Dialog/Fab";
-import getPets from "./getPets";
+import PetsTableSkeleton from "./Table/TableSkeleton";
 
-export default async function PetsPage() {
-    const pets = getPets();
-
+export default function PetsPage() {
     return (
         <>
             <SpaceBetween alignItems="center" py={2}>
                 <Typography variant="h4">Pets</Typography>
             </SpaceBetween>
 
-            <Table rowsPromise={pets} />
+            <PetsTableSkeleton />
 
             {/* Dialog */}
             <DialogFab Dialog={AddPetDialog} />

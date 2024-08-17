@@ -78,12 +78,19 @@ export const handlers = NextAuth({
     },
 });
 
-interface Options {
+interface GetProfileOptions {
     workingHours?: boolean;
     workplace?: boolean;
+    pets?: boolean;
+    appointments?: boolean;
 }
 
-export const getProfile = async ({ workingHours, workplace }: Options) => {
+export const getProfile = async ({
+    workingHours,
+    workplace,
+    pets,
+    appointments,
+}: GetProfileOptions) => {
     const session = await getServerSession();
     const { user: sessionUser } = session || {};
     const { email } = sessionUser || {};
@@ -97,6 +104,8 @@ export const getProfile = async ({ workingHours, workplace }: Options) => {
         include: {
             workingHours,
             workplace,
+            pets,
+            appointments,
         },
     });
 

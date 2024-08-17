@@ -2,14 +2,14 @@ import {
     Stack,
     Dialog as MuiDialog,
     DialogActions as MuiDialogActions,
-    DialogProps as MuiDialogProps,
     DialogContent,
     DialogTitle as MuiDialogTitle,
     IconButton as MuiIconButton,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { ReactNode, forwardRef } from "react";
+import { FC, forwardRef } from "react";
 import Iconify from "@/components/iconify";
+import { DialogProps } from "./types";
 
 const DialogTitle = styled(MuiDialogTitle)({
     position: "relative",
@@ -30,15 +30,7 @@ const DialogForm = forwardRef<HTMLFormElement>((props, ref) => (
     <form ref={ref} {...props} method="POST" />
 ));
 
-type Props = {
-    title?: ReactNode;
-    content?: ReactNode;
-    actions?: ReactNode;
-    submit?: boolean; // support <form> mode
-    onClose: () => void;
-} & Omit<MuiDialogProps, "title" | "content">;
-
-const Dialog = ({
+const Dialog: FC<DialogProps> = ({
     open,
     submit = false,
     title,
@@ -46,7 +38,7 @@ const Dialog = ({
     content,
     onClose,
     ...props
-}: Props) =>
+}) =>
     !open ? null : (
         <MuiDialog
             open={open}

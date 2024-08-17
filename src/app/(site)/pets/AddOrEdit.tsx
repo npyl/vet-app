@@ -1,3 +1,5 @@
+"use client";
+
 import Dialog from "@/components/Dialog";
 import { IPet, IPetGender, IPetPOST, IPetType } from "@/types/pet";
 import {
@@ -8,7 +10,7 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import { useCallback, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,12 +33,10 @@ import {
     DOG_BLOOD_OPTIONS,
     CAT_BLOOD_OPTIONS,
 } from "@/types/options";
+import { DialogProps } from "@/components/Dialog/types";
 
-interface Props {
-    open: boolean;
+export interface PetDialogProps extends DialogProps {
     onMutate: () => void;
-    onClose: () => void;
-    // ...
     pet?: IPet;
 }
 
@@ -87,7 +87,7 @@ const Schema = yup
     })
     .required();
 
-const AddPetDialog = ({ pet, onMutate, ...props }: Props) => {
+const AddPetDialog: FC<PetDialogProps> = ({ pet, onMutate, ...props }) => {
     const { user } = useAuth();
     const { post, put } = useApiContext();
 

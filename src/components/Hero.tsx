@@ -1,6 +1,6 @@
 import Grid from "@mui/material/Grid";
 import Image from "next/image";
-import { GridItem } from "./styled";
+import { GridItem } from "../app/(auth)/styled";
 
 import Cat from "/public/images/hero/cat.png";
 import Cat2 from "/public/images/hero/cat2.png";

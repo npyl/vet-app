@@ -1,7 +1,7 @@
 // mui
 import { Container } from "@mui/material";
 import { Background, StyledPaper } from "./styled";
-import Hero from "./Hero";
+import Hero from "../../components/Hero";
 import React, { PropsWithChildren } from "react";
 
 // ----------------------------------------------------------------------

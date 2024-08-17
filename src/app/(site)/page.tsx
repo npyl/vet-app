@@ -3,10 +3,10 @@ import UserDashboard from "@/sections/UserDashboard";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { getProfile } from "@/Auth";
+import getProfile from "@/util/getProfile";
 
 export default async function Home() {
-    const user = await getProfile({});
+    const user = await getProfile();
 
     return (
         <Box py={1}>

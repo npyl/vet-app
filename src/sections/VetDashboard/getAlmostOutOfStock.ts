@@ -1,4 +1,4 @@
-import { getProfile } from "@/Auth";
+import getProfile from "@/util/getProfile";
 import { ProductType } from "@prisma/client";
 import prisma from "@/util/db";
 

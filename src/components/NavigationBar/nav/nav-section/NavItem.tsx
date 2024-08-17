@@ -31,11 +31,11 @@ export default function NavItem({ item, depth, open, ...other }: NavItemProps) {
                 <ListItemText
                     primary={title}
                     secondary={
-                        caption && (
+                        caption ? (
                             <Tooltip title={caption} placement="top-start">
                                 <span>{caption}</span>
                             </Tooltip>
-                        )
+                        ) : null
                     }
                     primaryTypographyProps={{
                         noWrap: true,
@@ -47,16 +47,21 @@ export default function NavItem({ item, depth, open, ...other }: NavItemProps) {
                     }}
                 />
 
-                {info && (
+                {info ? (
                     <Box component="span" sx={{ lineHeight: 0 }}>
                         {info}
                     </Box>
-                )}
+                ) : null}
 
                 <ActiveIndicator path={path} />
 
-                {!!children &&
-                    (!open ? <ExpandMoreIcon /> : <ExpandLessIcon />)}
+                {!!children ? (
+                    !open ? (
+                        <ExpandMoreIcon />
+                    ) : (
+                        <ExpandLessIcon />
+                    )
+                ) : null}
             </StyledItem>
         </Link>
     );

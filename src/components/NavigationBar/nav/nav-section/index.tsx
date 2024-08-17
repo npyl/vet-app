@@ -10,11 +10,10 @@ import { StyledSubheader } from "./styles";
 
 export default function NavSectionVertical({
     data,
-    sx,
     ...other
 }: NavSectionProps) {
     return (
-        <Stack sx={sx} {...other}>
+        <Stack {...other}>
             {data.map((group) => {
                 const key = group.subheader || group.items[0].title;
 

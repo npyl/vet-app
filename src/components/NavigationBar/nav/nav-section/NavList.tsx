@@ -1,7 +1,7 @@
 import { NavListProps } from "./types";
 import NavItem from "./NavItem";
 import NavSubList from "./NavSubList";
-import { getProfile } from "@/Auth";
+import getProfile from "@/util/getProfile";
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ type NavListRootProps = {
 };
 
 export default async function NavList({ data, depth }: NavListRootProps) {
-    const user = await getProfile({});
+    const user = await getProfile();
 
     const hasChildren = !!data.children;
 
@@ -22,7 +22,9 @@ export default async function NavList({ data, depth }: NavListRootProps) {
         <>
             <NavItem item={data} depth={depth} />
 
-            {hasChildren && <NavSubList data={data.children} depth={depth} />}
+            {hasChildren ? (
+                <NavSubList data={data.children} depth={depth} />
+            ) : null}
         </>
     );
 }

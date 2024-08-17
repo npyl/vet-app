@@ -1,9 +1,9 @@
-import { getProfile } from "@/Auth";
+import getProfile from "@/util/getProfile";
 import prisma from "@/util/db";
 import { IMedication } from "@/types/medication";
 
 const getCurrentMedication = async () => {
-    const user = await getProfile({});
+    const user = await getProfile();
 
     const medication = await prisma.medication.findMany({
         where: {

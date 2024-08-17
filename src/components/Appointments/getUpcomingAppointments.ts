@@ -1,4 +1,4 @@
-import { getProfile } from "@/Auth";
+import getProfile from "@/util/getProfile";
 import prisma from "@/util/db";
 import { IAppointment } from "@/types/appointment";
 import dayjs from "dayjs";
@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 const todayStart = dayjs().startOf("day").toISOString();
 
 const getUpcomingAppointments = async () => {
-    const user = await getProfile({});
+    const user = await getProfile();
     if (!user) throw "Error getting user!";
 
     // This user's pets

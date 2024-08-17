@@ -1,4 +1,4 @@
-import { getProfile } from "@/Auth";
+import getProfile from "@/util/getProfile";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
@@ -7,7 +7,7 @@ interface OnlyVetGuardProps {
 }
 
 const OnlyVetGuard = async ({ children }: OnlyVetGuardProps) => {
-    const profile = await getProfile({});
+    const profile = await getProfile();
 
     if (profile?.type !== "VET") {
         redirect("/pets");

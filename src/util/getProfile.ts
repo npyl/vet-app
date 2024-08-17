@@ -9,7 +9,7 @@ declare global {
 const getProfile = async () => {
     if (globalThis.profile) return globalThis.profile;
 
-    let profile = await authGetProfile({});
+    const profile = await authGetProfile({});
     if (!profile) return null;
 
     globalThis.profile = profile as unknown as IUser;

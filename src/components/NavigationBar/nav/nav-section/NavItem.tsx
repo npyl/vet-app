@@ -55,7 +55,7 @@ export default function NavItem({ item, depth, open, ...other }: NavItemProps) {
 
                 <ActiveIndicator path={path} />
 
-                {!!children ? (
+                {children ? (
                     !open ? (
                         <ExpandMoreIcon />
                     ) : (

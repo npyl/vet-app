@@ -5,7 +5,7 @@ import AddPetDialog from "./AddOrEdit";
 import DialogFab from "@/components/Dialog/Fab";
 import getPets from "./getPets";
 
-export default async function PetsPage() {
+export default function PetsPage() {
     const pets = getPets();
 
     return (

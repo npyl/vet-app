@@ -1,7 +1,5 @@
 import { SpaceBetween } from "@/components/styled";
 import { Typography } from "@mui/material";
-import AddPetDialog from "./AddOrEdit";
-import DialogFab from "@/components/Dialog/Fab";
 import PetsTableSkeleton from "./Table/TableSkeleton";
 
 export default function PetsPage() {
@@ -12,9 +10,6 @@ export default function PetsPage() {
             </SpaceBetween>
 
             <PetsTableSkeleton />
-
-            {/* Dialog */}
-            <DialogFab Dialog={AddPetDialog} />
         </>
     );
 }

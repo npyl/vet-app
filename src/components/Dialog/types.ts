@@ -6,5 +6,4 @@ export type DialogProps = {
     content?: ReactNode;
     actions?: ReactNode;
     submit?: boolean; // support <form> mode
-    onClose: () => void;
-} & Omit<MuiDialogProps, "title" | "content">;
+} & Omit<MuiDialogProps, "title" | "content" | "open" | "onClose">;

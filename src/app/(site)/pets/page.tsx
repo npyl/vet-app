@@ -17,7 +17,9 @@ export default async function PetsPage() {
             <Table rowsPromise={pets} />
 
             {/* Dialog */}
-            <DialogFab Dialog={AddPetDialog} />
+            <DialogFab>
+                <AddPetDialog />
+            </DialogFab>
         </>
     );
 }

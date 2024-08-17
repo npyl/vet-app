@@ -2,10 +2,16 @@
 
 import useDialog from "@/hooks/useDialog";
 import Fab from "@mui/material/Fab";
-import { ComponentType } from "react";
+import {
+    cloneElement,
+    FC,
+    isValidElement,
+    ReactElement,
+    ReactNode,
+} from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { DialogProps } from "./types";
 import { styled } from "@mui/material/styles";
+import { DialogProps } from "./types";
 
 const FixedFab = styled(Fab)({
     position: "absolute",
@@ -13,16 +19,27 @@ const FixedFab = styled(Fab)({
     right: "10px",
 });
 
-interface DialogFabProps<T extends DialogProps> {
-    Dialog: ComponentType<T>;
-    dialogProps?: Omit<T, keyof DialogProps>;
+interface DialogChildProps extends DialogProps {
+    open?: boolean;
+    onClose?: VoidFunction;
 }
 
-function DialogFab<T extends DialogProps>({
-    Dialog,
-    dialogProps,
-}: DialogFabProps<T>) {
+interface DialogFabProps {
+    children: ReactNode;
+}
+
+const DialogFab: FC<DialogFabProps> = ({ children }) => {
     const [isOpen, openDialog, closeDialog] = useDialog();
+
+    if (!isValidElement(children)) throw "Must only pass one element!";
+
+    const childWithProps = cloneElement(
+        children as ReactElement<DialogChildProps>,
+        {
+            open: isOpen,
+            onClose: closeDialog,
+        },
+    );
 
     return (
         <>
@@ -30,15 +47,9 @@ function DialogFab<T extends DialogProps>({
                 <AddIcon />
             </FixedFab>
 
-            {isOpen ? (
-                <Dialog
-                    {...(dialogProps as T)}
-                    open={isOpen}
-                    onClose={closeDialog}
-                />
-            ) : null}
+            {isOpen ? childWithProps : null}
         </>
     );
-}
+};
 
 export default DialogFab;

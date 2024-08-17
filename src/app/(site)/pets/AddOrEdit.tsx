@@ -36,7 +36,6 @@ import {
 import { DialogProps } from "@/components/Dialog/types";
 
 export interface PetDialogProps extends DialogProps {
-    onMutate: () => void;
     pet?: IPet;
 }
 
@@ -87,7 +86,7 @@ const Schema = yup
     })
     .required();
 
-const AddPetDialog: FC<PetDialogProps> = ({ pet, onMutate, ...props }) => {
+const AddPetDialog: FC<PetDialogProps> = ({ pet, ...props }) => {
     const { user } = useAuth();
     const { post, put } = useApiContext();
 
@@ -123,8 +122,8 @@ const AddPetDialog: FC<PetDialogProps> = ({ pet, onMutate, ...props }) => {
     const type = methods.watch("type") || "DOG";
 
     const handleMutate = useCallback(() => {
-        onMutate();
-        props.onClose();
+        // onMutate();
+        // props.onClose();
     }, [user?.id]);
 
     const handleSubmit = useCallback(

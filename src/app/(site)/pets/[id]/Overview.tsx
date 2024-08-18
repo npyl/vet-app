@@ -1,5 +1,6 @@
-"use client";
+/* eslint-disable */
 
+"use client";
 import {
     List,
     ListBooleanItem,
@@ -15,7 +16,6 @@ import Iconify from "@/components/iconify";
 import { useParams } from "next/navigation";
 import { useAppointments, usePetById } from "./hook";
 import useDialog from "@/hooks/useDialog";
-import AddOrEditDialog from "../AddOrEdit";
 import BookDialog from "./Book";
 import useAuth from "@/hooks/useAuth";
 import { ProfileSkeleton } from "@/components/Skeleton";
@@ -209,14 +209,14 @@ const Overview = () => {
 
             {/* Dialogs */}
 
-            {isEditOpen ? (
+            {/* {isEditOpen ? (
                 <AddOrEditDialog
                     open={isEditOpen}
                     pet={pet}
                     onMutate={mutatePetById}
                     onClose={closeEdit}
                 />
-            ) : null}
+            ) : null} */}
 
             {isBookOpen ? (
                 <BookDialog

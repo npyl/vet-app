@@ -1,3 +1,5 @@
+"use client";
+
 // react
 import { useCallback } from "react";
 // react-hook-form

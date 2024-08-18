@@ -1,3 +1,5 @@
+"use client";
+
 import { Controller, useFormContext } from "react-hook-form";
 import { FormControlLabel, Select, SelectProps } from "@mui/material";
 import ErrorTooltip from "./ErrorTooltip";

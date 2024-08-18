@@ -1,3 +1,5 @@
+"use client";
+
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import { Controller, useFormContext } from "react-hook-form";

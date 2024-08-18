@@ -1,7 +1,7 @@
 import { SpaceBetween } from "@/components/styled";
 import { Typography } from "@mui/material";
 import Table from "./Table";
-import AddPetDialog from "./AddOrEdit";
+import AddPetDialog from "./AddOrEditDialog";
 import DialogFab from "@/components/Dialog/Fab";
 import getPets from "./getPets";
 

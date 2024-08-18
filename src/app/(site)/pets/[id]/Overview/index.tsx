@@ -9,7 +9,7 @@ import AppointmentsButton from "./AppointmentsButton";
 import { ProfileSkeleton } from "@/components/Skeleton";
 import PetProfile from "./PetProfile";
 import EditButton from "./EditButton";
-import AddOrEditDialog from "../../AddOrEditDialog";
+import AddOrEditDialog from "../../PetDialog";
 import getPetById from "./getPetById";
 
 interface OverviewProps {

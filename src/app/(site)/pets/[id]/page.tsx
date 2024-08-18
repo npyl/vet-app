@@ -1,28 +1,19 @@
-"use client";
-
 import Box from "@mui/material/Box";
-import Examinations from "./Examinations";
 import Overview from "./Overview";
-import ExaminationsDiagrams from "./Diagrams";
-import useDialog from "@/hooks/useDialog";
+import More from "./More";
 
-const PetPage = () => {
-    const [isDiagramsOpen, openDiagrams, closeDiagrams] = useDialog();
+interface PetPageParams {
+    params: { id: string };
+}
 
-    return (
-        <>
-            <Overview />
+const PetPage = ({ params: { id } }: PetPageParams) => (
+    <>
+        <Overview id={+id} />
 
-            <Box my={2} />
+        <Box my={2} />
 
-            {/* Examinations */}
-            {isDiagramsOpen ? (
-                <ExaminationsDiagrams onOpenExaminations={closeDiagrams} />
-            ) : (
-                <Examinations onOpenDiagrams={openDiagrams} />
-            )}
-        </>
-    );
-};
+        <More />
+    </>
+);
 
 export default PetPage;

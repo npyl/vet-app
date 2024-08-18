@@ -1,14 +1,17 @@
+"use client";
+
 import Dialog from "@/components/Dialog";
 import { Box, Button, CircularProgress, Stack } from "@mui/material";
 import Pagination from "@/components/Pagination";
 import Typography from "@mui/material/Typography";
 import { useCallback, useState } from "react";
-import { useAppointments } from "./hook";
+import { useAppointments } from "../hook";
 import { styled, alpha } from "@mui/material/styles";
 import useDialog from "@/hooks/useDialog";
-import AddOrEditDialog from "./AppointmentDialog";
+import AddOrEditDialog from "../AppointmentDialog";
 import { IAppointment } from "@/types/appointment";
 import { AppointmentItem } from "@/components/Appointments";
+import { DialogProps } from "@/components/Dialog/types";
 
 // ----------------------------------------------------------------
 
@@ -78,10 +81,7 @@ const AppointmentsList = ({ petId }: AppointmentsListProp) => {
     );
 };
 
-interface Props {
-    open: boolean;
-    onClose: VoidFunction;
-
+interface Props extends DialogProps {
     petId: number;
 }
 

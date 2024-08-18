@@ -31,10 +31,7 @@ interface DialogFabProps {
 const DialogFab: FC<DialogFabProps> = ({ children }) => {
     const [isOpen, openDialog, closeDialog] = useDialog();
 
-    if (!isValidElement(children)) {
-        console.log("got: ", children);
-        throw "Must only pass one element!";
-    }
+    if (!isValidElement(children)) throw "Must only pass one element!";
 
     const childWithProps = cloneElement(
         children as ReactElement<DialogChildProps>,

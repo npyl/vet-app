@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import { useExaminations } from "@/hooks/pets";
 import useAuth from "@/hooks/useAuth";
 import { useCallback, useState } from "react";
-import ExaminationDialog from "../../../../../components/Examination";
+import ExaminationDialog from "../../../../../../components/Examination";
 import ExaminationItem from "./Item";
 import ExaminationItemSkeleton from "./Skeleton";
 import Pagination from "@/components/Pagination";

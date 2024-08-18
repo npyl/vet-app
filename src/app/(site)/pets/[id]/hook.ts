@@ -1,5 +1,4 @@
 import { IAppointment } from "@/types/appointment";
-import { IPet } from "@/types/pet";
 import { useMemo } from "react";
 import useSWR from "swr";
 
@@ -14,9 +13,4 @@ export const useAppointments = (id: number) => {
     );
 
     return { appointments, isLoading };
-};
-
-export const usePetById = (id: number) => {
-    const { data: pet, isLoading, mutate } = useSWR<IPet>(`/api/pets/${id}`);
-    return { pet, isLoading, mutate };
 };

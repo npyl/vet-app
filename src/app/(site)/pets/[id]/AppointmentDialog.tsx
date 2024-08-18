@@ -1,3 +1,5 @@
+"use client";
+
 import Dialog from "@/components/Dialog";
 import {
     RHFDatePicker,

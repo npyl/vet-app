@@ -1,30 +1,8 @@
-import {
-    Stack,
-    Dialog as MuiDialog,
-    DialogActions as MuiDialogActions,
-    DialogContent,
-    DialogTitle as MuiDialogTitle,
-    IconButton as MuiIconButton,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Stack, Dialog as MuiDialog, DialogContent } from "@mui/material";
 import { FC, forwardRef } from "react";
 import Iconify from "@/components/iconify";
 import { DialogProps } from "./types";
-
-const DialogTitle = styled(MuiDialogTitle)({
-    position: "relative",
-    borderBottom: "1px solid #ddd",
-});
-const DialogActions = styled(MuiDialogActions)({
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-});
-const IconButton = styled(MuiIconButton)(({ theme }) => ({
-    position: "absolute",
-    right: theme.spacing(2),
-}));
+import { DialogActions, DialogTitle, IconButton } from "./styled";
 
 const DialogForm = forwardRef<HTMLFormElement>((props, ref) => (
     <form ref={ref} {...props} method="POST" />

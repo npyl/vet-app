@@ -21,6 +21,7 @@ import toast, { Toaster } from "react-hot-toast";
 import useSWR, { useSWRConfig } from "swr";
 import * as yup from "yup";
 import { IAppointment } from "@/types/appointment";
+import { DialogProps } from "@/components/Dialog/types";
 
 // ----------------------------------------------------------------
 
@@ -134,10 +135,7 @@ const Schema = yup.object<IBookAppointment>().shape({
     id: yup.number(),
 });
 
-interface Props {
-    open: boolean;
-    onClose: VoidFunction;
-
+interface Props extends DialogProps {
     petId: number;
     appointment?: IAppointment;
 }

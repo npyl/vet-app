@@ -25,29 +25,6 @@ export async function GET() {
     }
 }
 
-export async function POST(req: Request | NextRequest) {
-    try {
-        console.log("clients: POST");
-
-        const body = await req.json();
-
-        const res = await prisma.pets.create({
-            data: body,
-        });
-
-        return new NextResponse(JSON.stringify(res), {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-        });
-    } catch (error) {
-        console.error(error);
-        return new NextResponse(JSON.stringify(error), {
-            status: 500,
-            headers: { "Content-Type": "application/json" },
-        });
-    }
-}
-
 export async function DELETE(req: Request | NextRequest) {
     try {
         console.log("client: DELETE");
@@ -64,33 +41,6 @@ export async function DELETE(req: Request | NextRequest) {
             where: {
                 id,
             },
-        });
-
-        return new NextResponse(JSON.stringify(res), {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-        });
-    } catch (error) {
-        console.error(error);
-
-        return new NextResponse(JSON.stringify(error), {
-            status: 500,
-            headers: { "Content-Type": "application/json" },
-        });
-    }
-}
-
-export async function PUT(req: Request | NextRequest) {
-    try {
-        console.log("clients: PUT");
-
-        const { id, ...body } = await req.json();
-
-        const res = await prisma.pets.update({
-            where: {
-                id,
-            },
-            data: body,
         });
 
         return new NextResponse(JSON.stringify(res), {

@@ -4,6 +4,9 @@ const nextConfig = {
     compiler: {
         styledComponents: true,
     },
+    serverActions: {
+        bodySizeLimit: "4mb",
+    },
 };
 
 module.exports = nextConfig;

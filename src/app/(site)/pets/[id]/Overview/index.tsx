@@ -1,10 +1,8 @@
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
-import BookDialog from "./Book";
 import getProfile from "@/util/getProfile";
 import { Suspense } from "react";
-import AppointmentsButtonSkeleton from "./AppointmentsButtonSkeleton";
 import AppointmentsButton from "./AppointmentsButton";
 import { ProfileSkeleton } from "@/components/Skeleton";
 import PetProfile from "./PetProfile";
@@ -41,11 +39,7 @@ const Overview = async ({ id }: OverviewProps) => {
                         direction="row"
                         spacing={0.5}
                     >
-                        <Suspense fallback={<AppointmentsButtonSkeleton />}>
-                            <AppointmentsButton petId={id} vet={isVet}>
-                                <BookDialog petId={id} />
-                            </AppointmentsButton>
-                        </Suspense>
+                        <AppointmentsButton petId={id} vet={isVet} />
 
                         <EditButton vet={isVet}>
                             <AddOrEditDialog pet={pet} />

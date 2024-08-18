@@ -1,19 +1,14 @@
+import DialogButton from "@/components/Dialog/Button";
+import BookDialog from "./Book";
 import Iconify from "@/components/iconify";
 import getAppointmentsForPet from "./getAppointmentsForPet";
-import { ReactNode } from "react";
-import DialogButton from "@/components/Dialog/Button";
 
-interface AppointmentsButtonProps {
+interface ActualProps {
     petId: number;
     vet: boolean;
-    children: ReactNode;
 }
 
-const AppointmentsButton = async ({
-    petId,
-    vet,
-    children,
-}: AppointmentsButtonProps) => {
+const Actual = async ({ petId, vet }: ActualProps) => {
     const appointments = await getAppointmentsForPet(petId);
 
     return (
@@ -23,9 +18,9 @@ const AppointmentsButton = async ({
             label={`Appointments ${appointments.length}`}
             startIcon={<Iconify icon="tabler:sthetoscope" />}
         >
-            {children}
+            <BookDialog petId={petId} />
         </DialogButton>
     );
 };
 
-export default AppointmentsButton;
+export default Actual;

@@ -18,7 +18,7 @@ import BloodTypeSelect from "./BloodTypeSelect";
 import MicrochipSelect from "./MicrochipSelect";
 import dayjs from "dayjs";
 import SubmitButton from "./SubmitButton";
-import createOrEdit from "@/app/actions/pet/createOrEdit";
+import createOrUpdate from "@/app/actions/pet/createOrUpdate";
 
 export interface PetDialogProps
     extends Omit<DialogFormProps, "schema" | "values" | "submitAction"> {
@@ -56,7 +56,7 @@ const AddPetDialog: FC<PetDialogProps> = ({ pet, ...props }) => {
             {...props}
             schema={Schema}
             values={values}
-            submitAction={createOrEdit}
+            submitAction={createOrUpdate}
             // ...
             maxWidth="sm"
             title={

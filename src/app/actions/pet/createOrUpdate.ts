@@ -6,7 +6,7 @@ import getProfile from "@/util/getProfile";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-const createOrEdit = async ({ id, ownerId, ...d }: IPetPOST) => {
+const createOrUpdate = async ({ id, ownerId, ...d }: IPetPOST) => {
     const user = await getProfile();
     if (!user) throw "Could not get user!";
 
@@ -27,4 +27,4 @@ const createOrEdit = async ({ id, ownerId, ...d }: IPetPOST) => {
     redirect("/pets");
 };
 
-export default createOrEdit;
+export default createOrUpdate;

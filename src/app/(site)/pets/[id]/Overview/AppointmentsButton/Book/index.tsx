@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { Suspense } from "react";
-import AddOrEditDialog from "./AppointmentDialog";
+import AddOrEditDialog from "./AppointmentsDialog";
 import { DialogProps } from "@/components/Dialog/types";
 import AppointmentsList from "./AppointmentsList";
 import DialogButton from "@/components/Dialog/Button";

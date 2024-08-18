@@ -1,9 +1,9 @@
-import { useCallback, useState } from "react";
+// import { useCallback, useState } from "react";
 import getAppointmentsForPetById from "./getAppointmentsForPetById";
-import { IAppointment } from "@/types/appointment";
+// import { IAppointment } from "@/types/appointment";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import AddOrEditDialog from "../AppointmentDialog";
+// import AddOrEditDialog from "../AppointmentDialog";
 import Box from "@mui/material/Box";
 import PaginatedList from "./PaginatedList";
 

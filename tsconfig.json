@@ -23,6 +23,6 @@
             "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
         }
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+    "include": ["src", ".next/types/**/*.ts"],
     "exclude": ["node_modules"]
 }

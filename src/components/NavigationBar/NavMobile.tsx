@@ -1,5 +1,5 @@
 import MenuButton from "./MenuButton";
-import Nav from "./Nav";
+import Nav from "./nav";
 
 const NavMobile = () => (
     <MenuButton

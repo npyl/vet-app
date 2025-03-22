@@ -2,7 +2,7 @@
 import { Box } from "@mui/material";
 // auth
 import Main from "./Main";
-import NavDesktop from "./Nav";
+import NavDesktop from "./nav";
 import NavMobile from "./NavMobile";
 // ----------------------------------------------------------------------
 

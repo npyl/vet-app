@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import NavSectionVertical from "./nav-section";
 import navConfig from "./config";
-import BobosLogo from "public/images/bobos_logo.jpg";
+const BobosLogo = "public/images/bobos_logo.jpg";
 import NavAccount from "./account";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +16,7 @@ const SidebarContent = () => (
                 <Link href="/">
                     <Image
                         alt="Bobos logo"
-                        src={BobosLogo.src}
+                        src={BobosLogo}
                         width={200}
                         height={200}
                         style={{

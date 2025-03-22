@@ -31,7 +31,6 @@
         "@mui/x-data-grid": "^7.1.0",
         "@mui/x-date-pickers": "^7.1.0",
         "@prisma/client": "^5.17.0",
-        "apexcharts": "^3.49.0",
         "dayjs": "^1.11.10",
         "husky": "^9.0.11",
         "lint-staged": "^15.2.2",

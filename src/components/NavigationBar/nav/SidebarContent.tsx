@@ -3,11 +3,11 @@ import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import NavSectionVertical from "./nav-section";
 import navConfig from "./config";
-const BobosLogo = "public/images/bobos_logo.jpg";
 import NavAccount from "./account";
 import Image from "next/image";
 import Link from "next/link";
 import { SidebarContentStack } from "./styled";
+const BobosLogo = "/images/bobos_logo.jpg";
 
 const SidebarContent = () => (
     <SidebarContentStack>

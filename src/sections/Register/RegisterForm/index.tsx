@@ -13,7 +13,7 @@ import { IRegisterReq } from "@/types/auth";
 import { IVetWorkingHoursPOST } from "@/types/workingHours";
 import UserForm from "./user";
 import UserTypeSelect from "./UserTypeSelect";
-import register from "@/app/actions/register";
+import register from "@/actions/register";
 
 // ----------------------------------------------------------
 

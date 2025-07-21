@@ -1,9 +1,9 @@
-import { randomUUID } from "crypto";
-import NextAuth, { getServerSession } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "@/util/db";
+import prisma from "./util/db";
+import { randomUUID } from "crypto";
 
-export const handlers = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -91,11 +91,14 @@ export const getProfile = async ({
     pets,
     appointments,
 }: GetProfileOptions) => {
-    const session = await getServerSession();
+    const session = await auth();
     const { user: sessionUser } = session || {};
+
+    console.log("sessionUser: ", sessionUser);
+
     const { email } = sessionUser || {};
 
-    if (!email) throw "Could not logged-in user's id!";
+    if (!email) throw "Could not get logged-in user's id!";
 
     const user = await prisma.user.findUnique({
         where: {

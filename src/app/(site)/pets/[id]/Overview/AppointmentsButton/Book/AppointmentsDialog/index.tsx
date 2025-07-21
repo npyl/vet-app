@@ -8,7 +8,7 @@ import SubmitButton from "./SubmitButton";
 import DateSelect from "./DateSelect";
 import VetSelect from "./VetSelect";
 import DialogForm from "@/components/Dialog/Form";
-import createOrUpdate from "@/app/actions/appointment/createOrUpdate";
+import createOrUpdate from "@/actions/appointment/createOrUpdate";
 import Schema from "./Schema";
 import { Suspense } from "react";
 

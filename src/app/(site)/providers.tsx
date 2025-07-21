@@ -1,7 +1,7 @@
 "use client";
 
 import { ApiProvider } from "@/contexts/api";
-import { SWRProvider } from "@/app/providers/swr";
+import { SWRProvider } from "@/providers/swr";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PropsWithChildren } from "react";

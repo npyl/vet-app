@@ -1,16 +1,16 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import login from "@/actions/login";
 import { FormEvent, PropsWithChildren, useCallback } from "react";
 
 const Form: React.FC<PropsWithChildren> = ({ children }) => {
     const handleSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await signIn("credentials", {
-            email: (e.target as HTMLFormElement).email.value || "",
-            password: (e.target as HTMLFormElement).password.value || "",
-            redirect: false,
-        });
+
+        const password = (e.target as HTMLFormElement).password.value || "";
+        const email = (e.target as HTMLFormElement).email.value || "";
+
+        await login(email, password);
     }, []);
 
     return (

@@ -1,16 +1,14 @@
 "use client";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { signOut } from "next-auth/react";
-import Stack from "@mui/material/Stack";
+import logout from "@/actions/logout";
+import { IconButton } from "@mui/material";
 
 const SignOutButton = () => (
-    <Stack
-        alignItems="center"
-        justifyContent="center"
-        onClick={() => signOut()}
-    >
-        <LogoutIcon />
-    </Stack>
+    <form action={logout}>
+        <IconButton type="submit">
+            <LogoutIcon sx={{ width: 20, height: 20 }} />
+        </IconButton>
+    </form>
 );
 
 export default SignOutButton;

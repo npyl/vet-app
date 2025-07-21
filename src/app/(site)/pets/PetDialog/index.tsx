@@ -18,7 +18,7 @@ import BloodTypeSelect from "./BloodTypeSelect";
 import MicrochipSelect from "./MicrochipSelect";
 import dayjs from "dayjs";
 import SubmitButton from "./SubmitButton";
-import createOrUpdate from "@/app/actions/pet/createOrUpdate";
+import createOrUpdate from "@/actions/pet/createOrUpdate";
 
 export interface PetDialogProps
     extends Omit<DialogFormProps, "schema" | "values" | "submitAction"> {

@@ -1,10 +1,11 @@
 "use server";
 
+import { signIn } from "@/Auth";
 import { IRegisterReq } from "@/types/auth";
 import prisma from "@/util/db";
 import { randomUUID } from "crypto";
 
-const register = async (b: IRegisterReq) => {
+const _register = async (b: IRegisterReq) => {
     const {
         workingHours: workingHoursWithVetId,
         region,
@@ -69,6 +70,24 @@ const register = async (b: IRegisterReq) => {
     if (!res0) {
         throw { errorMessage: `Could not set jwt token for this user.` };
     }
+};
+
+const register = async (b: IRegisterReq) => {
+    try {
+        await _register(b);
+    } catch (ex) {
+        console.log(ex);
+        return false;
+    }
+
+    await signIn("credentials", {
+        email: b.email,
+        password: b.password,
+        redirect: true,
+        redirectTo: "/",
+    });
+
+    return true;
 };
 
 export default register;

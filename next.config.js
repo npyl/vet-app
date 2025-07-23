@@ -1,7 +1,9 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    eslint: false,
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
     compiler: {
         styledComponents: true,
     },

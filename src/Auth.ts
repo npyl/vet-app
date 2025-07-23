@@ -2,6 +2,64 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "./util/db";
 import { randomUUID } from "crypto";
+import * as yup from "yup";
+
+export const signInSchema = yup.object({
+    email: yup
+        .string()
+        .email("Invalid email format")
+        .required("Email is required"),
+    password: yup
+        .string()
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required"),
+});
+
+const _authorize = async (
+    credentials: Partial<Record<"email" | "password", unknown>>,
+) => {
+    const validatedCredentials = await signInSchema.validate(credentials, {
+        abortEarly: false,
+    });
+
+    const { email, password } = validatedCredentials;
+
+    const user = await prisma.user.findUnique({
+        where: {
+            email,
+            AND: {
+                password: {
+                    equals: password,
+                },
+            },
+        },
+    });
+
+    if (!user) return null;
+
+    // Generate token
+    const token = randomUUID();
+
+    // Update user token
+    await prisma.user.update({
+        where: {
+            id: user.id,
+        },
+        data: {
+            token,
+        },
+    });
+
+    // Convert to NextAuthUser
+    const nextAuthUser = {
+        id: user.id.toString(), // Convert id to string
+        email: user.email,
+        name: `${user.firstName} ${user.lastName}`,
+        image: user.avatar || "",
+    };
+
+    return { ...user, ...nextAuthUser, token };
+};
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -15,47 +73,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials, req) {
-                req; // eslint
-
-                const email = credentials?.email as string;
-                const password = credentials?.password as string;
-                if (!email || !password) return null;
-
-                const user = await prisma.user.findUnique({
-                    where: {
-                        email,
-                        AND: {
-                            password: {
-                                equals: password,
-                            },
-                        },
-                    },
-                });
-
-                if (!user) return null;
-
-                // Generate token
-                const token = randomUUID();
-
-                // Update user token
-                await prisma.user.update({
-                    where: {
-                        id: user.id,
-                    },
-                    data: {
-                        token,
-                    },
-                });
-
-                // Convert to NextAuthUser
-                const nextAuthUser = {
-                    id: user.id.toString(), // Convert id to string
-                    email: user.email,
-                    name: `${user.firstName} ${user.lastName}`,
-                    image: user.avatar || "",
-                };
-
-                return { ...user, ...nextAuthUser, token };
+                try {
+                    req; // eslint
+                    return _authorize(credentials);
+                } catch (ex) {
+                    return null;
+                }
             },
         }),
     ],

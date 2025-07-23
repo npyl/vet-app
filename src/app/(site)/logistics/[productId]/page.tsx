@@ -11,6 +11,7 @@ import { Divider, Stack, Typography, alpha } from "@mui/material";
 import { SpaceBetween } from "@/components/styled";
 import Iconify from "@/components/iconify";
 import { ICONS } from "@/constants/logistics";
+import WithAuth from "@/guards/WithAuth";
 
 // ------------------------------------------------------------
 
@@ -137,4 +138,4 @@ const ProductPage = () => {
     );
 };
 
-export default ProductPage;
+export default WithAuth(ProductPage);

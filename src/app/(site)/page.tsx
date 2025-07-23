@@ -4,8 +4,9 @@ import UserDashboard from "@/sections/UserDashboard";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import getProfile from "@/util/getProfile";
+import WithAuth from "@/guards/WithAuth";
 
-export default async function Home() {
+async function Home() {
     const user = await getProfile();
 
     return (
@@ -18,3 +19,5 @@ export default async function Home() {
         </Box>
     );
 }
+
+export default WithAuth(Home);

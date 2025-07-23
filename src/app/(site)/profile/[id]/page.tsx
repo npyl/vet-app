@@ -13,6 +13,7 @@ import NextPageProps from "@/types/NextPageProps";
 import Office from "./Office";
 import WorkingHours from "./WorkingHours";
 import PersonalInfo from "./Personal";
+import WithAuth from "@/guards/WithAuth";
 
 const getUserById = async (id: number) => {
     const user = await prisma.user.findUnique({
@@ -79,4 +80,4 @@ const Profile: React.FC<NextPageProps> = async ({ params }) => {
     );
 };
 
-export default Profile;
+export default WithAuth(Profile);

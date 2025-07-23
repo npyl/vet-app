@@ -24,6 +24,7 @@ import useDialog from "@/hooks/useDialog";
 import { ProductType } from "@prisma/client";
 import { SectionHeader } from "@/components/Section";
 import StockDataGrid from "@/components/DataGrid/Stock";
+import WithAuth from "@/guards/WithAuth";
 
 const PAGE_SIZE = 5;
 
@@ -207,4 +208,4 @@ const Logistics = () => {
     );
 };
 
-export default Logistics;
+export default WithAuth(Logistics);

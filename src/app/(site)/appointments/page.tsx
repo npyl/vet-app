@@ -5,6 +5,7 @@ import Calendar from "./Calendar";
 import WorkingHours from "./WorkingHours";
 import ExaminationDialog from "../../../components/Examination";
 import { useGetAppointments } from "../../../components/Examination/hook";
+import WithAuth from "@/guards/WithAuth";
 
 const Appointments = () => {
     const { mutate } = useGetAppointments();
@@ -31,4 +32,4 @@ const Appointments = () => {
     );
 };
 
-export default Appointments;
+export default WithAuth(Appointments);

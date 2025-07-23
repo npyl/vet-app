@@ -4,8 +4,9 @@ import Table from "./Table";
 import AddPetDialog from "./PetDialog";
 import DialogFab from "@/components/Dialog/Fab";
 import getPets from "./getPets";
+import WithAuth from "@/guards/WithAuth";
 
-export default function PetsPage() {
+function PetsPage() {
     const pets = getPets();
 
     return (
@@ -23,3 +24,5 @@ export default function PetsPage() {
         </>
     );
 }
+
+export default WithAuth(PetsPage);

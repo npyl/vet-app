@@ -6,8 +6,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "eslint --fix src/",
-        "prepare": "husky"
+        "lint": "eslint --fix src/"
     },
     "dependencies": {
         "@emotion/cache": "^11.11.0",
@@ -33,7 +32,6 @@
         "@prisma/client": "^5.17.0",
         "@types/lodash.merge": "^4.6.9",
         "dayjs": "^1.11.10",
-        "husky": "^9.0.11",
         "lint-staged": "^15.2.2",
         "lodash.merge": "^4.6.2",
         "next": "^14.2.5",

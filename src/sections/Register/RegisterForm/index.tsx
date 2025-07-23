@@ -14,7 +14,6 @@ import { IVetWorkingHoursPOST } from "@/types/workingHours";
 import UserForm from "./user";
 import UserTypeSelect from "./UserTypeSelect";
 import register from "@/actions/register";
-import { useRouter } from "next/navigation";
 
 // ----------------------------------------------------------
 
@@ -46,7 +45,6 @@ const UserSchema = yup.object<IRegisterReq>().shape({
     region: yup.string(),
     city: yup.string(),
     complex: yup.string(),
-    telephone: yup.string().length(10),
 
     workingHours: yup.object<IVetWorkingHoursPOST>().shape({
         monday: TUPLE,
@@ -125,15 +123,9 @@ export default function RegisterForm() {
         },
     });
 
-    const router = useRouter();
-    const handleSubmit = useCallback(
-        async (d: IRegisterReq) => {
-            const res = await register(d);
-            if (!res) return;
-            router.push("/");
-        },
-        [type],
-    );
+    console.log("ERRORS: ", methods.formState.errors);
+
+    const handleSubmit = useCallback((d: IRegisterReq) => register(d), []);
 
     return (
         <FormProvider {...methods}>

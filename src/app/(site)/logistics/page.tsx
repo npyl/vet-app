@@ -1,5 +1,4 @@
 "use client";
-
 import { SpaceBetween } from "@/components/styled";
 import { IProduct } from "@/types/products";
 import {
@@ -24,7 +23,7 @@ import useDialog from "@/hooks/useDialog";
 import { ProductType } from "@prisma/client";
 import { SectionHeader } from "@/components/Section";
 import StockDataGrid from "@/components/DataGrid/Stock";
-import WithAuth from "@/guards/WithAuth";
+import WithVet from "@/guards/WithVet";
 
 const PAGE_SIZE = 5;
 
@@ -208,4 +207,4 @@ const Logistics = () => {
     );
 };
 
-export default WithAuth(Logistics);
+export default WithVet(Logistics);

@@ -8,6 +8,7 @@ import WithAuth from "@/guards/WithAuth";
 
 async function Home() {
     const user = await getProfile();
+    if (!user) return null;
 
     return (
         <Box py={1}>

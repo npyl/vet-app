@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "./util/db";
+import prisma from "@/util/db";
 import { randomUUID } from "crypto";
 import * as yup from "yup";
 
@@ -100,40 +100,3 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         strategy: "jwt",
     },
 });
-
-interface GetProfileOptions {
-    workingHours?: boolean;
-    workplace?: boolean;
-    pets?: boolean;
-    appointments?: boolean;
-}
-
-export const getProfile = async ({
-    workingHours,
-    workplace,
-    pets,
-    appointments,
-}: GetProfileOptions) => {
-    const session = await auth();
-    const { user: sessionUser } = session || {};
-
-    console.log("sessionUser: ", sessionUser);
-
-    const { email } = sessionUser || {};
-
-    if (!email) throw "Could not get logged-in user's id!";
-
-    const user = await prisma.user.findUnique({
-        where: {
-            email,
-        },
-        include: {
-            workingHours,
-            workplace,
-            pets,
-            appointments,
-        },
-    });
-
-    return user;
-};
